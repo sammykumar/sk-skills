@@ -35,7 +35,7 @@ Once you're thinking in these two loads, most authoring decisions — split or d
 - **Information hierarchy** — the ladder from in-file step, to in-file reference, to disclosed reference behind a pointer. **Progressive disclosure** is the move down that ladder so the top stays legible; **co-location** decides what sits beside each piece once placed.
 - **Completion criteria** — the clarity and demand of each step's done-condition, and the **legwork** it drives; the defence against **premature completion**.
 - **Leading words** — a compact concept already in the model's pretraining (*tight*, *red*, *tracer bullet*) that the agent thinks with while running the document; hunt restatements a single word can retire.
-- **Pruning** — single source of truth, relevance, and the no-op test applied sentence by sentence, against **sediment** and **sprawl**.
+- **Pruning** — single source of truth, relevance, and the no-op test applied sentence by sentence, against **sediment** and **sprawl**. Single source of truth reaches past the document into the environment: a doc restating what's already in `package.json`, a config file, or `--help` output is a **cache** of a lookup that was never expensive, and it's the copy that goes stale. Cache what the agent can't find by looking — the unwritten convention, the reason behind a choice.
 
 ## Where it fits
 
