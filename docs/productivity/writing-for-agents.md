@@ -1,5 +1,3 @@
-[Source](https://github.com/mattpocock/skills/tree/main/skills/productivity/writing-for-agents)
-
 ## What it does
 
 `writing-for-agents` is the reference you write agent-facing documents against — skills, `AGENTS.md` / `CLAUDE.md`, and any doc an agent reaches by a pointer. The packaging differs; the writing does not: the same levers make each one predictable, so the agent takes the same *process* every run rather than producing the same output.

@@ -1,5 +1,3 @@
-[Source](https://github.com/mattpocock/skills/tree/main/skills/productivity/grilling)
-
 ## What it does
 
 `grilling` is the relentless interview that stress-tests a plan or design before you build it. It maps the plan as a **design tree** — every decision branches into the decisions that hang off it — and works that tree in **rounds** until you and the agent share the same understanding.

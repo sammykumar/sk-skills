@@ -1,5 +1,3 @@
-[Source](https://github.com/mattpocock/skills/tree/main/skills/productivity/to-questionnaire)
-
 ## What it does
 
 `to-questionnaire` turns a decision you can't settle on your own into a **questionnaire** — a Markdown document you hand to the one person who holds what you're missing, to fill in async or work through together in a meeting.

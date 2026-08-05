@@ -1,5 +1,3 @@
-[Source](https://github.com/mattpocock/skills/tree/main/skills/engineering/grill-with-docs)
-
 ## What it does
 
 `grill-with-docs` interviews you relentlessly about a plan or design, a round of questions at a time, until you and the agent reach a shared understanding — and it writes the vocabulary and decisions down as you go.

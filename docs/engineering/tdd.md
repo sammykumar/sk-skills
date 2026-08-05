@@ -1,5 +1,3 @@
-[Source](https://github.com/mattpocock/skills/tree/main/skills/engineering/tdd)
-
 ## What it does
 
 `tdd` builds a feature or fixes a bug test-first, one behaviour at a time, driving the code out through a red-green loop.

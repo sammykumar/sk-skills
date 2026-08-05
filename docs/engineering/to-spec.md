@@ -1,5 +1,3 @@
-[Source](https://github.com/mattpocock/skills/tree/main/skills/engineering/to-spec)
-
 ## What it does
 
 `to-spec` turns the current conversation and your codebase understanding into a spec, then publishes it to your issue tracker.
