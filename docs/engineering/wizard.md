@@ -2,34 +2,34 @@
 
 `wizard` generates an interactive bash script that walks a human, step by step, through a manual procedure — wiring up third-party services, running a one-off migration, moving a project from state A to state B. It opens each URL, says what to click and copy, captures what comes back, and writes it into `.env` files and GitHub Actions secrets.
 
-You reach for it only where a human is genuinely in the loop. If the agent could just do the step itself, it should do it, and a wizard for that step is a worse version of a tool call. Matt's reason for keeping the human there is provisioning: asked why an agent-browser doesn't do the whole setup unattended, his answer was "because it requires HITL to stop it provisioning stupid things." A wizard is for the clicks, approvals and dashboard trips you would not hand to an agent, packaged so you stop re-explaining them to one every time.
+The agent writes the script; it never runs it. You do, on your own machine. So a wizard is not a list of instructions you follow — it is a program that drives the procedure and holds the state, and your part is to click, paste, and press Enter.
 
 ## When to reach for it
 
-You can type `/wizard`, and the agent can also reach for it on its own. When it hits a step only you can perform — a key it can't mint, a dashboard it can't click — it builds you a wizard instead of writing the instructions into the chat, where they scroll away.
+You can type `/wizard`, and the agent can also reach for it on its own. When it hits a step you have to take — a key it can't mint, a dashboard it can't click — it builds you a wizard instead of writing the instructions into the chat, where they scroll away.
 
-Reach for it when the next thing blocking you is a human clicking through a dashboard:
+Reach for it when the next thing blocking you is a trip through a dashboard:
 
 | Situation | What the wizard does |
 | --- | --- |
 | A new dev needs six services configured before the app boots | Opens each dashboard in order, captures the keys, writes them to `.env` and CI |
 | A one-off migration needs switches flipped in a specific order | Sequences the irreversible steps behind confirmation gates |
 | A project has to move from state A to state B once | Walks the transition and reports what it could not do |
-| You are about to write those steps into a README | Writes an executable version instead, which cannot rot as quietly |
+| You are about to write those steps into a README | Writes an executable version instead, which can't rot as quietly |
 
-Don't reach for it when the procedure is scriptable end to end — that is a script, and the agent should write and run it. Don't reach for it to *decide* what to build; for that, [grill-with-docs](https://aihero.dev/skills-grill-with-docs) and [to-spec](https://aihero.dev/skills-to-spec) are the tools.
+Don't reach for it to *decide* what to build; for that, [grill-with-docs](https://aihero.dev/skills-grill-with-docs) and [to-spec](https://aihero.dev/skills-to-spec) are the tools.
 
 ## Prerequisites
 
-None to generate one. The wizard it writes runs on bash, and reaches for `gh` when a stage sets a GitHub secret or variable. If `gh` is missing or unauthenticated, that stage degrades to a warning and the closing summary tells the human what to set by hand, rather than failing the run.
+None to generate one. The wizard it writes runs on bash, and uses `gh` when a stage sets a GitHub secret or variable. If `gh` is missing or unauthenticated, that stage becomes a warning and the closing summary tells you what to set by hand, instead of failing the run.
 
 ## Stages
 
-A **stage** is the unit of authoring and the unit of attention: one focused task, one screen. The script clears the terminal between stages, so anything that doesn't fit the screen is anything the human loses. You author them in dependency order and set an honest `TOTAL_STAGES` and `TOTAL_MINUTES`, which is what drives the time-remaining display. That estimate is a promise to the person running it.
+A **stage** is one focused task on one screen. The script clears the terminal between stages, so a stage that overflows the screen loses the part that scrolled away. You author stages in dependency order and set `TOTAL_STAGES` and `TOTAL_MINUTES`, which drive the time-remaining display — make the estimate honest, because the person running it will hold you to it.
 
-Scoping happens before a line is written. The skill reads the repo rather than asking cold — `.env*`, `docker-compose*`, framework config, and every `secrets.*` / `vars.*` reference in `.github/workflows/`, each of which is a value the wizard must produce. Then it shows you the ordered stage list to confirm, and only then maps each stage to the precise path a human follows ("Dashboard → Developers → API keys → Reveal test key → copy"). Where it doesn't know the current UI, it asks or checks the docs; it doesn't invent clicks that may not exist.
+Scoping happens before a line is written. The skill reads the repo instead of asking cold: `.env*`, `docker-compose*`, framework config, and every `secrets.*` / `vars.*` reference in `.github/workflows/` — each of those is a value the wizard has to produce. It then shows you the ordered stage list to confirm, and only after that maps each stage to the exact path a human follows ("Dashboard → Developers → API keys → Reveal test key → copy"). Where it doesn't know the current UI, it asks you or checks the docs rather than inventing clicks.
 
-For each captured value, scoping has to settle where it lands:
+For each captured value, scoping settles where it lands:
 
 | Destination | When |
 | --- | --- |
@@ -39,11 +39,11 @@ For each captured value, scoping has to settle where it lands:
 | Both `.env` and a secret | Local dev and CI both need it |
 | Nowhere | The stage is a pure action — a switch flipped, a plan upgraded |
 
-## The UX is not yours to design
+## The template already solves the UX
 
-A [template](https://github.com/mattpocock/skills/blob/main/skills/engineering/wizard/template.sh) already solves it: progress with time remaining, confirmation gates, cross-platform URL opening including WSL, hidden entry for secrets, idempotent `.env` upserts, `gh secret` / `gh variable` writes, and a closing summary of everything it had to skip. Everything above the `STAGES` marker is a fixed library, identical in every wizard, never hand-edited. The consistency is the point. Your job is only to scope the procedure and author its stages.
+The [template](https://github.com/mattpocock/skills/blob/main/skills/engineering/wizard/template.sh) ships the whole experience: progress with time remaining, confirmation gates, cross-platform URL opening including WSL, hidden entry for secrets, idempotent `.env` upserts, `gh secret` / `gh variable` writes, and a closing summary of everything it had to skip. Everything above the `STAGES` marker is a fixed library, identical in every wizard and never hand-edited. The consistency is the point. Your job is only to scope the procedure and author its stages.
 
-The agent that writes a wizard never runs it end to end — it opens browsers and blocks on human input. Verification is static instead: `bash -n`, `shellcheck` where available, and a trace that every value lands where scoping said it would, with every `set_secret` name matching a real `secrets.*` reference in CI. That is worth knowing because it sets your expectations honestly. The first person to run the wizard is you, and you are the test.
+The agent that writes a wizard never runs it end to end, because it opens browsers and waits for human input. It verifies statically instead: `bash -n`, `shellcheck` where available, and a trace that every value lands where scoping said it would, with every `set_secret` name matching a real `secrets.*` reference in CI. Set your expectations accordingly — the first run is yours, and that run is the test.
 
 ## Ephemeral by default
 
@@ -56,7 +56,7 @@ The agent that writes a wizard never runs it end to end — it opens browsers an
 
 **Do my API keys end up in the model's context?**
 
-No. The agent writes a script; it doesn't run it. You run the script yourself, and it captures the key with hidden terminal entry and writes it straight to `.env` or `gh secret`. Matt's answer to this on launch day was "No, because it's a CLI — the LLM is not connected to it." The caveat worth stating: that holds for values the wizard captures at runtime. If you paste a key into the chat while scoping the procedure, it's in the context like any other pasted text.
+No. The agent writes a script; it doesn't run it. You run the script yourself, and it captures the key with hidden terminal entry and writes it straight to `.env` or `gh secret`. Matt's answer to this on launch day was "No, because it's a CLI — the LLM is not connected to it." One caveat: that holds for values the wizard captures at runtime. If you paste a key into the chat while scoping the procedure, it's in the context like any other pasted text.
 
 **Can I go back and fix a value I mistyped?**
 
@@ -68,13 +68,9 @@ There's a related open bug. Arrow keys in an `ask` prompt insert `^[[D` / `^[[C`
 
 Partly, and less than the launch reactions assumed. It reads the repo before it asks — your `.env` files, `docker-compose`, framework config, the `secrets.*` references in CI — so it scopes to values that are genuinely missing rather than starting from zero the way a README does. What it doesn't do is check the third-party service. If a key exists in your `.env` the wizard offers it back and Enter keeps it; if you already created the Stripe account but never saved the key, the wizard still sends you to the dashboard for it.
 
-**Why not let an agent-browser do the whole setup automatically?**
-
-Because provisioning is where an unattended agent spends your money and creates things you didn't want. The human in the loop is the point of the skill, not a limitation of it. Where a step genuinely is safe to automate, the agent should do it directly and the wizard shouldn't carry it at all.
-
 **Where does it sit in the workflow — after grilling and the spec?**
 
-Nowhere in particular. It's a standalone, not a chain step. The common guess is `/grill-with-docs → /to-spec → /wizard`, and that sequence is fine, but the trigger is a human-only procedure showing up, which can happen at any point: before you start, mid-build, or long after ship. It also works as a discovery tool — scoping surfaces the hidden prerequisites of a task, like the three API keys you hadn't thought about, before you commit to the work.
+Nowhere in particular. It's a standalone, not a chain step. The common guess is `/grill-with-docs → /to-spec → /wizard`, and that sequence is fine, but the trigger is a manual procedure showing up, which can happen at any point: before you start, mid-build, or long after ship. It also works as a discovery tool — scoping surfaces the hidden prerequisites of a task, like the three API keys you hadn't thought about, before you commit to the work.
 
 **Does it work outside Claude Code?**
 
@@ -82,9 +78,7 @@ The artifact does, unconditionally: it's a plain bash script and it doesn't care
 
 **Didn't this used to be user-invoked?**
 
-It did. It's now model-invoked, so the agent reaches for it unprompted when it hits a step only you can take. Nothing you could do before stopped working — model-invocation *adds* the agent's reach, it never removes yours, so `/wizard` behaves exactly as it did. What changed is the failure mode it retires: the agent hitting a credentials wall mid-build and dumping six numbered steps into the chat for you to follow by hand.
-
-The guard against the opposite failure is in the description itself — don't invoke it for steps the agent can perform itself. Work an agent can do, an agent should do.
+It did. It's now model-invoked, so the agent reaches for it unprompted when it hits a step you have to take. Nothing you could do before stopped working — model-invocation *adds* the agent's reach, it never removes yours, so `/wizard` behaves exactly as it did. What changed is the failure mode it retires: the agent hitting a credentials wall mid-build and dumping six numbered steps into the chat for you to follow by hand.
 
 **It used to be in `in-progress/` — where is it now?**
 
