@@ -14,6 +14,8 @@ There is no H1 — the published page takes its title from the slug.
 
 Fill the template below. The **fixed frame** (Quickstart block, source link, `## What it does`, `## When to reach for it`, `## Where it fits`) appears on every page. The **adaptable middle** — `## Prerequisites` and the free-form substance sections — carries only what this particular skill earns; delete the rest.
 
+Install commands are not written per page. Copy them verbatim from [the canonical install block](./install-block.md) — it is the single source for how anyone installs these skills, and a page that words it differently is a page that tells a second story.
+
 <page-template>
 
 Quickstart:

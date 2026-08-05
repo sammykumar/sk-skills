@@ -26,3 +26,7 @@ The only robust ways to give Codex a single promoted-only path are (a) **restruc
 
 - Every promoted skill has an entry in `.claude-plugin/plugin.json`'s `skills` array (this already stood as a `CLAUDE.md` rule; it now also gates the plugin's contents).
 - `.claude-plugin/plugin.json`'s `version` tracks `package.json`'s version — bump both together on release. Claude uses the plugin `version` to decide when installed users see an update.
+
+## Update, 2026-08-05
+
+`mattpocock-skills` was accepted into **Claude Code's official marketplace** (`anthropics/claude-plugins-official`), which every Claude Code install has configured by default. `claude plugins install mattpocock-skills` is now the documented route, and the `marketplace add` → `install` path above is superseded. The official listing points at this repo's git URL and reads `.claude-plugin/plugin.json` directly, so it does not depend on `.claude-plugin/marketplace.json`; that file is retained only as a fallback for installing the repo directly (an unreleased commit, or a fork). The install wording lives in [.agents/install-block.md](../install-block.md).
