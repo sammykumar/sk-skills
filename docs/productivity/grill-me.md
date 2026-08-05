@@ -2,25 +2,27 @@
 
 ## What it does
 
-`grill-me` interviews you about a plan until every decision inside it has been made on purpose rather than by default. It asks in **rounds**: each round is the whole **frontier** — every question whose prerequisites you have already settled — so you are never asked something that hinges on an answer it hasn't heard yet.
+`grill-me` takes a **loose idea** and interviews you until it has real decisions in it. You do not need a worked-out plan to start — producing one is what the session is for. It asks in **rounds**: each round is the whole **frontier** — every question whose prerequisites you have already settled — so you are never asked something that hinges on an answer it hasn't heard yet.
 
-It is **stateless**. It writes no files and leaves no workspace behind. The only thing it produces is a sharper plan in your own head.
+It is **stateless**. It writes no files and leaves no workspace behind. The only thing it leaves is a sharper version of the idea, in your own head.
 
 ## When to reach for it
 
 You invoke this by typing `/grill-me` — the agent won't reach for it on its own. Start it in a **fresh conversation**, not on top of a plan you already had an agent write.
 
-Reach for it when a plan feels roughly right and you suspect it isn't. Which of the three grilling skills you want depends on what is in front of you:
+Reach for it as soon as you have an idea worth taking seriously — a feature, a product direction, a business call, a piece of writing — and long before you have worked out what it involves. Vagueness is not a reason to wait; it is the thing the session eats. If you can already specify the thing precisely, you don't need to grill it.
 
-- **No codebase yet** — `grill-me`. There is nothing to align against, so there is nothing worth recording.
-- **A codebase** — [grill-with-docs](https://aihero.dev/skills-grill-with-docs). The same interview, but stateful: it keeps what it learns in `CONTEXT.md` and ADRs.
+Which of the three grilling skills you want depends on what is in front of you:
+
+- **Anything, anywhere** — `grill-me`. It needs no repo and writes no files, and the subject doesn't have to be code.
+- **A codebase to align against** — [grill-with-docs](https://aihero.dev/skills-grill-with-docs). The same interview, but stateful: it reads your code and keeps what it learns in `CONTEXT.md` and ADRs.
 - **Too big for one session** — [wayfinder](https://aihero.dev/skills-wayfinder). It charts the effort as a map and runs grilling sessions inside it.
 
 Leave plan mode off. Plan mode primes the agent to rush toward producing a plan, which is the opposite of staying in inquiry.
 
 ## It's a conversation, not an interview
 
-The skill asks the questions, but **you** own the scope. That is the part people miss, and it separates a session that sharpens a plan from one that produces confident nonsense.
+The skill asks the questions, but **you** own the scope. That is the part people miss, and it separates a session that turns an idea into decisions from one that produces confident nonsense.
 
 The failure mode is **passivity** — answering "agreed, agreed, agreed" for forty questions and coming out with a plan the agent wrote and you nodded at. It feels productive because it was long. Nothing was actually decided, and the result carries a certainty it hasn't earned.
 
@@ -69,4 +71,8 @@ More than for most skills. Grilling leans on the model's own sense of how system
 
 ## Where it fits
 
-`grill-me` is a reach-for-it-anytime standalone — the pre-build stress test you run whenever a plan needs hardening. It is the stateless, user-invoked front door to the [grilling](https://aihero.dev/skills-grilling) primitive; its closest neighbour is [grill-with-docs](https://aihero.dev/skills-grill-with-docs), the stateful sibling that runs the same interview against a codebase and records the decisions as ADRs and a glossary. When the plan is settled, hand the conversation to [to-spec](https://aihero.dev/skills-to-spec), which writes it up without re-interviewing you. When you're unsure which flow fits, [ask-matt](https://aihero.dev/skills-ask-matt) routes you.
+`grill-me` is a **standalone you can run anywhere, on anything**. Being stateless is what makes it portable: no repo, no workspace, no setup, and no assumption that the idea is even about software. People point it at business decisions, at writing, at what to do next — anything that won't sit still in their head.
+
+That portability is the whole difference from [grill-with-docs](https://aihero.dev/skills-grill-with-docs), which runs the same interview but reads a codebase to align against and records what it learns as `CONTEXT.md` and ADRs. Both sit on the [grilling](https://aihero.dev/skills-grilling) primitive; `grill-me` is the user-invoked front door that carries nothing with it.
+
+If what you grilled does turn out to be software, you can hand the same conversation to [to-spec](https://aihero.dev/skills-to-spec) and carry on into the build flow — an option, not the point of the skill. When you're unsure which flow fits, [ask-matt](https://aihero.dev/skills-ask-matt) routes you.
