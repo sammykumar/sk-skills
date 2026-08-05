@@ -1,12 +1,12 @@
 # The canonical install block
 
-One install story, one wording. `README.md`, `.changeset/*`, and every page under `docs/` say **this** and nothing else. If the install route changes, change it here first, then propagate.
+One install story, one wording. `README.md`, `.changeset/*`, and every page under `docs/` must say **this** and nothing else. Change it here first, then propagate.
 
-`mattpocock-skills` is listed in **Claude Code's official marketplace** (`claude-plugins-official`), which every Claude Code install has configured out of the box. There is no marketplace to add first, and official-marketplace plugins auto-update in the background.
+`mattpocock-skills` is listed in **Claude Code's official marketplace** — configured name `claude-plugins-official`, source repo `anthropics/claude-plugins-official` — which every Claude Code install has out of the box. There is no marketplace to add first. Official Anthropic marketplaces have auto-update enabled by default ([discover-plugins](https://code.claude.com/docs/en/discover-plugins)), so "updates arrive automatically" is a true claim, not a hope.
 
-## Claude Code (the plugin)
+## Claude Code — the plugin
 
-<canonical-block>
+<canonical-block name="claude-code">
 
 ```bash
 claude plugins install mattpocock-skills
@@ -22,15 +22,35 @@ It's in Claude Code's official marketplace, so there's nothing to add first, and
 
 </canonical-block>
 
-## Codex, and other agents (skills.sh)
+## Codex, and other agents — skills.sh
 
-The plugin is Claude Code only. Everywhere else, [skills.sh](https://skills.sh/mattpocock/skills) copies editable skill files into the project:
+The plugin is Claude Code only. Everywhere else, [skills.sh](https://skills.sh/mattpocock/skills) copies editable skill files into the project. Use the whole-set form on `README.md`:
+
+<canonical-block name="skills-sh-whole-set">
 
 ```bash
 npx skills@latest add mattpocock/skills
 ```
 
-For a single skill, `npx skills add mattpocock/skills --skill=<name>`; to refresh it later, `npx skills update <name>`.
+Pick the skills you want, and which coding agents to install them on. **The installer lets you choose which skills to take — make sure `setup-matt-pocock-skills` is one of them.**
+
+</canonical-block>
+
+…and the single-skill form on a `docs/` page, where the page already names one skill:
+
+<canonical-block name="skills-sh-one-skill">
+
+```bash
+npx skills@latest add mattpocock/skills --skill=<name>
+```
+
+```bash
+npx skills@latest update <name>
+```
+
+</canonical-block>
+
+`skills@latest` is the pinned spelling in all three. The Quickstart template in [writing-docs.md](./writing-docs.md), and the 24 pages under `docs/`, still carry the older bare `npx skills …`; the docs pass brings them into line.
 
 ## The two routes are exclusive
 
