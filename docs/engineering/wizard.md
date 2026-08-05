@@ -6,7 +6,7 @@ You reach for it only where a human is genuinely in the loop. If the agent could
 
 ## When to reach for it
 
-You invoke this by typing `/wizard` — the agent won't reach for it on its own.
+You can type `/wizard`, and the agent can also reach for it on its own. When it hits a step only you can perform — a key it can't mint, a dashboard it can't click — it builds you a wizard instead of writing the instructions into the chat, where they scroll away.
 
 Reach for it when the next thing blocking you is a human clicking through a dashboard:
 
@@ -78,7 +78,13 @@ Nowhere in particular. It's a standalone, not a chain step. The common guess is 
 
 **Does it work outside Claude Code?**
 
-The artifact does, unconditionally: it's a plain bash script and it doesn't care what harness generated it. The skill itself is user-invoked, so you type `/wizard` in Claude Code or `$wizard` in Codex. One known gap — on Claude's desktop and web surfaces, which run in coordinator mode, every user-invoked skill is dropped from the model's listing entirely, so the assistant tells you `/wizard` isn't installed when it is. The plain `claude` CLI is unaffected. The tracking issue is [#693](https://github.com/mattpocock/skills/issues/693); the fix belongs in the harness.
+The artifact does, unconditionally: it's a plain bash script and it doesn't care what harness generated it. The skill itself is model-invoked, so it's listed everywhere — type `/wizard` in Claude Code or `$wizard` in Codex, or just describe the setup you're stuck on. Being model-invoked also keeps it clear of [#693](https://github.com/mattpocock/skills/issues/693), where Claude's desktop and web surfaces drop *user-invoked* skills from the model's listing and report them as not installed.
+
+**Didn't this used to be user-invoked?**
+
+It did. It's now model-invoked, so the agent reaches for it unprompted when it hits a step only you can take. Nothing you could do before stopped working — model-invocation *adds* the agent's reach, it never removes yours, so `/wizard` behaves exactly as it did. What changed is the failure mode it retires: the agent hitting a credentials wall mid-build and dumping six numbered steps into the chat for you to follow by hand.
+
+The guard against the opposite failure is in the description itself — don't invoke it for steps the agent can perform itself. Work an agent can do, an agent should do.
 
 **It used to be in `in-progress/` — where is it now?**
 
