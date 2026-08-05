@@ -1,5 +1,3 @@
-[Source](https://github.com/mattpocock/skills/tree/main/skills/engineering/codebase-design)
-
 ## What it does
 
 `codebase-design` gives you a shared, precise vocabulary for designing **deep modules** — a lot of behaviour hidden behind a small interface, placed at a clean seam, testable through that interface.

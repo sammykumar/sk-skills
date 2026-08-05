@@ -1,5 +1,3 @@
-[Source](https://github.com/mattpocock/skills/tree/main/skills/engineering/wizard)
-
 ## What it does
 
 `wizard` generates an interactive bash script that walks a human, step by step, through a manual procedure that's tedious to do by hand and tedious to re-explain to an agent every time — wiring up third-party services, running a one-off migration, moving a project from state A to state B. It opens each URL, says what to click and copy, captures what comes back, and writes it where it belongs.

@@ -1,5 +1,3 @@
-[Source](https://github.com/mattpocock/skills/tree/main/skills/engineering/resolving-merge-conflicts)
-
 ## What it does
 
 `resolving-merge-conflicts` works through an in-progress git merge or rebase conflict, hunk by hunk, and finishes the operation — resolved, checked, and committed.

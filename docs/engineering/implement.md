@@ -1,5 +1,3 @@
-[Source](https://github.com/mattpocock/skills/tree/main/skills/engineering/implement)
-
 ## What it does
 
 `implement` builds the work described in a spec or a set of tickets — driving it through test-driven development, typechecking, and the full test suite, then handing off to review and committing to the current branch.

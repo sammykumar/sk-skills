@@ -1,5 +1,3 @@
-[Source](https://github.com/mattpocock/skills/tree/main/skills/productivity/wait-what)
-
 ## What it does
 
 `wait-what` is the fire extinguisher for a message that didn't land. You fire it the moment you lose the thread, and the agent re-pitches what it just said: a little of the context you were missing, plain English, and the vocabulary from your project's `CONTEXT.md`.

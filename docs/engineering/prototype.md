@@ -1,5 +1,3 @@
-[Source](https://github.com/mattpocock/skills/tree/main/skills/engineering/prototype)
-
 ## What it does
 
 `prototype` builds a small, disposable program whose only job is to answer one design question — does this state model feel right, or what should this UI look like.
