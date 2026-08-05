@@ -2,11 +2,11 @@
 
 `resolving-merge-conflicts` works through an in-progress git merge or rebase, hunk by hunk, then runs the project's own checks and finishes the operation with a commit.
 
-It refuses to treat a conflict as a text problem. Before touching a hunk it traces each side back to its **primary source** — the commit message, the PR, the original issue — so it is choosing between two intents rather than between two blocks of text, and it preserves both wherever they are compatible. Where they genuinely are not, it picks the side matching the merge's stated goal and names the trade-off. It invents no new behaviour to paper over a clash, and `--abort` is not an option it has: the merge is always carried to a finished commit.
+It refuses to treat a conflict as a text problem. Before touching a hunk it traces each side back to its **[primary source](https://www.aihero.dev/ai-coding-dictionary/primary-source)** — the commit message, the PR, the original issue — so it is choosing between two intents rather than between two blocks of text, and it preserves both wherever they are compatible. Where they genuinely are not, it picks the side matching the merge's stated goal and names the trade-off. It invents no new behaviour to paper over a clash, and `--abort` is not an option it has: the merge is always carried to a finished commit.
 
 ## When to reach for it
 
-Type `/resolving-merge-conflicts`, or the agent reaches for it automatically when a task fits.
+Type `/resolving-merge-conflicts`, or the [agent](https://www.aihero.dev/ai-coding-dictionary/agent) reaches for it automatically when a task fits.
 
 Reach for it when git has already stopped on conflicts it could not resolve itself. It is scoped to the conflict in front of you, not to anything either side of it:
 
@@ -20,19 +20,19 @@ Reach for it when git has already stopped on conflicts it could not resolve itse
 
 The failure mode this exists to kill is resolving by flag: `--ours`, `--theirs`, or hand-deleting whichever block looks less important, so the markers go away and the build compiles. That resolution can be syntactically perfect and still silently drop a change somebody made on purpose.
 
-You cannot preserve an intent you have not read. So the work starts in the history — commits, PRs, tickets — and only then moves to the diff. Another step in the loop exists for the same reason: the skill finds the repo's own automated checks and runs them before committing, because a merge is the easiest place in git to produce code that satisfies both branches and passes neither's tests.
+You cannot preserve an intent you have not read. So the work starts in the history — commits, PRs, [tickets](https://www.aihero.dev/ai-coding-dictionary/ticket) — and only then moves to the diff. Another step in the loop exists for the same reason: the skill finds the repo's own [automated checks](https://www.aihero.dev/ai-coding-dictionary/automated-check) and runs them before committing, because a merge is the easiest place in git to produce code that satisfies both branches and passes neither's tests.
 
 ## Common questions
 
 **Claude Code already resolves conflicts pretty well on its own. Why does this need a skill?**
 
-This was asked directly when the skill was published. Matt's answer: "The 'find the primary sources' + 'run feedback loops' bits are the added value, I'd always need to manually prompt those." An unprompted agent will usually produce a plausible resolution from the diff alone and stop there. The skill's value is the two steps it will not let the agent skip — reading why each side exists, and running the checks afterwards. That is a thin margin over a good model, and it is meant to be: at least one reader has predicted this is a whole skill that becomes a no-op as models improve.
+This was asked directly when the skill was published. Matt's answer: "The 'find the primary sources' + 'run feedback loops' bits are the added value, I'd always need to manually prompt those." An unprompted agent will usually produce a plausible resolution from the diff alone and stop there. The skill's value is the two steps it will not let the agent skip — reading why each side exists, and running the checks afterwards. That is a thin margin over a good [model](https://www.aihero.dev/ai-coding-dictionary/model), and it is meant to be: at least one reader has predicted this is a whole skill that becomes a no-op as models improve.
 
 **Should I keep parallel agents off the same files to avoid conflicts in the first place?**
 
 Mostly no. Asked whether he uses zones or similar to minimise conflicts across parallel tasks, Matt's answer was: "Genuinely, AI is so good at doing merge conflicts that this tradeoff is not as harsh as you might think." The one piece of discipline he keeps: "You just make sure that large refactors are done first and that's basically it." A large rename landing after ten branches have forked off it is the case that stays expensive.
 
-One caveat from a user report on parallel worktrees: when sibling sessions each build a ticket in their own tree, the merge back is best done by the session that wrote the change, because it is the one that already knows the intent. Batching everybody's conflicts onto one agent at the end throws away exactly the context step 2 of this skill has to go and reconstruct.
+One caveat from a user report on parallel worktrees: when sibling [sessions](https://www.aihero.dev/ai-coding-dictionary/session) each build a ticket in their own tree, the merge back is best done by the session that wrote the change, because it is the one that already knows the intent. Batching everybody's conflicts onto one agent at the end throws away exactly the [context](https://www.aihero.dev/ai-coding-dictionary/context) step 2 of this skill has to go and reconstruct.
 
 **Why never `--abort`?**
 
