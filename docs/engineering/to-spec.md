@@ -8,11 +8,18 @@ It does not interview you. By the time you reach for it the deciding is already 
 
 You invoke this by typing `/to-spec` — the agent won't reach for it on its own.
 
-Reach for it when the build is too big for one agent session and has to survive being split across several. That is the whole trigger: if grilling settled everything and the work fits in one context window, skip the spec and go straight to [implement](https://aihero.dev/skills-implement). If you haven't aligned yet, grill first with [grill-with-docs](https://aihero.dev/skills-grill-with-docs). Once the spec exists, [to-tickets](https://aihero.dev/skills-to-tickets) slices it.
+Reach for it when the build is too big for one agent session and has to survive being split across several. That is the whole trigger:
+
+| Where you are | What to run |
+| --- | --- |
+| You haven't decided anything yet | [grill-with-docs](https://aihero.dev/skills-grill-with-docs) first |
+| Decided, and the work fits one context window | [implement](https://aihero.dev/skills-implement) — skip the spec |
+| Decided, and the work spans several sessions | `/to-spec`, then [to-tickets](https://aihero.dev/skills-to-tickets) |
+| A [wayfinder](https://aihero.dev/skills-wayfinder) map has cleared | `/to-spec #<map_issue>` |
 
 ## Prerequisites
 
-`to-spec` publishes into your tracker, so [setup-matt-pocock-skills](https://aihero.dev/skills-setup-matt-pocock-skills) must have configured the tracker and the triage-label vocabulary for this repo first. There is no local file: the spec is written straight into the tracker as an issue.
+`to-spec` publishes the spec as an issue, so [setup-matt-pocock-skills](https://aihero.dev/skills-setup-matt-pocock-skills) must have configured a tracker and the triage-label vocabulary for this repo first. Either kind works: a real tracker like GitHub, or local markdown files under `.scratch/`, which is supported out of the box.
 
 ## The spec is a decision record
 

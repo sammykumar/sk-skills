@@ -10,6 +10,8 @@ Type `/prototype`, or the agent reaches for it automatically when a task fits.
 
 Reach for it the moment you hit a question you can't settle by talking — a state machine whose edge cases you can't hold in your head, a screen you can't picture until you see three versions side by side. Grilling sessions balloon on exactly these questions: the agent rephrases, you guess, and the scope grows to fill the uncertainty. Stop grilling, build the throwaway version, look at it, then answer in one line. If instead something already built is misbehaving and you want to know why, use [diagnosing-bugs](https://aihero.dev/skills-diagnosing-bugs) — prototyping explores what to build, not why the built thing is broken.
 
+You will also arrive here without choosing to. [wayfinder](https://aihero.dev/skills-wayfinder) files `prototype` decision tickets on its map, and working one is this skill.
+
 ## Two branches
 
 The question picks the branch, and the branches produce very different artifacts:
@@ -42,7 +44,7 @@ Known, and it is a naming problem. `prototype` is a generic, appealing word that
 That is a different artifact wearing this skill's name. A prototype here is scoped to one question, and "what is the whole app?" isn't one. A full-app prototype has no natural stopping point, so it becomes the production app by momentum: the cleanup pass never happens, and code written under prototype rules — no tests, no error handling — ends up in front of users. If you need a sales demo, build it deliberately as a demo and be explicit that none of it is production. If you need to settle a design question, cut it down to that question.
 
 **How do I run it in its own session?**
-That is the step-2 detour in [ask-matt](https://aihero.dev/skills-ask-matt)'s main flow: [handoff](https://aihero.dev/skills-handoff) out of the thread you're in, open a fresh session against that file, `/prototype` there, then `handoff` the conclusions back and reference them from the original thread. A prototype lives in its own directory and generates a lot of context you don't want in the thread that asked the question — which is exactly what the handoff bridge is for.
+A prototype lives in its own directory and generates a lot of context you don't want in the thread that asked the question, so run it somewhere else and bring back only the answer. [handoff](https://aihero.dev/skills-handoff) is the bridge in both directions.
 
 **Isn't this the fastest possible way to burn tokens?**
 It can be, if you prototype questions you could have answered by talking, or let one prototype sprawl across a whole feature. The comparison that matters isn't tokens against zero; it's tokens against building the wrong state model and finding out after it has production callers. Keep the question narrow and the run short, and the spend stays proportionate.
@@ -58,6 +60,8 @@ It can be, if you prototype questions you could have answered by talking, or let
 
 ## Where it fits
 
-`prototype` is a **reach-for-it-anytime standalone** — you drop into it to settle one design question, then drop back out. It is also the named detour in step 2 of the main flow: the escape hatch for when a grilling session hits something it cannot talk its way to.
+`prototype` is a **reach-for-it-anytime standalone** — you drop into it to settle one design question, then drop back out — and it is also machinery another skill runs on.
 
-That is its closest relationship. [grill-me](https://aihero.dev/skills-grill-me) and [grill-with-docs](https://aihero.dev/skills-grill-with-docs) answer grillable questions; the ungrillable ones — how should this feel, does this model hold up — come here instead, and the one-line answer goes back into the interview. Downstream, a validated state model or UI direction becomes settled input for [to-spec](https://aihero.dev/skills-to-spec), which can inline the decision-rich snippet the prototype produced rather than describing it in prose. For anything else, [ask-matt](https://aihero.dev/skills-ask-matt) routes you over the whole set.
+Its largest consumer is [wayfinder](https://aihero.dev/skills-wayfinder). A wayfinder map is made of **decision tickets**, and `prototype` is one of the four types a ticket can be: the one used when the blocking question is "how should this look" or "how should it behave", which no amount of discussion resolves. Wayfinder raises the fidelity of a foggy discussion by making something concrete to react to, and this skill is how that concrete thing gets built. A prototype ticket is resolved by the answer, and the prototype is linked from the map as an asset.
+
+The other neighbours are upstream and downstream of that. [grill-me](https://aihero.dev/skills-grill-me) and [grill-with-docs](https://aihero.dev/skills-grill-with-docs) answer grillable questions; the ungrillable ones come here instead, and the one-line answer goes back into the interview. Downstream, a validated state model or UI direction becomes settled input for [to-spec](https://aihero.dev/skills-to-spec), which can inline the decision-rich snippet the prototype produced rather than describing it in prose. For anything else, [ask-matt](https://aihero.dev/skills-ask-matt) routes you over the whole set.
