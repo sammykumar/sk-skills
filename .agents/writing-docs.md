@@ -45,13 +45,15 @@ The single non-negotiable: **surface the skill's leading word / defining idea** 
 
 The questions readers really ask about this skill, each in bold with the answer in the lines beneath it — no sub-headings.
 
-Every question here is one someone asked. That is the section's whole value: a page with three observed questions beats one with eight plausible ones, because an invented question teaches the reader nothing and reads as filler. So go and find them before you write any:
+An observed question always beats an invented one, so go and find them before you write any:
 
 - **The wiki.** If `~/repos/matt/personal-wiki` exists on this machine, it is the richest source there is. Its `wiki/audience/` area is organised around what the audience wants, discusses, and **is confused by** — read `wiki/index.md` first for the registry of pages, then the pages bearing on this skill. Every page carries `sources:` linkbacks to the original X, Discord, GitHub, and email threads; the wiki is a secondary source, so quote the asker's own question rather than the wiki's summary of it. Skip this bullet where the directory does not exist.
 - **This repo's issues.** `gh issue list --repo mattpocock/skills --search "<skill-name>" --state all`. A question filed twice is a question the page owes an answer to.
 - **`CHANGELOG.md`.** Anything renamed, moved, or behaviourally changed generates a "where did it go?" that the page has to answer.
 
-Order them by how often each comes up, sharpest first, and say the unflattering thing where it is true — a very long grilling session usually means the scope was too big; a model asked to write its own skill produces something verbose. Omit the heading where the hunt turns up nothing.
+Where the hunt comes up thin, the section may also carry a question a reader would plainly ask — but **the count stays honest to the evidence**. A well-discussed skill earns six; an obscure one earns one or two, or none at all. Padding a thin skill out to match a rich one is how the section fills with questions nobody has, and an invented question teaches the reader nothing.
+
+Order them by how often each comes up, sharpest first, and say the unflattering thing where it is true — a very long grilling session usually means the scope was too big; a model asked to write its own skill produces something verbose. Omit the heading where there is nothing worth answering.
 
 ## It's working if
 
@@ -71,6 +73,7 @@ Always present. Situate the skill in the system in a sentence or two:
 
 - Explain the **why**, not the process. The page orients and situates the skill; it never reproduces the `SKILL.md` steps or template dumps — a human choosing a tool does not need the runbook.
 - Use the skill's **leading words** (_seam_, _deep module_, _tracer bullet_) so the page and the skill speak one language.
+- **Branches go in a table or a list, never in a paragraph.** Where the page presents a choice — two artifacts the skill can produce, four situations that trigger it, five options at a boundary — the reader is scanning for the one row that matches their situation. A paragraph makes them read all of it to find out. A short markdown table (condition in the left column, what to do in the right) or a bulleted list gives it back in one glance. This applies wherever the branch appears, most often in `## When to reach for it` and the free-form middle.
 - Keep the page itself low-load. It is documentation *about* low-cognitive-load skills; furniture (spare headings, restated links) is the thing it is arguing against.
 
 ## Done when
@@ -82,7 +85,8 @@ Always present. Situate the skill in the system in a sentence or two:
 - `## Where it fits` names the role and links to `ask-matt`.
 - A prerequisite (workspace, prior setup, tooling) is stated where one exists, and the section is absent where none does.
 - The middle surfaces the leading word.
-- Every `## Common questions` entry traces to a question someone asked — found in the wiki, the issues, or the changelog — and the heading is absent where the hunt found none.
+- Every multi-way branch is a table or a list, not a paragraph the reader has to read in full.
+- The hunt for real questions ran — the wiki, the issues, the changelog — and `## Common questions` is sized to what it found, not padded to match a richer skill's page.
 - Every `## It's working if` bullet is checkable without opening `SKILL.md`.
 - The sections appear in the template's order.
 - Every link is absolute, and every one resolves.
