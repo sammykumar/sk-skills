@@ -1,6 +1,6 @@
 ## What it does
 
-`wait-what` is the fire extinguisher for a message that didn't land. You fire it the moment you lose the thread, and the agent re-pitches what it just said: a little of the context you were missing, plain English, and the vocabulary from your project's `CONTEXT.md`.
+`wait-what` is what you type when a message didn't land. You use it the moment you lose the thread, and the agent re-pitches what it just said: a little of the context you were missing, plain English, and the vocabulary from your project's `CONTEXT.md`.
 
 It is three lines long, and that is the design rather than an unfinished draft. Skills that fight verbosity fail by growing — a four-hundred-line concision skill still leaves the model verbose, because the model reads the volume, not the plea. This one carries a single precise leading word and nothing else.
 
@@ -20,7 +20,7 @@ The re-pitch is deliberately vague about its own scope. It says re-pitch **that*
 
 ## It plugs into the language you already have
 
-The body reuses the leading words already sitting in your global `CLAUDE.md` and your project's `CONTEXT.md`: ASD-STE100 Simplified Technical English for the register, ubiquitous language for the nouns. Skill, `CLAUDE.md` and `CONTEXT.md` reach for the same tokens, so firing it isn't a new instruction — it's a reminder of one the agent already agreed to.
+The body reuses the leading words already sitting in your global `CLAUDE.md` and your project's `CONTEXT.md`: ASD-STE100 Simplified Technical English for the register, ubiquitous language for the nouns. Skill, `CLAUDE.md` and `CONTEXT.md` reach for the same tokens, so invoking it isn't a new instruction — it's a reminder of one the agent already agreed to.
 
 If you have no `CONTEXT.md`, it still works; you just lose the domain-vocabulary half.
 
@@ -29,8 +29,8 @@ If you have no `CONTEXT.md`, it still works; you just lose the domain-vocabulary
 - The re-pitch is **shorter and clearer**, not shorter and blunter.
 - It adds the premise you were missing rather than just deleting words.
 - Project nouns replace invented ones — the terms in your `CONTEXT.md` come back.
-- You can fire it twice in a row without it degrading into terseness.
+- You can use it twice in a row without it degrading into terseness.
 
 ## Where it fits
 
-`wait-what` is a reach-for-it-anytime standalone — it sits inside whatever conversation you're already having, in any skill, at any point. It's the extinguisher; [grill-with-docs](https://aihero.dev/skills-grill-with-docs) is the sprinkler system, because a shared language agreed upfront is the real cure for jargon, and [domain-modeling](https://aihero.dev/skills-domain-modeling) is what you reach for when the *words themselves* are the problem rather than one bad message. When you're unsure which skill fits the moment, [ask-matt](https://aihero.dev/skills-ask-matt) routes you.
+`wait-what` is a reach-for-it-anytime standalone — it sits inside whatever conversation you're already having, in any skill, at any point. It repairs one message after the fact; [grill-with-docs](https://aihero.dev/skills-grill-with-docs) stops the jargon arriving, because a shared language agreed upfront is the real cure, and [domain-modeling](https://aihero.dev/skills-domain-modeling) is what you reach for when the *words themselves* are the problem rather than one bad message. When you're unsure which skill fits the moment, [ask-matt](https://aihero.dev/skills-ask-matt) routes you.
