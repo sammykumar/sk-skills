@@ -2,7 +2,7 @@
 
 ## What it does
 
-`writing-for-agents` is the reference you write agent-facing documents against — a skill, an `AGENTS.md` / `CLAUDE.md`, a spec, a runtime prompt, any doc an agent reaches by a pointer. The packaging differs; the writing does not: the same levers make each one predictable, so the agent takes the same *process* every run rather than producing the same output.
+`writing-for-agents` is the reference you write agent-facing documents against — a skill, an `AGENTS.md` / `CLAUDE.md`, a spec, a runtime prompt, a README, any doc an agent reads. The packaging differs; the writing does not: the same levers make each one predictable, so the agent takes the same *process* every run rather than producing the same output.
 
 Its default move is deletion, not explanation. Ask an agent to write instructions for another agent and it spends most of its words explaining what the model already knows — every one of those lines is a **no-op**, paying context and changing no behaviour. This reference is the lens that finds them, which is why it earns its keep at least as often on a document you already have as on a blank file.
 
@@ -12,7 +12,7 @@ It was called `writing-great-skills` until v1.1. The rename tracks what it alway
 
 Type `/writing-for-agents`, or the agent reaches for it on its own when you're creating or editing a skill, or modifying `AGENTS.md` or `CLAUDE.md`.
 
-Reach for it by hand for everything else an agent has to execute from: docs behind a pointer, specs and tickets, system and AFK prompts. The test is whether an agent reads the document and acts, not who typed it. For working out what a codebase actually contains in the first place, use [grill-with-docs](https://aihero.dev/skills-grill-with-docs) — this reference governs how a document reads, not what it knows.
+Reach for it by hand for everything else an agent reads: your docs, specs and tickets, system and AFK prompts. The test is one question — does an agent read this? — and it does not matter how the document gets in front of it, whether a pointer names it, a human pastes it, or it simply sits in the repo. For working out what a codebase actually contains in the first place, use [grill-with-docs](https://aihero.dev/skills-grill-with-docs) — this reference governs how a document reads, not what it knows.
 
 ## The two loads
 
