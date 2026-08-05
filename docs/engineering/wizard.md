@@ -2,7 +2,7 @@
 
 `wizard` generates an interactive bash script that walks a human, step by step, through a manual procedure — wiring up third-party services, running a one-off migration, moving a project from state A to state B. It opens each URL, says what to click and copy, captures what comes back, and writes it into `.env` files and GitHub Actions secrets.
 
-You reach for it only where a human is genuinely in the loop. If the agent could just do the step itself, it should do it, and a wizard for that step is a worse version of a tool call. Matt's reason for keeping the human there is provisioning: asked why an agent-browser doesn't do the whole setup unattended, his answer was "because it requires HITL to stop it provisioning stupid things." A wizard is for the clicks, approvals and dashboard trips you would not hand to an agent, packaged so you stop re-explaining them to one every time.
+You reach for it only where a human is genuinely in the loop. If the [agent](https://www.aihero.dev/ai-coding-dictionary/agent) could just do the step itself, it should do it, and a wizard for that step is a worse version of a [tool call](https://www.aihero.dev/ai-coding-dictionary/tool-call). Matt's reason for keeping the human there is provisioning: asked why an agent-browser doesn't do the whole setup unattended, his answer was "because it requires [HITL](https://www.aihero.dev/ai-coding-dictionary/human-in-the-loop) to stop it provisioning stupid things." A wizard is for the clicks, approvals and dashboard trips you would not hand to an agent, packaged so you stop re-explaining them to one every time.
 
 ## When to reach for it
 
@@ -27,7 +27,7 @@ None to generate one. The wizard it writes runs on bash, and reaches for `gh` wh
 
 A **stage** is the unit of authoring and the unit of attention: one focused task, one screen. The script clears the terminal between stages, so anything that doesn't fit the screen is anything the human loses. You author them in dependency order and set an honest `TOTAL_STAGES` and `TOTAL_MINUTES`, which is what drives the time-remaining display. That estimate is a promise to the person running it.
 
-Scoping happens before a line is written. The skill reads the repo rather than asking cold — `.env*`, `docker-compose*`, framework config, and every `secrets.*` / `vars.*` reference in `.github/workflows/`, each of which is a value the wizard must produce. Then it shows you the ordered stage list to confirm, and only then maps each stage to the precise path a human follows ("Dashboard → Developers → API keys → Reveal test key → copy"). Where it doesn't know the current UI, it asks or checks the docs; it doesn't invent clicks that may not exist.
+Scoping happens before a line is written. The [skill](https://www.aihero.dev/ai-coding-dictionary/skill) reads the repo rather than asking cold — `.env*`, `docker-compose*`, framework config, and every `secrets.*` / `vars.*` reference in `.github/workflows/`, each of which is a value the wizard must produce. Then it shows you the ordered stage list to confirm, and only then maps each stage to the precise path a human follows ("Dashboard → Developers → API keys → Reveal test key → copy"). Where it doesn't know the current UI, it asks or checks the docs; it doesn't invent clicks that may not exist.
 
 For each captured value, scoping has to settle where it lands:
 
@@ -56,7 +56,7 @@ The agent that writes a wizard never runs it end to end — it opens browsers an
 
 **Do my API keys end up in the model's context?**
 
-No. The agent writes a script; it doesn't run it. You run the script yourself, and it captures the key with hidden terminal entry and writes it straight to `.env` or `gh secret`. Matt's answer to this on launch day was "No, because it's a CLI — the LLM is not connected to it." The caveat worth stating: that holds for values the wizard captures at runtime. If you paste a key into the chat while scoping the procedure, it's in the context like any other pasted text.
+No. The agent writes a script; it doesn't run it. You run the script yourself, and it captures the key with hidden terminal entry and writes it straight to `.env` or `gh secret`. Matt's answer to this on launch day was "No, because it's a CLI — the LLM is not connected to it." The caveat worth stating: that holds for values the wizard captures at runtime. If you paste a key into the chat while scoping the procedure, it's in the [context](https://www.aihero.dev/ai-coding-dictionary/context) like any other pasted text.
 
 **Can I go back and fix a value I mistyped?**
 
@@ -78,7 +78,7 @@ Nowhere in particular. It's a standalone, not a chain step. The common guess is 
 
 **Does it work outside Claude Code?**
 
-The artifact does, unconditionally: it's a plain bash script and it doesn't care what harness generated it. The skill itself is model-invoked, so it's listed everywhere — type `/wizard` in Claude Code or `$wizard` in Codex, or just describe the setup you're stuck on. Being model-invoked also keeps it clear of [#693](https://github.com/mattpocock/skills/issues/693), where Claude's desktop and web surfaces drop *user-invoked* skills from the model's listing and report them as not installed.
+The artifact does, unconditionally: it's a plain bash script and it doesn't care what [harness](https://www.aihero.dev/ai-coding-dictionary/harness) generated it. The skill itself is model-invoked, so it's listed everywhere — type `/wizard` in Claude Code or `$wizard` in Codex, or just describe the setup you're stuck on. Being model-invoked also keeps it clear of [#693](https://github.com/mattpocock/skills/issues/693), where Claude's desktop and web surfaces drop *user-invoked* skills from the [model](https://www.aihero.dev/ai-coding-dictionary/model)'s listing and report them as not installed.
 
 **Didn't this used to be user-invoked?**
 
