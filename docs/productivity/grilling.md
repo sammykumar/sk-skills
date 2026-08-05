@@ -12,8 +12,8 @@ Typing `/grilling` directly gets you the plain interview and nothing else. Where
 
 | What you have | Reach for |
 | --- | --- |
-| Any subject at all, no repo, nothing written down afterwards | [grill-me](https://aihero.dev/skills-grill-me) — the same session, under a name the agent will never fire by itself |
-| A codebase to align against, and you want the decisions kept | [grill-with-docs](https://aihero.dev/skills-grill-with-docs) — it writes `CONTEXT.md` and ADRs as it goes |
+| You aren't working in a working directory | [grill-me](https://aihero.dev/skills-grill-me) — the same session, under a name the agent will never fire by itself |
+| You are in a working directory | [grill-with-docs](https://aihero.dev/skills-grill-with-docs) — the same session, and it writes `CONTEXT.md` and ADRs as it goes |
 | An effort too big to hold in one session | [wayfinder](https://aihero.dev/skills-wayfinder) — it charts a map and runs grilling inside the decision tickets |
 | A question that talking cannot settle — how something should look or feel | [prototype](https://aihero.dev/skills-prototype) — build the throwaway version, then come back |
 | A skill of your own that needs an interview | Invoke `/grilling` from it, rather than writing another interview |

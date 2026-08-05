@@ -44,13 +44,9 @@ One run covers one ticket. The tickets [to-tickets](https://aihero.dev/skills-to
 
 The idea the skill runs on is the **seam**: the public boundary you observe behaviour at, without reaching inside. Tests live at seams. Working at a seam agreed before any code is written is what keeps the tests durable, because the implementation underneath can be rewritten without the tests moving.
 
-The word "pre-agreed" is doing real work, and it is also the skill's weakest joint. Nothing inside `implement` agrees the seams. `tdd` is the skill that asks, and it refuses to write a test at an unconfirmed seam. So in practice the agreement happens either upstream in the spec, or in the first exchange of the run. If it happens nowhere, the precondition never fires and the run quietly becomes "just write the code". That failure is common enough to be the first question below.
+The word "pre-agreed" is doing real work, and it is also the skill's weakest joint. Nothing inside `implement` agrees the seams. `tdd` is the skill that asks, and it refuses to write a test at an unconfirmed seam. So in practice the agreement happens either upstream in the spec, or in the first exchange of the run. If it happens nowhere, the precondition never fires and the run quietly becomes "just write the code". Naming the seams in the spec is what stops that.
 
 ## Common questions
-
-**It implemented the work but never ran `/tdd` or `/code-review`. Is that expected?**
-
-It is a known, open bug, and it is the single most reported thing about this skill. One reporter estimated `/tdd` fails to fire in about 80% of runs. The diagnosis in the issue thread is context burial: the skill's text is injected once at invocation, and by the time the implementation is done the closing steps are hundreds of lines back with nothing re-surfacing them, so they are the first thing dropped. Others report the opposite inconsistency, with `code-review` running some sessions and not others, or firing per ticket when they didn't ask for it. Matt rejected the proposed fix of stronger completion wording as a no-op, on the grounds that "must" buried 500 lines back reads the same as "should". Until it is fixed structurally, the reliable move is to invoke `/tdd` and `/code-review` yourself rather than expect the chain to hold.
 
 **It finished, but my ticket is still open and the acceptance criteria are still unchecked.**
 

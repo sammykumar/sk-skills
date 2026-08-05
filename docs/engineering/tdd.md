@@ -54,10 +54,6 @@ Because the refactor step was removed and the description was not. Matt dropped 
 
 This is the most-reported friction with the skill ([issue #607](https://github.com/mattpocock/skills/issues/607)). The prompt lists candidate seams by name only, with nothing about what each one catches or misses, so you are choosing between labels. There is no fix shipped yet. The practical workaround is to ask the agent for the trade-offs before answering — what does the component-level seam miss that the integration seam catches, and how much slower is it. It is also why the chain agrees seams up front in `to-spec`, where you have the whole feature in view rather than one prompt.
 
-**I ran `/implement` and it never invoked `/tdd`.**
-
-Known and common. One user's estimate on [issue #479](https://github.com/mattpocock/skills/issues/479) is that `/implement` fails to trigger `/tdd` in about 80% of runs. Two structural reasons: `implement` says to use `tdd` "where possible, at pre-agreed seams", which is satisfied by doing TDD-shaped work without ever invoking the skill, and by the time implementation finishes the instruction is hundreds of lines back in the transcript. Naming it explicitly at the start of the run, or invoking `/tdd` yourself per slice, is the reliable path today.
-
 **It wrote the implementation before the test, even though the skill says red first.**
 
 It happens. One user pushed the model on it and got an unusually honest answer: "I knew the skill said 'one test at a time, watch it fail for the right reason' — I read it. I just defaulted to my normal habit." Matt's position is to live with it: "I've not managed to get agents to do anything 100% of the time. Being too forceful about this is also negative because we don't want to restrict an agent's creativity. So what I've done is I've just accepted that sometimes it will not follow TDD strictly. But overall I still get better results." If strict adherence matters for a particular slice, watch the run rather than trusting the skill to enforce it.

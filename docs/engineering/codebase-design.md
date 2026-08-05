@@ -65,7 +65,7 @@ No, and Matt has been consistent about that under repeated pushback. [Issue #95]
 
 **Does `tdd` actually use this vocabulary?**
 
-Not yet, in the sense you'd expect. `tdd` talks about seams heavily, but it defines "seam" itself — as "the public boundary you test at" — and contains no reference to `codebase-design`. It uses "boundary", the word this skill's glossary bans. The inline deep-module notes that used to live inside `tdd` were removed in favour of this shared skill, but the pointer replacing them was never added. Matt has acknowledged the gap publicly: "Yeah I have a /codebase-design skill, might be that TDD needs to point there too." In practice that means invoking `/tdd` will not reliably pull this vocabulary in — say so explicitly if you want it.
+It does now. For a long time it did not. The inline deep-module notes that used to live inside `tdd` were removed in v1.0 in favour of this shared skill, but the pointer replacing them was never added — so `tdd` defined "seam" for itself and referenced nothing. Matt acknowledged the gap publicly ("Yeah I have a /codebase-design skill, might be that TDD needs to point there too") and the pointer is now in the skill, reached when the shape of the interface is the open question rather than the tests. `tdd` still owns "seam" as the boundary you *test* at; this skill owns the module shape behind it.
 
 **Does the design-it-twice pattern work outside Claude Code?**
 

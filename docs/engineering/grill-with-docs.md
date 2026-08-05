@@ -12,7 +12,7 @@ Reach for it at the start of a change, in a repo, when the plan is still fuzzy a
 
 | What you have | Reach for |
 | --- | --- |
-| An idea, no repo — or a subject that isn't code | [grill-me](https://aihero.dev/skills-grill-me) |
+| You aren't working in a working directory at all | [grill-me](https://aihero.dev/skills-grill-me) |
 | A repo, and a change you can settle in one session | `grill-with-docs` |
 | An effort too big to hold in one session — a greenfield build, a large feature | [wayfinder](https://aihero.dev/skills-wayfinder) |
 | A repo with no domain docs at all, and no particular feature in mind | `grill-with-docs`, aimed at the repo rather than a change |
