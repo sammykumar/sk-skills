@@ -12,7 +12,7 @@ npx skills update to-spec
 
 ## What it does
 
-`to-spec` turns the current conversation and your codebase understanding into a spec (you may know this document as a PRD), then publishes it to your issue tracker.
+`to-spec` turns the current conversation and your codebase understanding into a spec, then publishes it to your issue tracker.
 
 It does **not** interview you again. By the time you reach for it, the alignment work is done — `to-spec` synthesises what is already known rather than asking a fresh round of questions.
 
