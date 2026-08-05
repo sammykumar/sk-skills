@@ -36,7 +36,7 @@ What it deliberately does not carry is anything already written down. Specs, pla
 ## Common questions
 
 **Handoff or compact?**
-`/compact` unless something is travelling. Asked directly whether you hand off or compact when you're still on the same task, Matt's answer was "mostly `/compact`" — same harness, same directory, and you need to stay in the loop is where the phase-boundary tree lands most days. `/handoff`'s advantage is not that it summarises better; it's that the result is a file you can carry somewhere `/compact` can't reach.
+`/compact` unless something is travelling. Staying on the same task is a compact, not a handoff — same harness, same directory, and you need to stay in the loop is where the phase-boundary tree lands most days. `/handoff`'s advantage is not that it summarises better; it's that the result is a file you can carry somewhere `/compact` can't reach.
 
 **So what's the actual difference between compact, clear and handoff?**
 Three different things being preserved. `/compact` compresses this context and keeps you going in a fresh window — intent survives. `/clear` empties the window and starts from nothing — correct when everything behind you is disposable, and one-way if it isn't. `/handoff` writes a portable file — the work survives the move to somewhere else. Note that all three turn a **[primary source](https://www.aihero.dev/ai-coding-dictionary/primary-source)** (the conversation as it happened) into a **[secondary source](https://www.aihero.dev/ai-coding-dictionary/secondary-source)** (a summary of it). Continuing is the only move that doesn't, which is why it's the first one to rule out.

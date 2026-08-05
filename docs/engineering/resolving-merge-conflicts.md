@@ -26,11 +26,11 @@ You cannot preserve an intent you have not read. So the work starts in the histo
 
 **Claude Code already resolves conflicts pretty well on its own. Why does this need a skill?**
 
-This was asked directly when the skill was published. Matt's answer: "The 'find the primary sources' + 'run feedback loops' bits are the added value, I'd always need to manually prompt those." An unprompted agent will usually produce a plausible resolution from the diff alone and stop there. The skill's value is the two steps it will not let the agent skip — reading why each side exists, and running the checks afterwards. That is a thin margin over a good [model](https://www.aihero.dev/ai-coding-dictionary/model), and it is meant to be: at least one reader has predicted this is a whole skill that becomes a no-op as models improve.
+The added value is the "find the primary sources" and "run feedback loops" steps, which otherwise have to be prompted by hand every time. An unprompted agent will usually produce a plausible resolution from the diff alone and stop there. The skill's value is the two steps it will not let the agent skip — reading why each side exists, and running the checks afterwards. That is a thin margin over a good [model](https://www.aihero.dev/ai-coding-dictionary/model), and it is meant to be: at least one reader has predicted this is a whole skill that becomes a no-op as models improve.
 
 **Should I keep parallel agents off the same files to avoid conflicts in the first place?**
 
-Mostly no. Asked whether he uses zones or similar to minimise conflicts across parallel tasks, Matt's answer was: "Genuinely, AI is so good at doing merge conflicts that this tradeoff is not as harsh as you might think." The one piece of discipline he keeps: "You just make sure that large refactors are done first and that's basically it." A large rename landing after ten branches have forked off it is the case that stays expensive.
+Mostly no. Zoning files off between parallel tasks costs more than it saves, because agents are good enough at merge conflicts that the tradeoff is not as harsh as it looks. The one piece of discipline worth keeping is to do large refactors first. A large rename landing after ten branches have forked off it is the case that stays expensive.
 
 One caveat from a user report on parallel worktrees: when sibling [sessions](https://www.aihero.dev/ai-coding-dictionary/session) each build a ticket in their own tree, the merge back is best done by the session that wrote the change, because it is the one that already knows the intent. Batching everybody's conflicts onto one agent at the end throws away exactly the [context](https://www.aihero.dev/ai-coding-dictionary/context) step 2 of this skill has to go and reconstruct.
 
