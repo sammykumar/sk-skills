@@ -73,6 +73,7 @@ Always present. Situate the skill in the system in a sentence or two:
 
 - Explain the **why**, not the process. The page orients and situates the skill; it never reproduces the `SKILL.md` steps or template dumps — a human choosing a tool does not need the runbook.
 - Use the skill's **leading words** (_seam_, _deep module_, _tracer bullet_) so the page and the skill speak one language.
+- **Use the [AI Coding Dictionary](https://www.aihero.dev/ai-coding-dictionary)'s term where one exists, and link its first use on the page.** The dictionary is the house vocabulary for AI coding — _context window_, _subagent_, _harness_, _primary source_, _agent mode_. Prefer its word over a synonym you invent. Link the first occurrence of each term to `https://www.aihero.dev/ai-coding-dictionary/<slug>` (the slug is the term lowercased with non-alphanumerics as hyphens: _context window_ → `context-window`), and leave every later occurrence unlinked. Link only where the word carries the dictionary's sense — a domain *model*, background *context* or an auth *token* is a different word that happens to match. Never link inside a heading, a code span, or an existing link, and never link a word that names a skill in this repo rather than the concept. Source of truth: [mattpocock/dictionary-of-ai-coding](https://github.com/mattpocock/dictionary-of-ai-coding).
 - **Branches go in a table or a list, never in a paragraph.** Where the page presents a choice — two artifacts the skill can produce, four situations that trigger it, five options at a boundary — the reader is scanning for the one row that matches their situation. A paragraph makes them read all of it to find out. A short markdown table (condition in the left column, what to do in the right) or a bulleted list gives it back in one glance. This applies wherever the branch appears, most often in `## When to reach for it` and the free-form middle.
 - Keep the page itself low-load. It is documentation *about* low-cognitive-load skills; furniture (spare headings, restated links) is the thing it is arguing against.
 
@@ -85,6 +86,7 @@ Always present. Situate the skill in the system in a sentence or two:
 - `## Where it fits` names the role and links to `ask-matt`.
 - A prerequisite (workspace, prior setup, tooling) is stated where one exists, and the section is absent where none does.
 - The middle surfaces the leading word.
+- Every AI Coding Dictionary term the page uses is spelt the dictionary's way, and its first use — and only its first use — links to the dictionary entry.
 - Every multi-way branch is a table or a list, not a paragraph the reader has to read in full.
 - The hunt for real questions ran — the wiki, the issues, the changelog — and `## Common questions` is sized to what it found, not padded to match a richer skill's page.
 - Every `## It's working if` bullet is checkable without opening `SKILL.md`.
