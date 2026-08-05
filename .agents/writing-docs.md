@@ -12,7 +12,9 @@ There is no H1 — the published page takes its title from the slug.
 
 ## Page structure
 
-Fill the template below. The **fixed frame** (`## What it does`, `## When to reach for it`, `## Where it fits`) appears on every page. The **adaptable middle** — `## Prerequisites` and the free-form substance sections — carries only what this particular skill earns; delete the rest.
+Fill the template below, keeping its order. The **fixed frame** (`## What it does`, `## When to reach for it`, `## Where it fits`) appears on every page. `## Prerequisites` and the free-form substance sections carry only what this particular skill needs; delete the rest.
+
+Four sections make a page worth reading: `What it does`, `When to reach for it`, `Common questions`, `It's working if`. The first two orient the reader; the last two are where the page stops summarising the skill and starts answering the reader's own situation. Each of the last two has a bar to clear, below — but treat a page that clears neither as unfinished, not as finished-and-short.
 
 **A page carries no install commands.** The ai-hero page template renders the install widget itself — a copy button, the single-skill command, the whole-set command, and the update line — above the body. A page that also writes them out shows the reader the same command twice, and the two copies drift: the hand-written pair on every page went stale against the widget beside it. Install wording is a property of the site, not of the page. If it needs changing, change it in ai-hero; the canonical wording lives in [the install block](./install-block.md).
 
@@ -39,9 +41,21 @@ One to three short sections, in the skill's *own vocabulary*, that make it click
 
 The single non-negotiable: **surface the skill's leading word / defining idea** — `tight` feedback loop, `deep module`, throwaway-code-answers-a-question, red-green. It pays off twice: the reader learns what the skill *is*, and learns the word they'll later think with to *reach for* it.
 
+## Common questions
+
+The questions readers really ask about this skill, each in bold with the answer in the lines beneath it — no sub-headings.
+
+Every question here is one someone asked. That is the section's whole value: a page with three observed questions beats one with eight plausible ones, because an invented question teaches the reader nothing and reads as filler. So go and find them before you write any:
+
+- **The wiki.** If `~/repos/matt/personal-wiki` exists on this machine, it is the richest source there is. Its `wiki/audience/` area is organised around what the audience wants, discusses, and **is confused by** — read `wiki/index.md` first for the registry of pages, then the pages bearing on this skill. Every page carries `sources:` linkbacks to the original X, Discord, GitHub, and email threads; the wiki is a secondary source, so quote the asker's own question rather than the wiki's summary of it. Skip this bullet where the directory does not exist.
+- **This repo's issues.** `gh issue list --repo mattpocock/skills --search "<skill-name>" --state all`. A question filed twice is a question the page owes an answer to.
+- **`CHANGELOG.md`.** Anything renamed, moved, or behaviourally changed generates a "where did it go?" that the page has to answer.
+
+Order them by how often each comes up, sharpest first, and say the unflattering thing where it is true — a very long grilling session usually means the scope was too big; a model asked to write its own skill produces something verbose. Omit the heading where the hunt turns up nothing.
+
 ## It's working if
 
-Optional. A short, checkable list of the observable signals that tell the reader the skill is actually doing its job — what they should see when it fires, and by absence when it hasn't. Include it when a skill has crisp tells (e.g. `to-spec` writes without re-interviewing you; a leading word reappearing in the trace); omit the heading when the signals are vague. A few bullets, no more.
+A few bullets naming what the reader sees when the skill is doing its job. The bar on each is that the reader can check it without opening `SKILL.md` — a signal in their own work, or in the trace in front of them. "The document gets shorter as it gets better" passes; "the library section is byte-identical to `template.sh`" is a compliance check on the skill's internals wearing this section's name. Include it wherever the tells are crisp; omit the heading where they stay vague.
 
 ## Where it fits
 
@@ -68,4 +82,7 @@ Always present. Situate the skill in the system in a sentence or two:
 - `## Where it fits` names the role and links to `ask-matt`.
 - A prerequisite (workspace, prior setup, tooling) is stated where one exists, and the section is absent where none does.
 - The middle surfaces the leading word.
+- Every `## Common questions` entry traces to a question someone asked — found in the wiki, the issues, or the changelog — and the heading is absent where the hunt found none.
+- Every `## It's working if` bullet is checkable without opening `SKILL.md`.
+- The sections appear in the template's order.
 - Every link is absolute, and every one resolves.
