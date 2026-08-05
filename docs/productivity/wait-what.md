@@ -1,13 +1,3 @@
-Quickstart:
-
-```bash
-npx skills@latest add mattpocock/skills --skill=wait-what
-```
-
-```bash
-npx skills@latest update wait-what
-```
-
 [Source](https://github.com/mattpocock/skills/tree/main/skills/productivity/wait-what)
 
 ## What it does
