@@ -57,8 +57,6 @@ Each smell reads *what it is* → *how to fix*; match it against the diff:
 
 ### 4. Spawn both sub-agents in parallel
 
-Dispatch both with your harness's subagent mechanism, in parallel — one message with two calls where the harness supports it. Pick its most general-purpose agent for both: each must read files and run `git`, so a search-only agent is too narrow.
-
 **Standards sub-agent prompt** — include:
 
 - The full diff command and commit list.
