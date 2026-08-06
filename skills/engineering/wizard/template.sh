@@ -35,7 +35,7 @@ _clear() {
   if command -v tput >/dev/null 2>&1; then tput clear; else printf '\033[2J\033[3J\033[H'; fi
 }
 
-# banner "Title" — opening frame: what this wizard does. Never a time estimate.
+# banner "Title" — opening frame: what this wizard does.
 banner() {
   _clear
   printf '\n%s%s  %s%s\n' "$BOLD" "$BLUE" "$1" "$RESET"
@@ -46,8 +46,8 @@ banner() {
   pause "Ready to start?"
 }
 
-# stage "Name" — clear the screen, then announce a stage and show progress as a
-# stage count. Clearing keeps only the current step on screen.
+# stage "Name" — clear the screen, then announce a stage and show progress.
+# Clearing keeps only the current step on screen.
 stage() {
   _clear
   _STAGE_INDEX=$((_STAGE_INDEX + 1))
@@ -182,7 +182,6 @@ finish() {
 # ──────────────────────────────────────────────────────────────────────────
 # STAGES — author this section. One stage() per step the human takes.
 # Replace the example below. Set TOTAL_STAGES to match the stages you write.
-# Never tell the human how many minutes anything takes.
 # ──────────────────────────────────────────────────────────────────────────
 
 TOTAL_STAGES=1
