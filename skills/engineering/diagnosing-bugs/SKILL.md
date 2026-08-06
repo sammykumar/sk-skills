@@ -11,11 +11,7 @@ When exploring the codebase, read `CONTEXT.md` (if it exists) to get a clear men
 
 ## Redact
 
-This skill has you show commands, outputs and captured artifacts. **Redact every secret first** — API keys, tokens, passwords, cookies, session IDs, connection strings, signed URLs. Write `<REDACTED>` in its place.
-
-- **Show a command's shape, not its credential**: `curl -H "Authorization: Bearer $API_TOKEN" …`. The env var reference is the redacted form, and it still runs.
-- **Build loops against env vars**, so the credential stays in the environment rather than in the file you write or the output you quote.
-- **Redact captured artifacts** — HAR files, log dumps and request payloads carry auth headers. Quote only the lines that carry the signal.
+This skill has you show commands, outputs and captured artifacts. **Redact every secret first** — write `<REDACTED>` in its place. Build loops against env vars, so the credential stays in the environment rather than in what you show. Captured artifacts carry auth headers: quote only the lines that carry the signal.
 
 If the redacted output is not enough to diagnose the bug, say so and ask the user.
 
