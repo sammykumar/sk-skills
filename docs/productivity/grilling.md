@@ -16,7 +16,7 @@ Typing `/grilling` directly gets you the plain interview and nothing else. Where
 | You are in a working directory | [grill-with-docs](https://aihero.dev/skills-grill-with-docs) — the same session, and it writes `CONTEXT.md` and ADRs as it goes |
 | An effort too big to hold in one session | [wayfinder](https://aihero.dev/skills-wayfinder) — it charts a map and runs grilling inside the decision tickets |
 | A question that talking cannot settle — how something should look or feel | [prototype](https://aihero.dev/skills-prototype) — build the throwaway version, then come back |
-| A skill of your own that needs an interview | Call the Skill tool with "grilling" from it, rather than writing another interview |
+| A skill of your own that needs an interview | Invoke `/grilling` from it, rather than writing another interview |
 
 ## The round, the frontier, and who decides
 
@@ -67,10 +67,10 @@ That is a bug in the run, not the intended behaviour, and it was the reason fact
 No, and a cap is deliberately out of scope. Some plans need three questions and some need fifty; a fixed ceiling either truncates the hard case or feels arbitrary on the easy one. Steering in plain language is the intended control — tell it to wrap up, or stop and accept the plan where it stands. If a session is running very long, the cause is usually that the scope was too big; break the work up and grill the pieces.
 
 **I installed `grill-me` on its own and nothing happens.**
-`grill-me` is a one-line skill whose whole body is `Call the Skill tool with "grilling"`, so it needs this skill installed too. The same is true of `grill-with-docs`, which additionally needs [domain-modeling](https://aihero.dev/skills-domain-modeling). Installing the whole set avoids the problem; installing selectively means installing the primitives as well.
+`grill-me` is a one-line skill whose whole body is "run a `/grilling` session", so it needs this skill installed too. The same is true of `grill-with-docs`, which additionally needs [domain-modeling](https://aihero.dev/skills-domain-modeling). Installing the whole set avoids the problem; installing selectively means installing the primitives as well.
 
 **`grill-with-docs` ran, but it never loaded `grilling`.**
-A reported rough edge, seen across [harnesses](https://www.aihero.dev/ai-coding-dictionary/harness) and models: a skill that names another skill in prose does not reliably cause that skill to load, and `grill-with-docs` names two. The skill's body now names both explicitly as separate Skill tool calls ("Call the Skill tool twice, for `grilling` and `domain-modeling`") rather than a bare mention, which is intended to raise the hit rate — but if you still see it, the tell is a session that asks everything at once with no recommendations attached, which is the model improvising an interview rather than running this one. Asking the agent directly whether it loaded `grilling` and `domain-modeling` usually recovers it.
+A real and unfixed rough edge, reported across [harnesses](https://www.aihero.dev/ai-coding-dictionary/harness) and models: a skill that names another skill does not reliably cause that skill to load, and `grill-with-docs` names two. The tell is a session that asks everything at once with no recommendations attached — that is the model improvising an interview rather than running this one. Asking the agent directly whether it loaded `grilling` and `domain-modeling` usually recovers it.
 
 ## It's working if
 
