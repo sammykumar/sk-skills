@@ -46,7 +46,7 @@ The model does. The skill names the *kinds* of source that qualify (official doc
 
 **Does a later session reuse what an earlier run found?**
 
-No. Nothing auto-loads a past research file; it is a document sitting in the repo until a human or a skill points at it. This was raised early as the strongest challenge to the design: "the value's the markdown becoming context the agent re-reads later, not the fetch itself. A write-once dead file is just a fancy search." The shipped skill does not solve it. In practice the file earns its keep by being fed into the next step deliberately: attach it to a spec, quote it into a grilling session, point a ticket at it.
+No. Nothing auto-loads a past research file; it is a document sitting in the repo until a human or a skill points at it. This was raised early as the strongest challenge to the design: "the value's the markdown becoming context the agent re-reads later, not the fetch itself. A write-once dead file is just a fancy search." The shipped skill does not solve it. In practice the file earns its keep by being fed into the next step deliberately: attach it to a spec, quote it into a grilling session, point a task at it.
 
 **Why not just ask the agent to go read the docs?**
 
@@ -56,9 +56,9 @@ You can, and a two-line prompt saying exactly that was the practice this skill r
 
 There is no stopping criterion in the skill, and this shows up as two complaints that look opposite but are the same gap: agents that go far too deep, and agents that cover a topic broadly while missing the one specific detail that mattered. One practitioner put it as "deep-research skills are a bit too deep sometimes. And telling an agent to research usually results in missing crucial details." Scoping is on you. A narrow, answerable question (one API, one behaviour, one version claim) comes back far better than "research X".
 
-**`/wayfinder` created research tickets. Do I resolve those myself?**
+**`/wayfinder` created research open questions. Do I resolve those myself?**
 
-No, it now fires them for you. In the unreleased changes since v1.1, a charting session spawns a `/research` subagent per research ticket and burns them down in parallel, capturing findings on a throwaway `research/<name>` branch with a context pointer from the ticket. Research tickets are the one exception to wayfinder's one-ticket-per-session rule, because they are AFK: nothing waits on you. Two known snags with those branches: the subagent has been seen opening a draft PR from a branch that is never meant to merge ([issue #576](https://github.com/mattpocock/skills/issues/576)), and deleting the branch later breaks the context pointers the tickets hold.
+No, it now fires them for you. In the unreleased changes since v1.1, a charting session spawns a `/research` subagent per research open question and burns them down in parallel, capturing findings on a throwaway `research/<name>` branch with a context pointer from the open question. Research open questions are the one exception to wayfinder's one-question-per-session rule, because they are AFK: nothing waits on you. Two known snags with those branches: the subagent has been seen opening a draft PR from a branch that is never meant to merge ([issue #576](https://github.com/mattpocock/skills/issues/576)), and deleting the branch later breaks the context pointers the open questions hold.
 
 ## It's working if
 
@@ -70,4 +70,4 @@ No, it now fires them for you. In the unreleased changes since v1.1, a charting 
 
 ## Where it fits
 
-A reach-for-it-anytime standalone that feeds the thinking skills rather than sitting in the build chain. Its file is something to take *into* the flow: grilling and grill-with-docs ask sharper questions when the facts are already on the table, and to-spec can synthesise against it. wayfinder is the one skill that invokes it directly, resolving each research ticket on its map with a `/research` subagent. For the whole map, see ask-sk.
+A reach-for-it-anytime standalone that feeds the thinking skills rather than sitting in the build chain. Its file is something to take *into* the flow: grilling and grill-with-docs ask sharper questions when the facts are already on the table, and to-spec can synthesise against it. wayfinder is the one skill that invokes it directly, resolving each research open question on its map with a `/research` subagent. For the whole map, see ask-sk.

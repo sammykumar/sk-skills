@@ -1,0 +1,5 @@
+interface:
+  display_name: "Migrate to Tasks"
+  short_description: "Migrate a repo off the retired ticket vocabulary"
+policy:
+  allow_implicit_invocation: false

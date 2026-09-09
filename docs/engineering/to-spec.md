@@ -14,12 +14,12 @@ Reach for it when the build is too big for one agent session and has to survive 
 | --- | --- |
 | You haven't decided anything yet | grill-with-docs first |
 | Decided, and the work fits one context window | implement: skip the spec |
-| Decided, and the work spans several sessions | `/to-spec`, then to-tickets |
+| Decided, and the work spans several sessions | `/to-spec`, then to-tasks |
 | A wayfinder map has cleared | `/to-spec #<map_issue>` |
 
 ## Prerequisites
 
-`to-spec` publishes the spec as an issue, so setup-sk-skills must have configured a tracker and the triage-label vocabulary for this repo first. Either kind works: a real tracker like GitHub, or Repo PDD Markdown files under `docs/plans/`, which is supported out of the box.
+`to-spec` publishes the spec as an issue, so setup-sk-skills must have configured a tracker and the triage-label vocabulary for this repo first. Either kind works: a real tracker like GitHub, or Repo PDD Markdown files under `docs/tasks/`, which is supported out of the box.
 
 ## The spec is a decision record
 
@@ -36,21 +36,21 @@ Those agreed seams then travel. tdd works only at pre-agreed seams, and code-rev
 ## Common questions
 
 **Where did `/to-prd` go?**
-It is this skill, renamed in v1.1. "Spec" is now the single through-line term, and the old `to-prd` slug is dead; reinstall under the new name. The pair that replaced the old vocabulary is *spec* and *tickets*: the spec is the destination and the decisions that fix it, the tickets are the execution steps that get there. If you pivot, delete the unfinished tickets and keep the spec.
+It is this skill, renamed in v1.1. "Spec" is now the single through-line term, and the old `to-prd` slug is dead; reinstall under the new name. The pair that replaced the old vocabulary is *spec* and *tasks*: the spec is the destination and the decisions that fix it, the tasks are the execution steps that get there. If you pivot, delete the unfinished tasks and keep the spec.
 
 **Why does the spec get the `ready-for-agent` label? I don't want an agent implementing off it.**
-The label means "no further triage needed": the document is complete enough for an agent to work from. It is an input designation, not a work order. But if you run AFK agents that poll for `ready-for-agent`, that distinction isn't visible to them, and they will happily try to build the whole spec in one run instead of picking up the ticket slices. This is the most-reported rough edge on the skill. Until it changes, exclude the parent spec explicitly in your AFK agent's prompt, or strip the label once `/to-tickets` has run.
+The label means "no further triage needed": the document is complete enough for an agent to work from. It is an input designation, not a work order. But if you run AFK agents that poll for `ready-for-agent`, that distinction isn't visible to them, and they will happily try to build the whole spec in one run instead of picking up the task slices. This is the most-reported rough edge on the skill. Until it changes, exclude the parent spec explicitly in your AFK agent's prompt, or strip the label once `/to-tasks` has run.
 
-**Why not go straight from grilling to `/to-tickets` and skip the spec?**
-Often you should; the spec earns its step only on multi-session work. Where it pays is that the tickets are disposable and the spec isn't: each ticket is sized for one fresh context window and gets deleted or closed, while the spec stays as the one place the reasoning behind them lives. On a single-session change that buys you nothing, and you have paid an extra synthesis step where the model can drift. Go grilling → `/implement`.
+**Why not go straight from grilling to `/to-tasks` and skip the spec?**
+Often you should; the spec earns its step only on multi-session work. Where it pays is that the tasks are disposable and the spec isn't: each task is sized for one fresh context window and gets deleted or closed, while the spec stays as the one place the reasoning behind them lives. On a single-session change that buys you nothing, and you have paid an extra synthesis step where the model can drift. Go grilling → `/implement`.
 
 **I just finished a wayfinder map. What do I feed it?**
-The main map issue: `/to-spec #<map_issue>`, not the individual decision tickets. wayfinder produces decisions rather than deliverables, scattered across a map; `to-spec` is the step that collapses them into one buildable document. Looping the map straight into `/implement` throws that collapse away.
+The main map issue: `/to-spec #<map_issue>`, not the individual open questions. wayfinder produces decisions rather than deliverables, scattered across a map; `to-spec` is the step that collapses them into one buildable document. Looping the map straight into `/implement` throws that collapse away.
 
 **Is the spec for me to review, or is it just for the agent?**
 Mostly for the agent, and it reads that way: complete, dense, reference-heavy. The parts worth your eyes are the seams and the out-of-scope section, because those are the two places a wrong decision is cheapest to catch and most expensive to discover later. Reading the whole thing end to end is a real complaint people have, and there is no summary mode: the honest answer is that if the spec surprises you, the grilling was too shallow, not the spec too long.
 
-**Do I keep the spec frozen once tickets start, or let the agent rewrite it?**
+**Do I keep the spec frozen once tasks start, or let the agent rewrite it?**
 Nothing keeps it in sync, so in practice it is a snapshot of what you knew at that moment, and it goes stale the first time implementation teaches you something. Treat it as throwaway once the work ships. The artifacts meant to outlive it are your `CONTEXT.md` and your ADRs; if something learned during implementation deserves to last, it belongs there, not in an edited spec.
 
 **My work is a refactor or a module boundary, not a feature. Does the template fit?**
@@ -59,8 +59,8 @@ Less well, and this is a known limitation. The template leans hard on user stori
 **Will it check the tracker for related work, or cite the ADRs it's respecting?**
 No to both. It reads and respects the ADRs covering the area it touches, but it doesn't link them, and it doesn't search the tracker for overlapping issues before drafting, so a spec can quietly duplicate work someone already filed. Search the tracker yourself first if the area is busy.
 
-**`/to-tickets` couldn't read my spec: it kept truncating.**
-Very large specs can outgrow what a tracker issue will serve back cleanly, and there is no local copy to fall back on. The fix is context hygiene: don't clear or compact between `/to-spec` and `/to-tickets`. Run them in the same window and the spec never has to be re-fetched at all.
+**`/to-tasks` couldn't read my spec: it kept truncating.**
+Very large specs can outgrow what a tracker issue will serve back cleanly, and there is no local copy to fall back on. The fix is context hygiene: don't clear or compact between `/to-spec` and `/to-tasks`. Run them in the same window and the spec never has to be re-fetched at all.
 
 ## It's working if
 
@@ -75,7 +75,7 @@ Very large specs can outgrow what a tracker issue will serve back cleanly, and t
 `to-spec` is a step in the main build chain, and only on the multi-session branch of it:
 
 ```txt
-grill-with-docs → to-spec → to-tickets → implement → code-review
+grill-with-docs → to-spec → to-tasks → implement → code-review
 ```
 
-Its neighbours upstream are grill-with-docs, which does the deciding this skill only records, and wayfinder, whose finished map merges onto the chain right here. Downstream, to-tickets cuts the spec into tracer-bullet tickets for implement to build. When you're unsure which skill or flow fits, ask-sk routes you.
+Its neighbours upstream are grill-with-docs, which does the deciding this skill only records, and wayfinder, whose finished map merges onto the chain right here. Downstream, to-tasks cuts the spec into tracer-bullet tasks for implement to build. When you're unsure which skill or flow fits, ask-sk routes you.
