@@ -2,7 +2,7 @@
 
 `code-review` reviews the diff between `HEAD` and a fixed point you name (a commit, a branch, a tag, `main`, `HEAD~5`) along two axes. **Standards** asks whether the code follows how this repo writes code. **Spec** asks whether the code does what the originating issue or spec asked for. Each axis runs in its own sub-agent so neither sees the other's reasoning.
 
-The two axes are never merged and never re-ranked. The report ends with a worst issue *per axis* and refuses to name a single winner across them, because a change can pass one axis and fail the other: code that follows every convention while implementing the wrong thing passes Standards and fails Spec; code that does exactly what the ticket asked while breaking the repo's conventions does the reverse. A blended verdict lets the passing axis hide the failing one.
+The two axes are never merged and never re-ranked. The report ends with a worst issue *per axis* and refuses to name a single winner across them, because a change can pass one axis and fail the other: code that follows every convention while implementing the wrong thing passes Standards and fails Spec; code that does exactly what the task asked while breaking the repo's conventions does the reverse. A blended verdict lets the passing axis hide the failing one.
 
 ## When to reach for it
 
@@ -59,9 +59,9 @@ Known open bug, reproduced by several people and in more than one harness. The S
 
 Prefer a fresh one. As one reader put it: "Same context reviewing itself isn't review, it's confirmation bias with a slash command." The reviewing agent in the authoring session holds every assumption that shaped the code, which is exactly the context an independent reviewer would not have. This is also why people ask for implement without its built-in review step: it runs the review inside the session that just wrote the diff. Invoking `/code-review` yourself from a clean session is the honest version.
 
-**After every ticket, or once at the end?**
+**After every task, or once at the end?**
 
-Both work, and the skill does not decide for you. Per-ticket keeps each diff small enough that the Spec axis has one clear spec to check against, which is the mode `implement` uses. Batching to the end of a branch catches interactions between tickets that the per-ticket passes each miss. If you are unsure, review per ticket and run one final pass against the branch point.
+Both work, and the skill does not decide for you. Per-task keeps each diff small enough that the Spec axis has one clear spec to check against, which is the mode `implement` uses. Batching to the end of a branch catches interactions between tasks that the per-task passes each miss. If you are unsure, review per task and run one final pass against the branch point.
 
 **Can I trust the findings?**
 
@@ -85,10 +85,10 @@ No. It diffs `<fixed-point>...HEAD`, three-dot, which is measured from the merge
 
 ## Where it fits
 
-`code-review` is the review step at the tail of the build chain: `grill-with-docs → to-spec → to-tickets → implement → code-review`. It also stands alone on any branch or PR you point it at.
+`code-review` is the review step at the tail of the build chain: `grill-with-docs → to-spec → to-tasks → implement → code-review`. It also stands alone on any branch or PR you point it at.
 
 - implement is the closest neighbour: it drives the build and calls this skill as its own closing review before committing.
-- to-spec and to-tickets produce the document the Spec axis checks against; a vague spec makes that axis vague.
+- to-spec and to-tasks produce the document the Spec axis checks against; a vague spec makes that axis vague.
 - improve-codebase-architecture is the whole-codebase counterpart: this skill only ever looks at one diff.
 
 ask-sk routes across the whole set when you are unsure which skill the situation wants.

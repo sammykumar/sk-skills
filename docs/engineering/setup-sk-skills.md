@@ -10,7 +10,7 @@ It is a prompt-driven skill rather than a deterministic script (the one exceptio
 
 You invoke this by typing `/setup-sk-skills`; the agent won't reach for it on its own. It is deliberately marked non-invokable, so no other skill can fire it for you.
 
-Reach for it once per repo, before the first use of any other engineering skill. If triage, to-spec, to-tickets or wayfinder start guessing where your issues go, or apply labels your tracker doesn't have, they have not been set up here yet. A repo already halfway through a project is a fine place to run it; the skill reads what is already there and no earlier work is wasted.
+Reach for it once per repo, before the first use of any other engineering skill. If triage, to-spec, to-tasks or wayfinder start guessing where your issues go, or apply labels your tracker doesn't have, they have not been set up here yet. A repo already halfway through a project is a fine place to run it; the skill reads what is already there and no earlier work is wasted.
 
 ## Prerequisites
 
@@ -108,10 +108,10 @@ One long-standing complaint says yes, in these words: *"having a skill to set up
 - `docs/agents/issue-tracker.md` and `docs/agents/domain.md` exist, plus `triage-labels.md` if `triage` is installed.
 - An `## Agent skills` section appears in the instruction file your harness actually reads, with a one-line summary pointing at each of those files.
 - The tracker it proposed matches the remote you really use, and the label strings match labels that really exist in your tracker.
-- Afterwards, `/to-tickets` publishes without asking you where issues live, and `/triage` applies labels rather than inventing them.
+- Afterwards, `/to-tasks` publishes without asking you where issues live, and `/triage` applies labels rather than inventing them.
 - If you opted into vocab mining and kept some terms, `CONTEXT.md` holds exactly those and nothing you did not confirm.
 - Nothing in the skill files themselves changed. If setup edited a `SKILL.md`, something went wrong.
 
 ## Where it fits
 
-`setup-sk-skills` is the **run-once setup** for the engineering flow, the precondition everything else assumes rather than a step in the chain. Its neighbours are its readers: triage, which applies the label vocabulary written here; to-spec and to-tickets, which publish into the tracker named here; and wayfinder, which reads the "Wayfinding operations" section of the same tracker file to know how maps and child tickets are stored. The domain-doc layout it records is the one domain-modeling fills in later, and the glossary it seeds is the one domain-modeling sharpens: setup may write `CONTEXT.md` once, from terms you confirmed, and domain-modeling owns it from there, creating ADRs and resolving ambiguities lazily as they come up. For which skill to reach for next, ask-sk routes the whole set.
+`setup-sk-skills` is the **run-once setup** for the engineering flow, the precondition everything else assumes rather than a step in the chain. Its neighbours are its readers: triage, which applies the label vocabulary written here; to-spec and to-tasks, which publish into the tracker named here; and wayfinder, which reads the "Wayfinding operations" section of the same tracker file to know how maps and their child open questions are stored. The domain-doc layout it records is the one domain-modeling fills in later, and the glossary it seeds is the one domain-modeling sharpens: setup may write `CONTEXT.md` once, from terms you confirmed, and domain-modeling owns it from there, creating ADRs and resolving ambiguities lazily as they come up. For which skill to reach for next, ask-sk routes the whole set.
