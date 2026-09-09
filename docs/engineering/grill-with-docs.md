@@ -52,7 +52,7 @@ The glossary is the point. Domain language is the thing this skill is actually b
 ## Common questions
 
 **Should I use this or `/wayfinder`?**
-Scope decides it. Use this for anything you can settle in one session; use wayfinder when the effort is too big to hold in one, and it charts the work as a map of decision tickets first. Wayfinder is slower and denser, and reaching for it on a well-scoped feature is the common mistake. It does not replace this skill: it can drop into a grilling session for the parts of the map that suit one.
+Scope decides it. Use this for anything you can settle in one session; use wayfinder when the effort is too big to hold in one, and it charts the work as a map of open questions first. Wayfinder is slower and denser, and reaching for it on a well-scoped feature is the common mistake. It does not replace this skill: it can drop into a grilling session for the parts of the map that suit one.
 
 **It ran, but no `CONTEXT.md` and no ADRs appeared.**
 Two known causes. The mundane one: nothing qualified. ADRs need all three gates, and a session about a change with no new vocabulary genuinely has nothing to write. The real bug: when the skill runs inside another orchestration layer (a spec-driven-development wrapper, a multi-agent framework, a rule that invokes it as a step in someone else's pipeline), the file-writing half is reported to silently not happen, while the interview still runs. This is filed and unfixed. If you are in that setup, check the working directory before you trust the session's output.
@@ -86,7 +86,7 @@ Nobody is happy with the name. There is an open suggestion to rename it `grill-d
 `grill-with-docs` is the head of the main build chain:
 
 ```txt
-grill-with-docs → to-spec → to-tickets → implement → code-review
+grill-with-docs → to-spec → to-tasks → implement → code-review
 ```
 
 It comes before anything is written down as a spec: it produces the shared understanding and settled vocabulary that to-spec then synthesises without interviewing you again. Its close neighbours are grill-me, the same interview with no repo and no files, and domain-modeling, the glossary-and-ADR discipline it drives; both sit on the grilling primitive. Upstream of it, wayfinder charts efforts too large for one session and can hand parts of the map back down to it. When you're unsure which skill or flow fits, ask-sk routes you.

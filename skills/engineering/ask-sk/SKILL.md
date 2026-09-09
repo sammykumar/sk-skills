@@ -14,7 +14,7 @@ A **flow** is a path through the skills. Most paths run along one **main flow**,
 
 The route most work travels. You have an idea and want it built.
 
-**If you already know this is the route, don't walk it step by step: `/auto-implement <feature>` drives the whole thing.** It runs steps 1 to 3 below in one context window from a feature you name up front, taking the branch at step 3 with you rather than asking which skill comes next, and stopping before `/implement` when the answer is tickets, because each ticket wants its own fresh window. Reach for the individual skills below when you want to stop between phases, or when you are picking up a flow part-way through.
+**If you already know this is the route, don't walk it step by step: `/auto-implement <feature>` drives the whole thing.** It runs steps 1 to 3 below in one context window from a feature you name up front, taking the branch at step 3 with you rather than asking which skill comes next, and stopping before `/implement` when the answer is tasks, because each task wants its own fresh window. Reach for the individual skills below when you want to stop between phases, or when you are picking up a flow part-way through.
 
 1. **`/grill-with-docs`** sharpens the idea by interview. Start here whenever you are **working in a working directory**: it's stateful, retaining what it learns in `CONTEXT.md` and ADRs, and writing the resolved design into your repo's planning-doc location. (No working directory? Use `/grill-me` instead, covered under Standalone. Both run the same `/grilling` primitive; `grill-with-docs` is the one that leaves a paper trail, which makes it the better of the two whenever a repo is there to leave it in.)
 2. **Branch: can you settle every question in conversation?** If a question needs a runnable answer (state, business logic, a UI you have to see), detour through a prototype, bridged by **`/handoff`** in both directions (a prototype lives in its own directory, which is exactly what `/handoff` is for; see Phase boundaries):
@@ -22,20 +22,20 @@ The route most work travels. You have an idea and want it built.
    - **`/prototype`** to answer the question with throwaway code,
    - **`/handoff`** back what you learned, and reference it from the original idea thread.
 3. **Branch: is this a multi-session build?**
-   - **Yes** → **`/to-spec`** (turn the thread into a spec), then **`/to-tickets`** to split it into tracer-bullet tickets, each declaring its **blocking edges**. On a Repo PDD Markdown tracker that's one file per ticket under `docs/plans/<feature>/issues/`, worked blockers-first by hand; on a real tracker the edges become native blocking links, so any ticket whose blockers are done can be grabbed: kick off **`/implement`** per ticket, **`/clear`ing context between each one**. Each ticket is self-contained, so the last one's context is disposable.
+   - **Yes** → **`/to-spec`** (turn the thread into a spec), then **`/to-tasks`** to split it into tracer-bullet tasks, each declaring its **blocking edges**. On a Repo PDD Markdown tracker that's one file per task under `docs/tasks/<feature>/tasks/`, worked blockers-first by hand; on a real tracker the edges become native blocking links, so any task whose blockers are done can be grabbed: kick off **`/implement`** per task, **`/clear`ing context between each one**. Each task is self-contained, so the last one's context is disposable.
    - **No** → **`/implement`** right here, in the same context window.
 
    Either way, **`/implement`** builds each issue by driving **`/tdd`** internally (one red-green slice at a time), then closes out by running **`/code-review`**, a two-axis review (Standards + Spec) of the diff, before committing. Reach for **`/tdd`** on its own when you just want to build a concrete behaviour test-first without a full spec, and **`/code-review`** on its own whenever you want to review a branch or PR against a fixed point.
 
 ### Wrappers and engines
 
-Three of the names above are thin shells. `/grill-with-docs` is a shell over `grilling`, `domain-modeling` and `recording-designs`; `/to-spec` over `writing-specs`; `/to-tickets` over `splitting-tickets`. The engines are model-invoked, so you *can* type them, and `/auto-implement` calls them directly because a skill cannot call a user-invoked one. Route by the wrapper names anyway: they behave identically and they are the names on this map.
+Three of the names above are thin shells. `/grill-with-docs` is a shell over `grilling`, `domain-modeling` and `recording-designs`; `/to-spec` over `writing-specs`; `/to-tasks` over `splitting-tasks`. The engines are model-invoked, so you *can* type them, and `/auto-implement` calls them directly because a skill cannot call a user-invoked one. Route by the wrapper names anyway: they behave identically and they are the names on this map.
 
 ### Context hygiene
 
-Keep steps 1–3 in **one unbroken context window** (don't compact or clear until after `/to-tickets`) so the grilling, spec, and tickets all build on the same thinking. Each `/implement` then starts fresh, working from the ticket.
+Keep steps 1–3 in **one unbroken context window** (don't compact or clear until after `/to-tasks`) so the grilling, spec, and tasks all build on the same thinking. Each `/implement` then starts fresh, working from the task.
 
-The limit on this is the **smart zone**: the window (~150k tokens on state-of-the-art models) within which the model still reasons sharply. If a session approaches it before `/to-tickets`, don't push on degraded; `/compact` at the nearest phase boundary and carry on (see Phase boundaries).
+The limit on this is the **smart zone**: the window (~150k tokens on state-of-the-art models) within which the model still reasons sharply. If a session approaches it before `/to-tasks`, don't push on degraded; `/compact` at the nearest phase boundary and carry on (see Phase boundaries).
 
 ## On-ramps
 
@@ -43,13 +43,13 @@ A starting situation that generates work, then merges onto the main flow.
 
 - **Bugs and requests piling up** → **`/triage`**. It moves issues through triage roles and produces agent-ready issues, which **`/implement`** later picks up.
 
-  Triage is only for issues **you didn't create**: bug reports, incoming feature requests, anything that arrives raw. Tickets that `/to-tickets` produced are already agent-ready, so **don't triage them**.
+  Triage is only for issues **you didn't create**: bug reports, incoming feature requests, anything that arrives raw. Tasks that `/to-tasks` produced are already agent-ready, so **don't triage them**.
 
 - **Something's broken** → **`/diagnosing-bugs`**. For the hard ones: the bug that resists a first glance, the intermittent flake, the regression that crept in between two known-good states. It refuses to theorise until it has a **tight feedback loop** (one command that already goes red on *this* bug), then fixes with a regression test. Its post-mortem hands off to **`/improve-codebase-architecture`** when the real finding is that there's no good seam to lock the bug down.
 
-- **A huge, foggy effort: a greenfield project or a huge feature build, too big for one session** → **`/wayfinder`**, the most cognitively demanding flow here. When the way from here to the destination isn't visible yet, it charts a **shared map** of **decision tickets** on the issue tracker and resolves them one at a time, producing **decisions, not deliverables**, until the fog is pushed back and the way is clear. Where **`/grill-with-docs`** sharpens an idea you can hold in one session, wayfinder is for the idea you can't, and it's slower and denser, so save it for exactly that, never a well-scoped feature.
+- **A huge, foggy effort: a greenfield project or a huge feature build, too big for one session** → **`/wayfinder`**, the most cognitively demanding flow here. When the way from here to the destination isn't visible yet, it charts a **shared map** of **open questions** on the issue tracker and resolves them one at a time, producing **decisions, not deliverables**, until the fog is pushed back and the way is clear. Where **`/grill-with-docs`** sharpens an idea you can hold in one session, wayfinder is for the idea you can't, and it's slower and denser, so save it for exactly that, never a well-scoped feature.
 
-  When the map clears, **it hands off, it doesn't build**: merge onto the main flow at **`/to-spec`**, which collapses the map's linked decisions into a buildable plan, then `/to-tickets` and `/implement` as usual. Looping the map straight into `/implement` skips that collapse and throws the linked detail away, so go straight to `/implement` only when the effort turned out genuinely small.
+  When the map clears, **it hands off, it doesn't build**: merge onto the main flow at **`/to-spec`**, which collapses the map's linked decisions into a buildable plan, then `/to-tasks` and `/implement` as usual. Looping the map straight into `/implement` skips that collapse and throws the linked detail away, so go straight to `/implement` only when the effort turned out genuinely small.
 
 ## Codebase health
 
@@ -100,3 +100,5 @@ Off the main flow entirely.
 **`/setup-statusline`**: run once per machine, not per repo, to install the custom terminal status line across your coding agents. Claude Code and GitHub Copilot CLI get the real renderer; Codex gets the closest approximation its built-in items allow, because it cannot run a command for its status line.
 
 **`/update-sk-skills`**: run when you want the skills themselves brought up to date. It works out how they reached this machine (the Claude Code plugin, skills.sh, or a symlinked dev checkout), reports what it found, and runs the matching update, so you never have to remember which route you took.
+
+**`/migrate-to-tasks`**: run once in any repo you configured before "ticket" was retired. It renames `/to-tickets` and `/splitting-tickets` to `/to-tasks` and `/splitting-tasks`, moves Repo PDD Markdown work into the `tasks/` layout, and sorts existing tickets into the two things they turned out to be: tasks, which are slices of a build, and open questions, which are wayfinder's units. Live trackers are read-only until you approve a batch. Reach for it right after `/update-sk-skills` on an older repo, since the updated skills expect the new vocabulary.

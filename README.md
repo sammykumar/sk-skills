@@ -66,7 +66,7 @@ It writes the skills into your repo as ordinary files you own and can edit. Noth
 In your agent, run it once per repo. It will:
 
 - Ask you which issue tracker you want to use (GitHub, Linear, or Repo PDD Markdown)
-- Ask you what labels you apply to tickets when you triage them (`/triage` uses labels)
+- Ask you what labels you apply to issues when you triage them (`/triage` uses labels)
 - Ask you where you want to save any docs we create
 - Offer to mine your past sessions in that repo for the words you actually use, and seed `CONTEXT.md` with the terms you confirm
 
@@ -94,7 +94,7 @@ flowchart TD
 
 ## Building a new feature
 
-Start every change with a grilling session, then either implement it directly or split it into tickets first. [`/implement`](./skills/engineering/implement/SKILL.md) drives [`/tdd`](./skills/engineering/tdd/SKILL.md) internally and closes out with [`/code-review`](./skills/engineering/code-review/SKILL.md) before committing.
+Start every change with a grilling session, then either implement it directly or split it into tasks first. [`/implement`](./skills/engineering/implement/SKILL.md) drives [`/tdd`](./skills/engineering/tdd/SKILL.md) internally and closes out with [`/code-review`](./skills/engineering/code-review/SKILL.md) before committing.
 
 ```mermaid
 flowchart TD
@@ -103,15 +103,15 @@ flowchart TD
     B -->|"No"| C{"Multi-session build?"}
     P --> C
     C -->|"No, single session"| I["/implement"]
-    C -->|"Yes"| S["/to-spec"] --> T["/to-tickets"] --> I
+    C -->|"Yes"| S["/to-spec"] --> T["/to-tasks"] --> I
     I --> J["drives /tdd (red-green-refactor)"]
     J --> K["/code-review (Standards and Spec)"]
     K --> L(["Commit and ship"])
 ```
 
-Want the whole route driven for you? [`/auto-implement <feature>`](./skills/engineering/auto-implement/SKILL.md) walks this diagram end to end from a feature you name up front: it grills, records the design, then either builds it here or splits it into tickets and hands them back. It stops before building the tickets, because each one wants its own fresh context window.
+Want the whole route driven for you? [`/auto-implement <feature>`](./skills/engineering/auto-implement/SKILL.md) walks this diagram end to end from a feature you name up front: it grills, records the design, then either builds it here or splits it into tasks and hands them back. It stops before building the tasks, because each one wants its own fresh context window.
 
-Forget which skill fits a given moment? [`/ask-sk`](./skills/engineering/ask-sk/SKILL.md) is the router over all of these. For an effort too big to hold in one session, start at [`/wayfinder`](./skills/engineering/wayfinder/SKILL.md), which charts a map of decision tickets before handing off to `/to-spec`.
+Forget which skill fits a given moment? [`/ask-sk`](./skills/engineering/ask-sk/SKILL.md) is the router over all of these. For an effort too big to hold in one session, start at [`/wayfinder`](./skills/engineering/wayfinder/SKILL.md), which charts a map of open questions before handing off to `/to-spec`.
 
 ## Reference
 
@@ -120,16 +120,17 @@ These split on two axes. **Bucket**: engineering skills are for daily code work,
 | Skill | Bucket | Invocation | What it does |
 | --- | --- | --- | --- |
 | **[ask-sk](./skills/engineering/ask-sk/SKILL.md)** | Engineering | User-invoked | Ask which skill or flow fits your situation. A router over the user-invoked skills in this repo. |
-| **[auto-implement](./skills/engineering/auto-implement/SKILL.md)** | Engineering | User-invoked | Drive the whole idea-to-ship flow on a feature you name up front: grill it, record the design, then either build it here in one session or split it into tickets and hand them back. |
+| **[auto-implement](./skills/engineering/auto-implement/SKILL.md)** | Engineering | User-invoked | Drive the whole idea-to-ship flow on a feature you name up front: grill it, record the design, then either build it here in one session or split it into tasks and hand them back. |
 | **[grill-with-docs](./skills/engineering/grill-with-docs/SKILL.md)** | Engineering | User-invoked | Grilling session that also documents as it goes: sharpening terminology in `CONTEXT.md`, recording hard decisions as ADRs, and writing the resolved design into your repo's planning-doc location. |
 | **[triage](./skills/engineering/triage/SKILL.md)** | Engineering | User-invoked | Move issues through a state machine of triage roles. |
 | **[improve-codebase-architecture](./skills/engineering/improve-codebase-architecture/SKILL.md)** | Engineering | User-invoked | Scan a codebase for deepening opportunities, present them as a visual HTML report, then grill through whichever one you pick. |
 | **[setup-sk-skills](./skills/engineering/setup-sk-skills/SKILL.md)** | Engineering | User-invoked | Configure this repo for the engineering skills (issue tracker, triage labels, domain doc layout), and seed `CONTEXT.md` from the vocabulary in your past sessions. Run once per repo before using the other engineering skills. |
 | **[update-sk-skills](./skills/engineering/update-sk-skills/SKILL.md)** | Engineering | User-invoked | Update the skills on this machine, after detecting how they were actually installed: the Claude Code plugin, skills.sh, or a dev checkout. |
+| **[migrate-to-tasks](./skills/engineering/migrate-to-tasks/SKILL.md)** | Engineering | User-invoked | Migrate a repo off the retired "ticket" vocabulary: rename the invocations, move Repo PDD Markdown work into the `tasks/` layout, and re-word existing issues as tasks or open questions. Run once per repo configured before the rename. |
 | **[to-spec](./skills/engineering/to-spec/SKILL.md)** | Engineering | User-invoked | Turn the current conversation into a spec and publish it to the issue tracker. No interview, just synthesizes what you've already discussed. |
-| **[to-tickets](./skills/engineering/to-tickets/SKILL.md)** | Engineering | User-invoked | Break any plan, spec, or conversation into a set of tracer-bullet tickets, each declaring its blocking edges, written as text in a local file, or as native blocking links on a real tracker. |
-| **[implement](./skills/engineering/implement/SKILL.md)** | Engineering | User-invoked | Build the work described by a spec or set of tickets, driving `/tdd` at pre-agreed seams and closing out with `/code-review` before committing. |
-| **[wayfinder](./skills/engineering/wayfinder/SKILL.md)** | Engineering | User-invoked | Plan a huge chunk of work, more than one agent session can hold, as a shared map of decision tickets on the issue tracker, and resolve them one at a time until the way to the destination is clear. |
+| **[to-tasks](./skills/engineering/to-tasks/SKILL.md)** | Engineering | User-invoked | Break any plan, spec, or conversation into a set of tracer-bullet tasks, each declaring its blocking edges, written as text in a local file, or as native blocking links on a real tracker. |
+| **[implement](./skills/engineering/implement/SKILL.md)** | Engineering | User-invoked | Build the work described by a spec or set of tasks, driving `/tdd` at pre-agreed seams and closing out with `/code-review` before committing. |
+| **[wayfinder](./skills/engineering/wayfinder/SKILL.md)** | Engineering | User-invoked | Plan a huge chunk of work, more than one agent session can hold, as a shared map of open questions on the issue tracker, and resolve them one at a time until the way to the destination is clear. |
 | **[prototype](./skills/engineering/prototype/SKILL.md)** | Engineering | Model-invoked | Build a throwaway prototype to answer a design question, either a single shareable HTML file for state/logic questions, or several radically different UI variations toggleable from one route. |
 | **[diagnosing-bugs](./skills/engineering/diagnosing-bugs/SKILL.md)** | Engineering | Model-invoked | Disciplined diagnosis loop for hard bugs and performance regressions: build a feedback loop that goes red on this bug → minimise → hypothesise → instrument → fix → regression-test. |
 | **[research](./skills/engineering/research/SKILL.md)** | Engineering | Model-invoked | Investigate a question against high-trust primary sources and capture the findings as a cited Markdown file in the repo, run as a background agent. |
@@ -139,7 +140,7 @@ These split on two axes. **Bucket**: engineering skills are for daily code work,
 | **[code-review](./skills/engineering/code-review/SKILL.md)** | Engineering | Model-invoked | Two-axis review of the diff since a fixed point: **Standards** (does it follow the repo's coding standards, plus a Fowler smell baseline?) and **Spec** (does it faithfully implement the originating issue/spec?), run as parallel sub-agents so neither pollutes the other. |
 | **[resolving-merge-conflicts](./skills/engineering/resolving-merge-conflicts/SKILL.md)** | Engineering | Model-invoked | Work through an in-progress git merge or rebase conflict hunk by hunk, resolving by intent traced to each side's primary source, then finish the operation (never `--abort`). |
 | **[writing-specs](./skills/engineering/writing-specs/SKILL.md)** | Engineering | Model-invoked | Synthesize the current conversation into a spec and publish it to the project issue tracker. The engine under `/to-spec`. |
-| **[splitting-tickets](./skills/engineering/splitting-tickets/SKILL.md)** | Engineering | Model-invoked | Break a plan, spec, or conversation into tracer-bullet tickets with their blocking edges, published to the configured tracker. The engine under `/to-tickets`. |
+| **[splitting-tasks](./skills/engineering/splitting-tasks/SKILL.md)** | Engineering | Model-invoked | Break a plan, spec, or conversation into tracer-bullet tasks with their blocking edges, published to the configured tracker. The engine under `/to-tasks`. |
 | **[recording-designs](./skills/engineering/recording-designs/SKILL.md)** | Engineering | Model-invoked | Write the resolved design record into whatever planning-doc convention the repo already uses. The engine `/grill-with-docs` and `/auto-implement` share. |
 | **[wizard](./skills/engineering/wizard/SKILL.md)** | Engineering | Model-invoked | Generate an interactive bash wizard that walks a human through steps only they can perform: provisioning infrastructure, setting up credentials or CI secrets, walking an unfamiliar third-party dashboard, or running a one-off migration or cutover. |
 | **[figma-arch-diagram](./skills/engineering/figma-arch-diagram/SKILL.md)** | Engineering | Model-invoked | Build or update an architecture, tech-stack, networking, or data-flow diagram on a FigJam board from the "Icon Lib - Editable" component library: authored as a spec, laid out by a tested engine, emitted by component key, then verified on the rendered board. |
