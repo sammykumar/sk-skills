@@ -29,4 +29,4 @@ Before it writes anything, the skill sketches the **seams** the feature will be 
 
 ## Where it fits
 
-A **chain step**, and the engine half of one: `grill-with-docs → to-spec → to-tickets → implement`. Its neighbours are [to-spec](../engineering/to-spec.md), the wrapper you type, and [splitting-tickets](../engineering/splitting-tickets.md), which takes the spec it publishes and slices it. [ask-sk](../engineering/ask-sk.md) is the router over the whole set.
+A **chain step**, and the engine half of one: `grill-with-docs → to-spec → to-tasks → implement`. Its neighbours are [to-spec](../engineering/to-spec.md), the wrapper you type, and [splitting-tasks](../engineering/splitting-tasks.md), which takes the spec it publishes and slices it. [ask-sk](../engineering/ask-sk.md) is the router over the whole set.

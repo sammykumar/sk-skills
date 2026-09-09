@@ -15,7 +15,7 @@ Reach for it when there is a concrete behaviour to build, with an input and an o
 | A behaviour with defined inputs and outputs (business logic, a request/response contract, a transformation, validation) | `tdd` |
 | The behaviour isn't pinned down yet | to-spec, which also agrees the test seams before any code is written |
 | The question is really the shape of the interface, not the tests | codebase-design |
-| You have a spec or tickets and want the whole build run for you | implement, which drives `tdd` per ticket |
+| You have a spec or tasks and want the whole build run for you | implement, which drives `tdd` per task |
 | Config, wiring, glue, type annotations, straight CRUD delegation | Nothing here fits well; see the open gap below |
 
 That last row is a real hole, not a stylistic preference. The skill decides *where* the seams go; nothing in it decides *whether* a change is worth the loop at all. Run it on a change with no independent source of truth to assert against and you get a test that restates the implementation: the tautological anti-pattern the skill itself warns about, arrived at from the other direction. It is [issue #746](https://github.com/mattpocock/skills/issues/746) and it is open. Until it closes, that judgement is yours or your `CLAUDE.md`'s.
@@ -64,15 +64,15 @@ Usually not, and the skill will not stop it. A user reported the agent writing a
 
 **Does `/tdd` replace `/implement`, or the course's `/do-work`?**
 
-No. `/tdd` documents the methodology; `/implement` is a very simple work→feedback→commit loop and is the direct stand-in for `/do-work`. The course's single `/do-work` step is now split across `/implement`, `/tdd` and `/code-review`. If you are asking which one to run against a ticket, the answer is almost always `/implement`.
+No. `/tdd` documents the methodology; `/implement` is a very simple work→feedback→commit loop and is the direct stand-in for `/do-work`. The course's single `/do-work` step is now split across `/implement`, `/tdd` and `/code-review`. If you are asking which one to run against a task, the answer is almost always `/implement`.
 
 **Where did the deep-modules and interface-design guidance go?**
 
 Into codebase-design in v1.0, generalised so several skills share one vocabulary. `refactoring.md` left at the same time; refactoring is now code-review's job, and that skill carries the Fowler smell baseline.
 
-**Does it know about my other tickets?**
+**Does it know about my other tasks?**
 
-No. Run against one ticket, it will happily propose work that belongs to a sibling ticket, because it has no view of the rest of the issue graph ([issue #129](https://github.com/mattpocock/skills/issues/129)). The maintainers' position is that this is not `tdd`'s job. Passing the spec alongside the ticket helps; right-sizing the tickets in the first place helps more.
+No. Run against one task, it will happily propose work that belongs to a sibling task, because it has no view of the rest of the issue graph ([issue #129](https://github.com/mattpocock/skills/issues/129)). The maintainers' position is that this is not `tdd`'s job. Passing the spec alongside the task helps; right-sizing the tasks in the first place helps more.
 
 ## It's working if
 
@@ -88,7 +88,7 @@ No. Run against one ticket, it will happily propose work that belongs to a sibli
 `tdd` is the engine inside the build step of the main chain, rather than a step of its own:
 
 ```txt
-grill-with-docs → to-spec → to-tickets → implement → code-review
+grill-with-docs → to-spec → to-tasks → implement → code-review
 ```
 
-to-spec agrees the test seams up front, implement drives `tdd` per ticket, and code-review checks afterwards that only the agreed seams were used, and owns the refactoring `tdd` no longer does. Its other neighbour is codebase-design, the shared source of the seam and deep-module vocabulary `tdd` speaks. You can also reach for it on its own, whenever there is a concrete behaviour to build and no full spec in play. When you are unsure which skill fits your situation, ask-sk routes you.
+to-spec agrees the test seams up front, implement drives `tdd` per task, and code-review checks afterwards that only the agreed seams were used, and owns the refactoring `tdd` no longer does. Its other neighbour is codebase-design, the shared source of the seam and deep-module vocabulary `tdd` speaks. You can also reach for it on its own, whenever there is a concrete behaviour to build and no full spec in play. When you are unsure which skill fits your situation, ask-sk routes you.

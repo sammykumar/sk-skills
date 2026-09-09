@@ -23,7 +23,7 @@ This whole convention only holds when the named skill is **model-invoked**. A us
 
 ## Wrapper and engine
 
-A flow that needs to be **driven** by another skill cannot be user-invoked, per the invariant above. Where we want both (a name the human types, and a target another skill can call), the flow splits in two: a **wrapper**, user-invoked, whose whole body is a Skill call, and an **engine**, model-invoked, holding the actual instructions. `/grill-with-docs` over `grilling`, `domain-modeling` and `recording-designs`; `/implement` over `tdd` and `code-review`; `/to-spec` over `writing-specs`; `/to-tickets` over `splitting-tickets`.
+A flow that needs to be **driven** by another skill cannot be user-invoked, per the invariant above. Where we want both (a name the human types, and a target another skill can call), the flow splits in two: a **wrapper**, user-invoked, whose whole body is a Skill call, and an **engine**, model-invoked, holding the actual instructions. `/grill-with-docs` over `grilling`, `domain-modeling` and `recording-designs`; `/implement` over `tdd` and `code-review`; `/to-spec` over `writing-specs`; `/to-tasks` over `splitting-tasks`.
 
 Reach for the split only when a second caller actually exists. A user-invoked skill with no driver above it stays whole. The reasoning, and the alternatives rejected, are in [adr/0006](./adr/0006-drivable-flows-use-wrapper-plus-engine.md).
 

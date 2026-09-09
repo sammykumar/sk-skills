@@ -20,7 +20,7 @@ Reach for it when git has already stopped on conflicts it could not resolve itse
 
 The failure mode this exists to kill is resolving by flag: `--ours`, `--theirs`, or hand-deleting whichever block looks less important, so the markers go away and the build compiles. That resolution can be syntactically perfect and still silently drop a change somebody made on purpose.
 
-You cannot preserve an intent you have not read. So the work starts in the history (commits, PRs, tickets) and only then moves to the diff. Another step in the loop exists for the same reason: the skill finds the repo's own automated checks and runs them before committing, because a merge is the easiest place in git to produce code that satisfies both branches and passes neither's tests.
+You cannot preserve an intent you have not read. So the work starts in the history (commits, PRs, issues) and only then moves to the diff. Another step in the loop exists for the same reason: the skill finds the repo's own automated checks and runs them before committing, because a merge is the easiest place in git to produce code that satisfies both branches and passes neither's tests.
 
 ## Common questions
 
@@ -32,7 +32,7 @@ The added value is the "find the primary sources" and "run feedback loops" steps
 
 Mostly no. Zoning files off between parallel tasks costs more than it saves, because agents are good enough at merge conflicts that the tradeoff is not as harsh as it looks. The one piece of discipline worth keeping is to do large refactors first. A large rename landing after ten branches have forked off it is the case that stays expensive.
 
-One caveat from a user report on parallel worktrees: when sibling sessions each build a ticket in their own tree, the merge back is best done by the session that wrote the change, because it is the one that already knows the intent. Batching everybody's conflicts onto one agent at the end throws away exactly the context step 2 of this skill has to go and reconstruct.
+One caveat from a user report on parallel worktrees: when sibling sessions each build a task in their own tree, the merge back is best done by the session that wrote the change, because it is the one that already knows the intent. Batching everybody's conflicts onto one agent at the end throws away exactly the context step 2 of this skill has to go and reconstruct.
 
 **Why never `--abort`?**
 

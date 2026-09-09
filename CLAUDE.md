@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this repo is
 
-A collection of agent **skills** (each a folder with a `SKILL.md`) shipped two ways: as the `sk-skills` Claude Code plugin (`.claude-plugin/plugin.json`) and as editable Agent Skills via skills.sh. There is no application to build or run: the "source" is Markdown instructions plus a small amount of glue (bash scripts, a handful of Node scripts, and test suites over the two that carry real logic). Every skill is dual-harness, carrying both a `SKILL.md` (Claude Code) and an `agents/openai.yaml` (Codex) that must stay in sync. `CONTEXT.md` holds the domain vocabulary (Issue tracker, Issue, Decision ticket, Triage role); read it before naming things. The `.agents/` folder holds the authoring docs referenced throughout this file (`invocation.md`, `writing-docs.md`, `install-block.md`, `adr/`).
+A collection of agent **skills** (each a folder with a `SKILL.md`) shipped two ways: as the `sk-skills` Claude Code plugin (`.claude-plugin/plugin.json`) and as editable Agent Skills via skills.sh. There is no application to build or run: the "source" is Markdown instructions plus a small amount of glue (bash scripts, a handful of Node scripts, and test suites over the two that carry real logic). Every skill is dual-harness, carrying both a `SKILL.md` (Claude Code) and an `agents/openai.yaml` (Codex) that must stay in sync. `CONTEXT.md` holds the domain vocabulary (Issue tracker, Issue, Task, Open question, Triage role); read it before naming things. The `.agents/` folder holds the authoring docs referenced throughout this file (`invocation.md`, `writing-docs.md`, `install-block.md`, `adr/`).
 
 This is a fork of https://github.com/mattpocock/skills, kept for local customization.
 
@@ -77,7 +77,7 @@ A plugin configures a language server, it never bundles one, so every entry has 
 
 ### Issue tracker
 
-Issues and specs live as markdown files under `docs/issues/`, kept separate from the flat design records in `docs/plans/`. See `docs/agents/issue-tracker.md`.
+Tasks and specs live as markdown files under `docs/tasks/`, kept separate from the flat design records in `docs/plans/`. See `docs/agents/issue-tracker.md`.
 
 ### Triage labels
 

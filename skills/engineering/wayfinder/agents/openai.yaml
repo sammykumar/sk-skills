@@ -1,5 +1,5 @@
 interface:
   display_name: "Wayfinder"
-  short_description: "Map a large effort as decision tickets"
+  short_description: "Map a large effort as open questions"
 policy:
   allow_implicit_invocation: false

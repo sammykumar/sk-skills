@@ -10,7 +10,7 @@ It was called `writing-great-skills` until v1.1. The rename tracks what it alway
 
 Type `/writing-for-agents`, or the agent reaches for it on its own when you're creating or editing a skill, or modifying `AGENTS.md` or `CLAUDE.md`.
 
-Reach for it by hand for everything else an agent reads: your docs, specs and tickets, system and AFK prompts. The test is one question: does an agent read this? And it does not matter how the document gets in front of it, whether a pointer names it, a human pastes it, or it simply sits in the repo. For working out what a codebase actually contains in the first place, use grill-with-docs; this reference governs how a document reads, not what it knows.
+Reach for it by hand for everything else an agent reads: your docs, specs and tasks, system and AFK prompts. The test is one question: does an agent read this? And it does not matter how the document gets in front of it, whether a pointer names it, a human pastes it, or it simply sits in the repo. For working out what a codebase actually contains in the first place, use grill-with-docs; this reference governs how a document reads, not what it knows.
 
 ## The two loads
 
@@ -32,7 +32,7 @@ Once you think in these two loads, most authoring decisions (split or don't, inl
 ## Common questions
 
 **Where did `/writing-great-skills` go?**
-It is this skill, renamed in v1.1. Practitioners were already pointing it at `AGENTS.md`, docs, specs, tickets and runtime prompts long before the name caught up; structure, leading words and pruning turn out to be the craft of any text an agent reads. There is no alias. Reinstall under the new name.
+It is this skill, renamed in v1.1. Practitioners were already pointing it at `AGENTS.md`, docs, specs, tasks and runtime prompts long before the name caught up; structure, leading words and pruning turn out to be the craft of any text an agent reads. There is no alias. Reinstall under the new name.
 
 **"Writing for agents": so the agent does the writing?**
 The other way round. You are the author; the agent is the reader. That is the whole difficulty of the genre: you are writing for a reader who has already read everything, so explanation is waste and precision is the entire job.
@@ -67,4 +67,4 @@ No. Finding the word that packs the most behaviour into the fewest tokens is wor
 
 ## Where it fits
 
-This is a reach-for-it-anytime standalone reference. It has no neighbour in the chain because it sits underneath the whole set rather than beside any one skill: every skill here was written against it, and the documents the other skills leave behind (a `CONTEXT.md` and its ADRs, a spec, a ticket) are exactly the text it governs once an agent has to read them. When you're unsure which skill or flow fits a task, ask-sk routes you over the whole set.
+This is a reach-for-it-anytime standalone reference. It has no neighbour in the chain because it sits underneath the whole set rather than beside any one skill: every skill here was written against it, and the documents the other skills leave behind (a `CONTEXT.md` and its ADRs, a spec, a task) are exactly the text it governs once an agent has to read them. When you're unsure which skill or flow fits a task, ask-sk routes you over the whole set.

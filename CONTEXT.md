@@ -5,15 +5,20 @@ A collection of agent skills (slash commands and behaviors) loaded by Claude Cod
 ## Language
 
 **Issue tracker**:
-The tool that hosts a repo's issues: GitHub Issues, Linear, a Repo PDD Markdown convention (`docs/plans/`), or similar. Skills like `to-tickets`, `to-spec`, and `triage` read from and write to it.
+The tool that hosts a repo's issues: GitHub Issues, Linear, a Repo PDD Markdown convention (`docs/tasks/`), or similar. Skills like `to-tasks`, `to-spec`, and `triage` read from and write to it.
 _Avoid_: backlog manager, backlog backend, issue host
 
 **Issue**:
-A single tracked unit of work inside an **Issue tracker**: a bug, task, spec, or slice produced by `to-tickets`.
-_Avoid_: ticket (use only when quoting external systems that call them tickets, or for a **Decision ticket**, see below)
+The genus: a single tracked unit of work inside an **Issue tracker**. A bug, a spec, a **Task**, or an **Open question** is each an Issue.
+_Avoid_: ticket (use only when quoting an external system that calls them tickets)
 
-**Decision ticket**:
-A `wayfinder` unit: a child **Issue** of a `wayfinder:map` holding a *question* whose resolution is a decision, not a slice of a build to execute. The **decision** qualifier is what keeps it distinct from an implementation ticket; `wayfinder` introduces the term, then uses "ticket".
+**Task**:
+The species produced by `to-tasks` / `splitting-tasks`: a tracer-bullet vertical slice of a build, sized to one agent session, declaring the Tasks that block it. An implementation unit, so it is the counterpart to an **Open question**, which decides rather than builds.
+_Avoid_: ticket
+
+**Open question**:
+A `wayfinder` unit: a child **Issue** of a `wayfinder:map` holding a *question* whose resolution is a decision, not a slice of a build to execute. The counterpart to a **Task**. Note that one of wayfinder's four Open question *types* is itself called `task` (the type that does rather than decides, to unblock a decision); that type is not a **Task** in the `to-tasks` sense.
+_Avoid_: decision ticket, ticket
 
 **Triage role**:
 A canonical state-machine label applied to an **Issue** during triage (e.g. `needs-triage`, `ready-for-afk`). Each role maps to a real label string in the **Issue tracker** via `docs/agents/triage-labels.md`.
@@ -45,7 +50,8 @@ _Avoid_: "slash command" where the repo's docs say "user-invoked skill"
 
 - An **Issue tracker** holds many **Issues**
 - An **Issue** carries one **Triage role** at a time
-- A **Decision ticket** is an **Issue** (a child of a `wayfinder:map`)
+- A **Task** is an **Issue** (a slice of a build, produced by `to-tasks`)
+- An **Open question** is an **Issue** (a child of a `wayfinder:map`)
 - A **Plugin marketplace** serves the plugin to many **Consumer repos**
 - **User vocab** is mined from many **Session transcripts** and becomes terms in this glossary only once the user accepts them
 
@@ -53,3 +59,5 @@ _Avoid_: "slash command" where the repo's docs say "user-invoked skill"
 
 - "backlog" was previously used to mean both the *tool* hosting issues and the *body of work* inside it. Resolved: the tool is the **Issue tracker**; "backlog" is no longer used as a domain term.
 - "backlog backend" / "backlog manager". Resolved: collapsed into **Issue tracker**.
+- "ticket" was the repo's word for both an implementation slice and a wayfinder question. Resolved: the slice is a **Task**, the question is an **Open question**, and "ticket" is retired except when quoting an external system that uses it. The skills renamed with it: `/to-tickets` is now `/to-tasks`, `/splitting-tickets` is now `/splitting-tasks`.
+- **Issue** and **Task** are not synonyms, though the repo once used "ticket" for both. Issue is the genus (anything tracked); Task is the implementation species. Reach for **Task** when the unit is a slice to build, **Issue** when the statement is true of any tracked unit.

@@ -1,6 +1,6 @@
 ---
 name: auto-implement
-description: "Drive the whole idea-to-ship flow on a feature you name up front: grill it, record the design, then either build it here or split it into tickets."
+description: "Drive the whole idea-to-ship flow on a feature you name up front: grill it, record the design, then either build it here or split it into tasks."
 disable-model-invocation: true
 ---
 
@@ -12,7 +12,7 @@ This skill runs the same route `ask-sk` maps, without stopping to ask which skil
 
 ## What this skill may call
 
-Every step below names a skill to pass to the Skill tool. Those names are exact. Do **not** substitute a `/`-prefixed flow name you may know for the same phase (`/grill-with-docs`, `/to-spec`, `/to-tickets`, `/implement`): those are user-invoked wrappers, the harness will refuse the call, and the turn is wasted. Call the skills named here.
+Every step below names a skill to pass to the Skill tool. Those names are exact. Do **not** substitute a `/`-prefixed flow name you may know for the same phase (`/grill-with-docs`, `/to-spec`, `/to-tasks`, `/implement`): those are user-invoked wrappers, the harness will refuse the call, and the turn is wasted. Call the skills named here.
 
 ## 1. Grill the idea
 
@@ -44,14 +44,14 @@ Build the feature in this context window.
 
 Then stop and report what landed.
 
-## 3b. Multi-session: spec, then tickets
+## 3b. Multi-session: spec, then tasks
 
 1. Call the Skill tool with "writing-specs" to synthesize the settled design into a spec and publish it. No interview here: the grilling already happened.
-2. Call the Skill tool with "splitting-tickets" to break the spec into tracer-bullet tickets with their blocking edges, published to the configured tracker.
+2. Call the Skill tool with "splitting-tasks" to break the spec into tracer-bullet tasks with their blocking edges, published to the configured tracker.
 
 Then **stop**. Do not start building.
 
-Report the tickets, which ones have no blockers and can be grabbed now, and tell the user to work them one at a time: `/clear`, then `/implement <ticket>`, one fresh context window per ticket. Each ticket is self-contained by construction, so the last one's context is disposable. Building them here instead would carry this window's context into every ticket, which is the thing the ticket split exists to avoid.
+Report the tasks, which ones have no blockers and can be grabbed now, and tell the user to work them one at a time: `/clear`, then `/implement <task>`, one fresh context window per task. Each task is self-contained by construction, so the last one's context is disposable. Building them here instead would carry this window's context into every task, which is the thing the task split exists to avoid.
 
 ## Preconditions
 

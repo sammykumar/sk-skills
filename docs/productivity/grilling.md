@@ -14,7 +14,7 @@ Typing `/grilling` directly gets you the plain interview and nothing else. Where
 | --- | --- |
 | You aren't working in a working directory | grill-me: the same session, under a name the agent will never fire by itself |
 | You are in a working directory | grill-with-docs: the same session, and it writes `CONTEXT.md` and ADRs as it goes |
-| An effort too big to hold in one session | wayfinder: it charts a map and runs grilling inside the decision tickets |
+| An effort too big to hold in one session | wayfinder: it charts a map and runs grilling inside the open questions |
 | A question that talking cannot settle: how something should look or feel | prototype: build the throwaway version, then come back |
 | A skill of your own that needs an interview | Invoke `/grilling` from it, rather than writing another interview |
 
@@ -61,7 +61,7 @@ This is the most common objection to the round design, and the frontier is the a
 A confirmation gate exists precisely for this: the skill is not finished when the frontier empties, it is finished when you say the understanding is shared. Weaker and faster models still break it; this is reported most often on lower-effort or non-frontier models, which collapse "interview until shared understanding" into a couple of questions and an outline. If yours does it, the reliable fix is a line in your own `AGENTS.md` or `CLAUDE.md` telling the agent not to implement without permission.
 
 **It answered its own questions instead of asking me.**
-That is a bug in the run, not the intended behaviour, and it was the reason facts and decisions were separated in the skill's text. It shows up most when another skill runs `grilling` inside a resolve-this-ticket frame, where the surrounding task reads as licence to keep moving. The same constraint is why there is no async mode: people have asked for a variant that reads a GitHub issue and posts one consolidated decision memo, and that is a different skill, because a grilling session that nobody answers has produced the agent's opinion rather than yours.
+That is a bug in the run, not the intended behaviour, and it was the reason facts and decisions were separated in the skill's text. It shows up most when another skill runs `grilling` inside a resolve-this-issue frame, where the surrounding task reads as licence to keep moving. The same constraint is why there is no async mode: people have asked for a variant that reads a GitHub issue and posts one consolidated decision memo, and that is a different skill, because a grilling session that nobody answers has produced the agent's opinion rather than yours.
 
 **Can I cap the number of questions?**
 No, and a cap is deliberately out of scope. Some plans need three questions and some need fifty; a fixed ceiling either truncates the hard case or feels arbitrary on the easy one. Steering in plain language is the intended control: tell it to wrap up, or stop and accept the plan where it stands. If a session is running very long, the cause is usually that the scope was too big; break the work up and grill the pieces.
@@ -84,4 +84,4 @@ A real and unfixed rough edge, reported across harnesses and models: a skill tha
 
 ## Where it fits
 
-`grilling` is a **primitive**, not a step you schedule: the single source of truth for the interview technique, kept in one place so every skill that needs an interview reaches for it instead of inventing one. grill-me and grill-with-docs are its two user-invoked front doors, and `grill-with-docs` is where the main build chain begins, ahead of to-spec. wayfinder runs it to resolve decision tickets, triage to grill a vague report into a workable one, and improve-codebase-architecture to walk the tree once you have picked a candidate to deepen. When you are unsure which entry point fits, ask-sk routes you.
+`grilling` is a **primitive**, not a step you schedule: the single source of truth for the interview technique, kept in one place so every skill that needs an interview reaches for it instead of inventing one. grill-me and grill-with-docs are its two user-invoked front doors, and `grill-with-docs` is where the main build chain begins, ahead of to-spec. wayfinder runs it to resolve open questions, triage to grill a vague report into a workable one, and improve-codebase-architecture to walk the tree once you have picked a candidate to deepen. When you are unsure which entry point fits, ask-sk routes you.
