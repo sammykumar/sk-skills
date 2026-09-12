@@ -15,7 +15,7 @@ This is a fork of https://github.com/mattpocock/skills, kept for local customiza
 - `npm test`: runs Node's built-in test runner over `skills/**/*.test.mjs` and `scripts/**/*.test.mjs`; run after editing any skill's `.mjs` glue or a repo script that has a test suite.
 - `npm run check-em-dashes`: fails if an em-dash reaches the repo's prose. Code is exempt, so a name quoted from another system stays verbatim inside a fence or a code span. Chained onto `npm run version`, because regenerating `CHANGELOG.md` from the changesets is how these get in.
 - `scripts/list-skills.sh`: list every `SKILL.md` path in the repo.
-- `scripts/link-skills.sh`: symlink the repo's skills into the local harness directories for dogfooding; re-run after adding, removing, or renaming a skill. Dev-only, not an installer.
+- `scripts/link-skills.sh`: symlink the repo's skills into the local harness directories for dogfooding; re-run after adding, removing, or renaming a skill. Dev-only, not an installer. Run it only from the canonical checkout: run from inside `.claude/worktrees/<slug>/`, it repoints every global symlink at a temporary directory that later disappears, and the failure is invisible until skills stop resolving in unrelated repos. If you are in a worktree, `cd` to the repo root first and confirm with `pwd`.
 - `scripts/scaffold-ship.sh /path/to/repo [branch]`: cut a repo's `/ship` command from the canonical template into its `.claude/commands/ship.md`. See below.
 
 ### The `/ship` command (per-repo, from a template)
