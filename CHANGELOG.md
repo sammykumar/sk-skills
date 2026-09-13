@@ -1,5 +1,26 @@
 # sk-skills
 
+## 2.4.1
+
+### Patch Changes
+
+- [`4540f07`](https://github.com/sammykumar/sk-skills/commit/4540f07f8bcf3e4c2e6c6510115734e843c3825a) Thanks [@sammykumar](https://github.com/sammykumar)! - Add `/figma-design-agent`, a user-invoked workflow for translating live application UI into native, editable Figma product designs. It establishes a verified runtime baseline, preserves explicit source contracts for fresh-file experiments, gates mutation behind an approved plan, verifies visual fidelity and Figma structure separately, and leaves a durable design-state ledger for the next phase.
+
+- [`17ddf2c`](https://github.com/sammykumar/sk-skills/commit/17ddf2cc8061c2d8d227f05e5b2446d6943c23b5) Thanks [@sammykumar](https://github.com/sammykumar)! - Point repository metadata and install instructions at `sammykumar/sk-skills`, and use `master` for release automation and repository file links. `/update-sk-skills` recognizes both the renamed repository and the legacy `sammykumar/skills` lockfile source, so installations made before the rename remain detectable.
+
+- [#24](https://github.com/sammykumar/sk-skills/pull/24) [`796d985`](https://github.com/sammykumar/sk-skills/commit/796d98528a23c0af0fe38e61f0f12f8667a51813) Thanks [@sammykumar](https://github.com/sammykumar)! - Ship `sk-skills` as a native **Codex plugin**, alongside the Claude Code one. The promoted set now installs as a managed, read-only bundle on both harnesses:
+
+  ```bash
+  codex plugin marketplace add sammykumar/sk-skills
+  codex plugin add sk-skills@sammykumar
+  ```
+
+  This was deferred because Codex's manifest accepted `skills` only as a single path string, which could not express a curated subset of this repo's bucketed layout. On `codex-cli` 0.154.0 it accepts an array of explicit skill directories, exactly as the Claude manifest does, so `.codex-plugin/plugin.json` lists the same 34 promoted skills and nothing from `misc/` or `in-progress/` is registered. `.agents/plugins/marketplace.json` makes the repo its own single-plugin Codex marketplace, the counterpart to `.claude-plugin/marketplace.json`.
+
+  `/update-sk-skills` learned the new route. It now detects four installations rather than three, reading Codex's config for an `sk-skills@<marketplace>` table and whether it is enabled, and updating with `codex plugin marketplace upgrade` followed by a re-install, since there is no `codex plugin update`. Carrying both plugins is treated as expected rather than as a duplicate: they serve different harnesses from the same repo, so both get updated. A plugin alongside skills.sh is still the conflict that stops and asks.
+
+  `npm run check-plugin-version` now asserts both manifests track `package.json`, and `npm run version` syncs both. `npm run check-em-dashes` now skips `archive/`, whose retired skills are a frozen record of what they said when they were dropped.
+
 ## 2.4.0
 
 ### Minor Changes
