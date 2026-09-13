@@ -5,7 +5,7 @@ Beta. These skills are public on purpose: try them and tell me what breaks. They
 The plugin won't give you these. Install one directly:
 
 ```bash
-npx skills@latest add sammykumar/skills --skill=<name>
+npx skills@latest add sammykumar/sk-skills --skill=<name>
 ```
 
 - **[writing-beats](./writing-beats/SKILL.md)**: Shape an article as a journey of beats, choose-your-own-adventure style. Pick a starting beat, write only that beat, then pivot to the next, until the article reaches a natural end.

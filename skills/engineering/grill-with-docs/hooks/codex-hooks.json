@@ -5,7 +5,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "/Users/samkumar/Development/SK-Productions-LLC/skills/skills/engineering/grill-with-docs/hooks/detect-new-feature-codex.sh"
+            "command": "/Users/samkumar/Development/SK-Productions-LLC/sk-skills/skills/engineering/grill-with-docs/hooks/detect-new-feature-codex.sh"
           }
         ]
       }

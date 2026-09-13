@@ -1,9 +1,9 @@
 ---
-description: Commit the work, push a branch, open a PR, merge it, fast-forward main locally, and clean up branches.
-argument-hint: [commit-only | no-ci] (default: branch to PR, merge to main, ff local, cleanup)
+description: Commit the work, push a branch, open a PR, merge it, fast-forward master locally, and clean up branches.
+argument-hint: [commit-only | no-ci] (default: branch to PR, merge to master, ff local, cleanup)
 ---
 
-Ship the current work. `$ARGUMENTS` picks the path; default is **branch to PR, merge to `main`, fast-forward local `main`, clean up branches**.
+Ship the current work. `$ARGUMENTS` picks the path; default is **branch to PR, merge to `master`, fast-forward local `master`, clean up branches**.
 
 - `commit-only`: commit, do not push or open a PR. Stop and report the SHAs.
 - `no-ci`: open the PR and merge without waiting for checks. Only when you asked.
@@ -27,29 +27,29 @@ Attribution: write commits and the PR as if Sam authored them. No `Co-Authored-B
 
 ## 3. Branch, push, PR, merge
 
-If HEAD is `main`, branch first. Branch from `origin/main`, **never from HEAD** (branching off a just-merged branch produces a conflicting PR with no checks). Push the branch to `origin`, then:
+If HEAD is `master`, branch first. Branch from `origin/master`, **never from HEAD** (branching off a just-merged branch produces a conflicting PR with no checks). Push the branch to `origin`, then:
 
 ```
-gh pr create --base main --fill
+gh pr create --base master --fill
 gh pr merge --merge   # a merge commit, not a squash
 ```
 
 `no-ci` skips waiting on checks. Otherwise let required checks finish before merging.
 
-## 4. Fast-forward main locally, clean up branches
+## 4. Fast-forward master locally, clean up branches
 
 After the merge lands on the remote:
 
 ```
-git checkout main
+git checkout master
 git fetch origin
-git merge --ff-only origin/main   # fast-forward local main to the merge
+git merge --ff-only origin/master   # fast-forward local master to the merge
 git branch -d <feature-branch>    # delete the local branch (merged, so -d is safe)
 git fetch --prune                 # drop the remote-tracking ref if the remote branch is gone
 ```
 
-If `gh pr merge` did not delete the remote branch, delete it by hand (`git push origin --delete <feature-branch>`). Verify `git status` shows `main` up to date with `origin/main` and the feature branch gone locally and remotely.
+If `gh pr merge` did not delete the remote branch, delete it by hand (`git push origin --delete <feature-branch>`). Verify `git status` shows `master` up to date with `origin/master` and the feature branch gone locally and remotely.
 
 ## 5. Report
 
-State what shipped, the branch and PR, the SHAs, the gate results, and that local `main` fast-forwarded and the branches were cleaned up. If a step failed, say so with the output.
+State what shipped, the branch and PR, the SHAs, the gate results, and that local `master` fast-forwarded and the branches were cleaned up. If a step failed, say so with the output.

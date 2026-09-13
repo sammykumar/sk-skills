@@ -17,7 +17,7 @@ Each leaves its own fingerprint, and the skill looks for all of them before acti
 | Route | What it looks for | How it updates |
 | --- | --- | --- |
 | **Claude Code plugin** | an `sk-skills@<marketplace>` entry in the installed-plugins record, with its scope and version | refresh the marketplace, then update the plugin at the scope it is installed at |
-| **skills.sh** | a lockfile entry whose source is `sammykumar/skills`, global or project-scoped | update those skills by name, in that scope |
+| **skills.sh** | a global or project-scoped lockfile entry sourced from `sammykumar/sk-skills` or the legacy `sammykumar/skills` | update those skills by name, in that scope |
 | **Dev checkout** | the skill directory is a symlink into a git working tree of the repo | pull the checkout, then relink |
 | **Hand-copied files** | real directories, no lockfile entry, no plugin record | nothing automatic; adopt one of the two supported routes |
 
@@ -31,7 +31,11 @@ A plugin update lands on disk but does not apply to a running session. Restart t
 
 **The two routes report different versions. Which one is right?**
 
-Both, for different definitions. The plugin installs a released version from the marketplace; skills.sh installs what is on `main`, which includes changes merged since the last release. Someone on the skills.sh route can be running skills that no released version contains yet. This has been raised directly as an issue, and it is a property of the two distribution routes rather than a bug in either.
+Both, for different definitions. The plugin installs a released version from the marketplace; skills.sh installs what is on the repository's default branch, which includes changes merged since the last release. Someone on the skills.sh route can be running skills that no released version contains yet. This has been raised directly as an issue, and it is a property of the two distribution routes rather than a bug in either.
+
+**Will it still find an installation made before the repository rename?**
+
+Yes. It recognizes both the current `sammykumar/sk-skills` source and the legacy `sammykumar/skills` source in global and project lockfiles. Existing installations keep their recorded source; the skill updates the detected skills by name in the matching scope.
 
 **Will it overwrite the edits I made to a skill?**
 
