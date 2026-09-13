@@ -44,6 +44,16 @@ test("fails on an em-dash in prose", () => {
   rmSync(root, { recursive: true, force: true });
 });
 
+test("ignores archive/, which is a frozen record of retired skills", () => {
+  const root = scratch({
+    "archive/gone/SKILL.md": `A retired skill ${EM_DASH} left as it was.\n`,
+    "README.md": "Fine.\n",
+  });
+  const result = run(root);
+  assert.equal(result.status, 0, result.stderr);
+  rmSync(root, { recursive: true, force: true });
+});
+
 test("ignores a tracked file that no longer exists on disk", () => {
   // What `changeset version` leaves behind: the consumed changesets are deleted
   // from the working tree but still listed by `git ls-files`.
