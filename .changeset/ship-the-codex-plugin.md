@@ -1,5 +1,5 @@
 ---
-"sk-skills": minor
+"sk-skills": patch
 ---
 
 Ship `sk-skills` as a native **Codex plugin**, alongside the Claude Code one. The promoted set now installs as a managed, read-only bundle on both harnesses:
