@@ -4,16 +4,16 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this repo is
 
-A collection of agent **skills** (each a folder with a `SKILL.md`) shipped two ways: as the `sk-skills` Claude Code plugin (`.claude-plugin/plugin.json`) and as editable Agent Skills via skills.sh. There is no application to build or run: the "source" is Markdown instructions plus a small amount of glue (bash scripts, a handful of Node scripts, and test suites over the two that carry real logic). Every skill is dual-harness, carrying both a `SKILL.md` (Claude Code) and an `agents/openai.yaml` (Codex) that must stay in sync. `CONTEXT.md` holds the domain vocabulary (Issue tracker, Issue, Task, Open question, Triage role); read it before naming things. The `.agents/` folder holds the authoring docs referenced throughout this file (`invocation.md`, `writing-docs.md`, `install-block.md`, `adr/`).
+A collection of agent **skills** (each a folder with a `SKILL.md`) shipped two ways: as the `sk-skills` plugin, on Claude Code (`.claude-plugin/plugin.json`) and on Codex (`.codex-plugin/plugin.json`), and as editable Agent Skills via skills.sh. There is no application to build or run: the "source" is Markdown instructions plus a small amount of glue (bash scripts, a handful of Node scripts, and test suites over the two that carry real logic). Every skill is dual-harness, carrying both a `SKILL.md` (Claude Code) and an `agents/openai.yaml` (Codex) that must stay in sync. `CONTEXT.md` holds the domain vocabulary (Issue tracker, Issue, Task, Open question, Triage role); read it before naming things. The `.agents/` folder holds the authoring docs referenced throughout this file (`invocation.md`, `writing-docs.md`, `install-block.md`, `adr/`).
 
 This is a fork of https://github.com/mattpocock/skills, kept for local customization.
 
 ## Commands
 
-- `claude plugin validate . --strict`: run after editing `.claude-plugin/plugin.json`, `marketplace.json`, or `.lsp.json`.
-- `npm run check-plugin-version`: asserts `plugin.json` version matches `package.json`; run after either changes.
+- `claude plugin validate . --strict`: run after editing `.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json`, or `.lsp.json`.
+- `npm run check-plugin-version`: asserts both plugin manifests' versions match `package.json`; run after any of the three changes.
 - `npm test`: runs Node's built-in test runner over `skills/**/*.test.mjs` and `scripts/**/*.test.mjs`; run after editing any skill's `.mjs` glue or a repo script that has a test suite.
-- `npm run check-em-dashes`: fails if an em-dash reaches the repo's prose. Code is exempt, so a name quoted from another system stays verbatim inside a fence or a code span. Chained onto `npm run version`, because regenerating `CHANGELOG.md` from the changesets is how these get in.
+- `npm run check-em-dashes`: fails if an em-dash reaches the repo's prose. Code is exempt, so a name quoted from another system stays verbatim inside a fence or a code span. `archive/` is exempt too: retired skills are kept as a frozen record of what they said when they were dropped, so restyling their prose would falsify the record. Chained onto `npm run version`, because regenerating `CHANGELOG.md` from the changesets is how these get in.
 - `scripts/list-skills.sh`: list every `SKILL.md` path in the repo.
 - `scripts/link-skills.sh`: symlink the repo's skills into the local harness directories for dogfooding; re-run after adding, removing, or renaming a skill. Dev-only, not an installer. Run it only from the canonical checkout: run from inside `.claude/worktrees/<slug>/`, it repoints every global symlink at a temporary directory that later disappears, and the failure is invisible until skills stop resolving in unrelated repos. If you are in a worktree, `cd` to the repo root first and confirm with `pwd`.
 - `scripts/scaffold-ship.sh /path/to/repo [branch]`: cut a repo's `/ship` command from the canonical template into its `.claude/commands/ship.md`. See below.
@@ -39,9 +39,9 @@ Skills are organized into bucket folders under `skills/`:
 - `in-progress/`: beta: public on purpose, feedback wanted, not shipped in the plugin
 - `deprecated/`: no longer used
 
-Every skill in `engineering/` or `productivity/` (the **promoted** buckets) must have a reference in the top-level `README.md` and an entry in `.claude-plugin/plugin.json`'s `skills` array (the Claude Code plugin ships exactly the promoted set). Skills in `misc/`, `in-progress/`, and `deprecated/` must not appear in either.
+Every skill in `engineering/` or `productivity/` (the **promoted** buckets) must have a reference in the top-level `README.md` and an entry in **both** plugin manifests' `skills` arrays, `.claude-plugin/plugin.json` and `.codex-plugin/plugin.json` (the plugin ships exactly the promoted set, on both harnesses). The two arrays must match entry for entry. Skills in `misc/`, `in-progress/`, and `deprecated/` must not appear in any of them.
 
-Install commands are copied verbatim from [.agents/install-block.md](./.agents/install-block.md). `.claude-plugin/marketplace.json` makes the repo its own single-plugin marketplace (a fallback the install block explains, not the documented route). Run `claude plugin validate . --strict` after touching either manifest. Why a Claude plugin but not (yet) a Codex one lives in [.agents/adr/0002-ship-as-a-claude-code-plugin.md](./.agents/adr/0002-ship-as-a-claude-code-plugin.md).
+Install commands are copied verbatim from [.agents/install-block.md](./.agents/install-block.md). The repo is its own single-plugin marketplace on both harnesses: `.claude-plugin/marketplace.json` for Claude Code, `.agents/plugins/marketplace.json` for Codex. Run `claude plugin validate . --strict` after touching the Claude manifests. The Codex side has no validator, so verify it the way it was verified originally: `codex plugin marketplace add <repo path>`, `codex plugin add sk-skills@sammykumar`, then `codex debug prompt-input` to confirm which skills registered. Do that against a throwaway `CODEX_HOME`, never the real one, because installing the plugin for real makes `scripts/link-skills.sh` tear down this repo's global Codex symlinks. How both plugins came to ship, and what was measured to get there, lives in [.agents/adr/0002-ship-as-a-claude-code-plugin.md](./.agents/adr/0002-ship-as-a-claude-code-plugin.md).
 
 Each skill entry in the top-level `README.md` must link the skill name to its `SKILL.md`.
 
