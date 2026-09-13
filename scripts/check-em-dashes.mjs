@@ -5,6 +5,10 @@
 //
 // Code is exempt, because a name quoted from another system has to stay verbatim:
 // in Markdown, fenced blocks and inline code spans are stripped before checking.
+//
+// archive/ is exempt too. It holds retired skills kept as a frozen record of what
+// they said when they were dropped, so rewriting their prose to satisfy a house
+// style would falsify the record for no reader's benefit.
 
 import { execFileSync } from "node:child_process";
 import { existsSync, readFileSync } from "node:fs";
@@ -19,7 +23,8 @@ const tracked = execFileSync("git", ["ls-files", "-z", "*.md", "*.mjs", "*.sh"],
   encoding: "utf8",
 })
   .split("\0")
-  .filter(Boolean);
+  .filter(Boolean)
+  .filter((file) => !file.startsWith("archive/"));
 
 // Blank out fenced blocks and inline code spans so only prose is left to check.
 const proseOnly = (text) => {
