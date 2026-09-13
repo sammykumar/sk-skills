@@ -36,7 +36,11 @@ The upstream `mattpocock-skills` plugin this repo forked from. Installed alongsi
 _Avoid_: matt's skills
 
 **Plugin marketplace**:
-The Claude Code marketplace listing that serves `sk-skills` to a **Consumer repo**. Distinct from `.claude-plugin/marketplace.json`, which is the self-marketplace fallback.
+The marketplace listing that serves `sk-skills` to a **Consumer repo**. This repo is its own single-plugin marketplace on both harnesses: `.claude-plugin/marketplace.json` for Claude Code, `.agents/plugins/marketplace.json` for Codex.
+
+**Plugin manifest**:
+The per-harness file declaring the plugin's identity and its promoted `skills` array: `.claude-plugin/plugin.json` for Claude Code, `.codex-plugin/plugin.json` for Codex. The two carry the same skill list and the same version, and both are kept in step by hand plus `scripts/sync-plugin-version.mjs`.
+_Avoid_: "the plugin.json" where which harness is meant matters
 
 **Consumer repo**:
 A repo that installs the skills as a published plugin, as opposed to this repo, which runs them live from the working tree via `scripts/link-skills.sh`.

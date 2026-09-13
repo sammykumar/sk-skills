@@ -12,7 +12,7 @@ This repo began as a fork of [mattpocock/skills](https://github.com/mattpocock/s
 
 ## Installation (30-second setup)
 
-Two ways in, two philosophies. **The [Claude Code plugin](https://code.claude.com/docs/en/plugins)** installs the whole set as a managed, read-only bundle you subscribe to rather than fork. **[skills.sh](https://skills.sh/sammykumar/sk-skills)** copies editable skill files into your project, so you can hack on them and make them your own. Pick one: installing both leaves you with every skill twice.
+Two ways in, two philosophies. **The plugin** ([Claude Code](https://code.claude.com/docs/en/plugins) or Codex) installs the whole set as a managed, read-only bundle you subscribe to rather than fork. **[skills.sh](https://skills.sh/sammykumar/sk-skills)** copies editable skill files into your project, so you can hack on them and make them your own. Pick one: installing both leaves you with every skill twice.
 
 ### 1. Get the skills
 
@@ -36,15 +36,25 @@ It ships from this repo's own marketplace, so add the marketplace first, then in
 </details>
 
 <details>
-<summary><strong>Codex, and other agents</strong></summary>
+<summary><strong>Codex</strong></summary>
+
+```bash
+codex plugin marketplace add sammykumar/sk-skills
+codex plugin add sk-skills@sammykumar
+```
+
+Same marketplace, same promoted set. To pull later updates, run `codex plugin marketplace upgrade` and then re-run the install.
+
+</details>
+
+<details>
+<summary><strong>Other agents</strong></summary>
 
 ```bash
 npx skills@latest add sammykumar/sk-skills
 ```
 
 Pick the skills you want, and which coding agents to install them on. **The installer lets you choose which skills to take: make sure `setup-sk-skills` and `update-sk-skills` are both among them.**
-
-A native Codex plugin is on the roadmap (see [`.agents/adr/0002-ship-as-a-claude-code-plugin.md`](./.agents/adr/0002-ship-as-a-claude-code-plugin.md)).
 
 </details>
 
@@ -84,7 +94,7 @@ Install the skills one of two ways, then run [`/setup-sk-skills`](./skills/engin
 ```mermaid
 flowchart TD
     A["Install the skills"] --> B{"Which install?"}
-    B -->|"Claude Code plugin (managed)"| C["claude plugin install sk-skills@sammykumar"]
+    B -->|"plugin (managed)"| C["claude plugin install sk-skills@sammykumar<br/>codex plugin add sk-skills@sammykumar"]
     B -->|"skills.sh (editable copies)"| D["npx skills@latest add sammykumar/sk-skills"]
     C --> E["/setup-sk-skills (once per repo)"]
     D --> E
@@ -125,7 +135,7 @@ These split on two axes. **Bucket**: engineering skills are for daily code work,
 | **[triage](./skills/engineering/triage/SKILL.md)** | Engineering | User-invoked | Move issues through a state machine of triage roles. |
 | **[improve-codebase-architecture](./skills/engineering/improve-codebase-architecture/SKILL.md)** | Engineering | User-invoked | Scan a codebase for deepening opportunities, present them as a visual HTML report, then grill through whichever one you pick. |
 | **[setup-sk-skills](./skills/engineering/setup-sk-skills/SKILL.md)** | Engineering | User-invoked | Configure this repo for the engineering skills (issue tracker, triage labels, domain doc layout), and seed `CONTEXT.md` from the vocabulary in your past sessions. Run once per repo before using the other engineering skills. |
-| **[update-sk-skills](./skills/engineering/update-sk-skills/SKILL.md)** | Engineering | User-invoked | Update the skills on this machine, after detecting how they were actually installed: the Claude Code plugin, skills.sh, or a dev checkout. |
+| **[update-sk-skills](./skills/engineering/update-sk-skills/SKILL.md)** | Engineering | User-invoked | Update the skills on this machine, after detecting how they were actually installed: the Claude Code plugin, the Codex plugin, skills.sh, or a dev checkout. |
 | **[migrate-to-tasks](./skills/engineering/migrate-to-tasks/SKILL.md)** | Engineering | User-invoked | Migrate a repo off the retired "ticket" vocabulary: rename the invocations, move Repo PDD Markdown work into the `tasks/` layout, and re-word existing issues as tasks or open questions. Run once per repo configured before the rename. |
 | **[to-spec](./skills/engineering/to-spec/SKILL.md)** | Engineering | User-invoked | Turn the current conversation into a spec and publish it to the issue tracker. No interview, just synthesizes what you've already discussed. |
 | **[to-tasks](./skills/engineering/to-tasks/SKILL.md)** | Engineering | User-invoked | Break any plan, spec, or conversation into a set of tracer-bullet tasks, each declaring its blocking edges, written as text in a local file, or as native blocking links on a real tracker. |

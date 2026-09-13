@@ -39,3 +39,20 @@ Verified 2026-08-05, on Claude Code 2.1.222, against the live listing:
 - `claude plugin details mattpocock-skills` then reports version 1.2.0 and loads the promoted skills.
 - The listing's `source` is `{"source": "url", "url": "https://github.com/mattpocock/skills.git", "sha": …}`: the **sha is pinned**, so a release reaches installed users when that pin moves, not the moment we tag. At the time of writing the pin sits two commits behind `main`, which is why it lists 22 skills rather than the 24 in `plugin.json`.
 - The in-session `/plugin install mattpocock-skills` was **not** exercised: `/plugin` is unavailable in headless (`claude -p`) sessions. It runs the same resolver as the CLI, and the documented example form is `/plugin install <name>@claude-plugins-official`.
+
+## Update, 2026-09-13: the Codex plugin ships
+
+The deferral above rested on one constraint: `.codex-plugin/plugin.json` accepted `skills` only as a single path string, so a curated subset of a bucketed repo could not be expressed. **That constraint is gone.** On `codex-cli` 0.154.0, `skills` accepts an **array of explicit skill-directory paths**, exactly as the Claude manifest does, and Codex registers only the listed directories.
+
+Verified empirically on 2026-09-13, against `codex-cli` 0.154.0, before writing the manifests:
+
+- A scratch plugin declaring `"skills": ["./skills/engineering/alpha"]` over a tree that also held `./skills/deprecated/beta` installed cleanly, and `codex debug prompt-input` listed `alpha` and not `beta`. Adding `beta` to the array made it appear. Selection follows the array, not the tree.
+- The same shape works with the plugin **at the marketplace root**: `.codex-plugin/plugin.json` at the repo root and `.agents/plugins/marketplace.json` naming `{"source": "local", "path": "./"}`. This is what this repo needs, since the plugin is the repo.
+- Installing this repo's real manifests into a throwaway `CODEX_HOME` registered the promoted skills from the plugin cache, with nothing from `misc/` or `in-progress/` reaching the model. All 38 `SKILL.md` files are copied into the cache on install, but only the 34 listed directories are registered: the same copy-everything, register-the-list behaviour Claude has.
+- The model-visible listing carries 16 of the 34. The other 18 are exactly the user-invoked skills (`policy.allow_implicit_invocation: false`), which by design do not appear in the model's prompt. That is invocation policy working, not a manifest failure.
+
+So both manifests now exist and must stay in step. The `skills` arrays match entry for entry, and `scripts/sync-plugin-version.mjs` (and its `--check` mode behind `npm run check-plugin-version`) copies `package.json`'s version into both.
+
+The escape hatches this ADR rejected (restructuring `skills/` to promoted-only, or committing a flat duplicate) are **not needed** and were not taken. The bucketed layout stands.
+
+`.agents/plugins/marketplace.json` is Codex's counterpart to `.claude-plugin/marketplace.json`: the path is Codex's to choose, and it lands inside the existing `.agents/` folder rather than adding a top-level one.

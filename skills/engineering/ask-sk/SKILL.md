@@ -99,6 +99,6 @@ Off the main flow entirely.
 
 **`/setup-statusline`**: run once per machine, not per repo, to install the custom terminal status line across your coding agents. Claude Code and GitHub Copilot CLI get the real renderer; Codex gets the closest approximation its built-in items allow, because it cannot run a command for its status line.
 
-**`/update-sk-skills`**: run when you want the skills themselves brought up to date. It works out how they reached this machine (the Claude Code plugin, skills.sh, or a symlinked dev checkout), reports what it found, and runs the matching update, so you never have to remember which route you took.
+**`/update-sk-skills`**: run when you want the skills themselves brought up to date. It works out how they reached this machine (the Claude Code plugin, the Codex plugin, skills.sh, or a symlinked dev checkout), reports what it found, and runs the matching update, so you never have to remember which route you took.
 
 **`/migrate-to-tasks`**: run once in any repo you configured before "ticket" was retired. It renames `/to-tickets` and `/splitting-tickets` to `/to-tasks` and `/splitting-tasks`, moves Repo PDD Markdown work into the `tasks/` layout, and sorts existing tickets into the two things they turned out to be: tasks, which are slices of a build, and open questions, which are wayfinder's units. Live trackers are read-only until you approve a batch. Reach for it right after `/update-sk-skills` on an older repo, since the updated skills expect the new vocabulary.
