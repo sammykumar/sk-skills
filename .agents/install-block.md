@@ -2,21 +2,21 @@
 
 One install story, one wording. `README.md`, `.changeset/*`, and every page under `docs/` must say **this** and nothing else. Change it here first, then propagate.
 
-`sk-skills` ships from this repo's own single-plugin marketplace: `.claude-plugin/marketplace.json` makes `sammykumar/skills` an installable marketplace. You add the marketplace once, then install the plugin from it. This is not in any Anthropic-official marketplace, so it must be added before it can be installed, and updates arrive when you re-run the install (or `/plugin marketplace update`), not automatically.
+`sk-skills` ships from this repo's own single-plugin marketplace: `.claude-plugin/marketplace.json` makes `sammykumar/sk-skills` an installable marketplace. You add the marketplace once, then install the plugin from it. This is not in any Anthropic-official marketplace, so it must be added before it can be installed, and updates arrive when you re-run the install (or `/plugin marketplace update`), not automatically.
 
 ## Claude Code: the plugin
 
 <canonical-block name="claude-code">
 
 ```bash
-claude plugin marketplace add sammykumar/skills
+claude plugin marketplace add sammykumar/sk-skills
 claude plugin install sk-skills@sammykumar
 ```
 
 Or, from inside a session:
 
 ```
-/plugin marketplace add sammykumar/skills
+/plugin marketplace add sammykumar/sk-skills
 /plugin install sk-skills@sammykumar
 ```
 
@@ -26,12 +26,12 @@ It ships from this repo's own marketplace, so add the marketplace first, then in
 
 ## Codex, and other agents: skills.sh
 
-The plugin is Claude Code only. Everywhere else, [skills.sh](https://skills.sh/sammykumar/skills) copies editable skill files into the project. Use the whole-set form on `README.md`:
+The plugin is Claude Code only. Everywhere else, [skills.sh](https://skills.sh/sammykumar/sk-skills) copies editable skill files into the project. Use the whole-set form on `README.md`:
 
 <canonical-block name="skills-sh-whole-set">
 
 ```bash
-npx skills@latest add sammykumar/skills
+npx skills@latest add sammykumar/sk-skills
 ```
 
 Pick the skills you want, and which coding agents to install them on. **The installer lets you choose which skills to take: make sure `setup-sk-skills` and `update-sk-skills` are both among them.**
@@ -43,7 +43,7 @@ Pick the skills you want, and which coding agents to install them on. **The inst
 <canonical-block name="skills-sh-one-skill">
 
 ```bash
-npx skills@latest add sammykumar/skills --skill=<name>
+npx skills@latest add sammykumar/sk-skills --skill=<name>
 ```
 
 ```bash

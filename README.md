@@ -1,6 +1,6 @@
 # Skills For Real Engineers
 
-[![skills.sh](https://skills.sh/b/sammykumar/skills)](https://skills.sh/sammykumar/skills)
+[![skills.sh](https://skills.sh/b/sammykumar/sk-skills)](https://skills.sh/sammykumar/sk-skills)
 
 My agent skills that I use every day to do real engineering - not vibe coding.
 
@@ -12,7 +12,7 @@ This repo began as a fork of [mattpocock/skills](https://github.com/mattpocock/s
 
 ## Installation (30-second setup)
 
-Two ways in, two philosophies. **The [Claude Code plugin](https://code.claude.com/docs/en/plugins)** installs the whole set as a managed, read-only bundle you subscribe to rather than fork. **[skills.sh](https://skills.sh/sammykumar/skills)** copies editable skill files into your project, so you can hack on them and make them your own. Pick one: installing both leaves you with every skill twice.
+Two ways in, two philosophies. **The [Claude Code plugin](https://code.claude.com/docs/en/plugins)** installs the whole set as a managed, read-only bundle you subscribe to rather than fork. **[skills.sh](https://skills.sh/sammykumar/sk-skills)** copies editable skill files into your project, so you can hack on them and make them your own. Pick one: installing both leaves you with every skill twice.
 
 ### 1. Get the skills
 
@@ -20,14 +20,14 @@ Two ways in, two philosophies. **The [Claude Code plugin](https://code.claude.co
 <summary><strong>Claude Code</strong></summary>
 
 ```bash
-claude plugin marketplace add sammykumar/skills
+claude plugin marketplace add sammykumar/sk-skills
 claude plugin install sk-skills@sammykumar
 ```
 
 Or, from inside a session:
 
 ```
-/plugin marketplace add sammykumar/skills
+/plugin marketplace add sammykumar/sk-skills
 /plugin install sk-skills@sammykumar
 ```
 
@@ -39,7 +39,7 @@ It ships from this repo's own marketplace, so add the marketplace first, then in
 <summary><strong>Codex, and other agents</strong></summary>
 
 ```bash
-npx skills@latest add sammykumar/skills
+npx skills@latest add sammykumar/sk-skills
 ```
 
 Pick the skills you want, and which coding agents to install them on. **The installer lets you choose which skills to take: make sure `setup-sk-skills` and `update-sk-skills` are both among them.**
@@ -54,7 +54,7 @@ A native Codex plugin is on the roadmap (see [`.agents/adr/0002-ship-as-a-claude
 Use the same installer, on any agent, including Claude Code:
 
 ```bash
-npx skills@latest add sammykumar/skills
+npx skills@latest add sammykumar/sk-skills
 ```
 
 It writes the skills into your repo as ordinary files you own and can edit. Nothing updates behind your back; pull the latest changes when you want them by running `/update-sk-skills`.
@@ -85,7 +85,7 @@ Install the skills one of two ways, then run [`/setup-sk-skills`](./skills/engin
 flowchart TD
     A["Install the skills"] --> B{"Which install?"}
     B -->|"Claude Code plugin (managed)"| C["claude plugin install sk-skills@sammykumar"]
-    B -->|"skills.sh (editable copies)"| D["npx skills@latest add sammykumar/skills"]
+    B -->|"skills.sh (editable copies)"| D["npx skills@latest add sammykumar/sk-skills"]
     C --> E["/setup-sk-skills (once per repo)"]
     D --> E
     E --> F["Set issue tracker, triage labels, and docs location"]

@@ -5,7 +5,7 @@
   "description": "SK Productions agent skills for real engineering",
   "repository": {
     "type": "git",
-    "url": "https://github.com/sammykumar/skills"
+    "url": "https://github.com/sammykumar/sk-skills"
   },
   "license": "MIT",
   "scripts": {

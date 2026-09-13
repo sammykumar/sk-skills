@@ -47,7 +47,7 @@ The questions readers really ask about this skill, each in bold with the answer 
 
 An observed question always beats an invented one, so go and find them before you write any:
 
-- **This repo's issues.** `gh issue list --repo sammykumar/skills --search "<skill-name>" --state all`. A question filed twice is a question the page owes an answer to.
+- **This repo's issues.** `gh issue list --repo sammykumar/sk-skills --search "<skill-name>" --state all`. A question filed twice is a question the page owes an answer to.
 - **`CHANGELOG.md`.** Anything renamed, moved, or behaviourally changed generates a "where did it go?" that the page has to answer.
 
 Where the hunt comes up thin, the section may also carry a question a reader would plainly ask, but **the count stays honest to the evidence**. A well-discussed skill earns six; an obscure one earns one or two, or none at all. Padding a thin skill out to match a rich one is how the section fills with questions nobody has, and an invented question teaches the reader nothing.

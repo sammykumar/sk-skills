@@ -39,7 +39,7 @@ Either copy `codex-hooks.json` to `~/.codex/hooks.json` (or `<repo>/.codex/hooks
 
 [[hooks.UserPromptSubmit.hooks]]
 type = "command"
-command = "/Users/samkumar/Development/SK-Productions-LLC/skills/skills/engineering/grill-with-docs/hooks/detect-new-feature-codex.sh"
+command = "/Users/samkumar/Development/SK-Productions-LLC/sk-skills/skills/engineering/grill-with-docs/hooks/detect-new-feature-codex.sh"
 ```
 
 Inspect and trust hooks with the `/hooks` command in Codex. Codex hooks are a newer feature; pin the Codex version you rely on.

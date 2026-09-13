@@ -4,8 +4,8 @@ This repo began as a fork of [mattpocock/skills](https://github.com/mattpocock/s
 
 ## Decision
 
-- The plugin is **`sk-skills`**; the marketplace alias is **`sammykumar`**, backed by `.claude-plugin/marketplace.json` in this repo (`sammykumar/skills`).
-- Install route: `/plugin marketplace add sammykumar/skills` then `/plugin install sk-skills@sammykumar`. The wording lives in [.agents/install-block.md](../install-block.md).
+- The plugin is **`sk-skills`**; the marketplace alias is **`sammykumar`**, backed by `.claude-plugin/marketplace.json` in this repo (`sammykumar/sk-skills`).
+- Install route: `/plugin marketplace add sammykumar/sk-skills` then `/plugin install sk-skills@sammykumar`. The wording lives in [.agents/install-block.md](../install-block.md).
 - This fork is **not** in any Anthropic-official marketplace. ADR 0002's "Update, 2026-08-05" (official-marketplace listing, auto-update) describes **upstream** `mattpocock-skills` only and does not apply here. The self-marketplace route ADR 0002 called a fallback is, for this fork, the primary and only route.
 - Version reset to **1.0.0** as the fork's first line; `package.json` and `.claude-plugin/plugin.json` stay in sync via `scripts/sync-plugin-version.mjs` as before.
 - Matt Pocock's MIT copyright is retained in `LICENSE` (MIT requires it); a second copyright line for Sam Kumar is added.

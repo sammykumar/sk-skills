@@ -13,7 +13,7 @@ There are three ways these skills reach a machine, and they are updated by three
 | Route | Evidence on disk | Updated by |
 | --- | --- | --- |
 | Claude Code plugin | an `sk-skills@<marketplace>` entry in the installed-plugins file | `claude plugin update` |
-| skills.sh | a lockfile entry whose source is `sammykumar/skills` | `npx skills@latest update` |
+| skills.sh | a lockfile entry whose source is `sammykumar/sk-skills` or the legacy `sammykumar/skills` | `npx skills@latest update` |
 | Dev checkout | the skill directory is a symlink into a git working tree of the repo | `git pull` |
 
 This is a read-then-act skill: gather the evidence, show the user what you found and what you are about to run, then run it.
@@ -58,7 +58,7 @@ lock="${XDG_STATE_HOME:+$XDG_STATE_HOME/skills}"; lock="${lock:-$HOME/.agents}/.
 [ -f skills-lock.json ] && cat skills-lock.json
 ```
 
-Entries whose `source` is `sammykumar/skills` are ours. Collect their **names**: they are the subset the user chose at install time, and they are what you pass to the update command. Note which scope each lockfile represents, because the update command takes a scope flag.
+Entries whose `source` is `sammykumar/sk-skills` or `sammykumar/skills` are ours. The former is the canonical repository name; the latter identifies installations made before the rename. Recognize both without rewriting the lockfile by hand. Collect their **names**: they are the subset the user chose at install time, and they are what you pass to the update command. Note which scope each lockfile represents, because the update command takes a scope flag.
 
 **D. Hand-copied files.** `SKILL.md` files for these skills present in a skills directory as real directories rather than symlinks, with no lockfile entry and no plugin record. Nothing can update these automatically.
 
