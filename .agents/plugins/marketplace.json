@@ -1,0 +1,16 @@
+{
+  "name": "sammykumar",
+  "interface": {
+    "displayName": "SK Productions"
+  },
+  "plugins": [
+    {
+      "name": "sk-skills",
+      "source": {
+        "source": "local",
+        "path": "./"
+      },
+      "category": "Developer Tools"
+    }
+  ]
+}

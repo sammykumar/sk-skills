@@ -2,7 +2,7 @@
 
 One install story, one wording. `README.md`, `.changeset/*`, and every page under `docs/` must say **this** and nothing else. Change it here first, then propagate.
 
-`sk-skills` ships from this repo's own single-plugin marketplace: `.claude-plugin/marketplace.json` makes `sammykumar/sk-skills` an installable marketplace. You add the marketplace once, then install the plugin from it. This is not in any Anthropic-official marketplace, so it must be added before it can be installed, and updates arrive when you re-run the install (or `/plugin marketplace update`), not automatically.
+`sk-skills` ships from this repo's own single-plugin marketplace, on both harnesses: `.claude-plugin/marketplace.json` for Claude Code and `.agents/plugins/marketplace.json` for Codex both make `sammykumar/sk-skills` an installable marketplace. You add the marketplace once, then install the plugin from it. This is not in any official marketplace on either side, so it must be added before it can be installed, and updates arrive when you re-run the install (or refresh the marketplace), not automatically.
 
 ## Claude Code: the plugin
 
@@ -24,9 +24,24 @@ It ships from this repo's own marketplace, so add the marketplace first, then in
 
 </canonical-block>
 
-## Codex, and other agents: skills.sh
+## Codex: the plugin
 
-The plugin is Claude Code only. Everywhere else, [skills.sh](https://skills.sh/sammykumar/sk-skills) copies editable skill files into the project. Use the whole-set form on `README.md`:
+<canonical-block name="codex">
+
+```bash
+codex plugin marketplace add sammykumar/sk-skills
+codex plugin add sk-skills@sammykumar
+```
+
+Same marketplace, same promoted set. To pull later updates, run `codex plugin marketplace upgrade` and then re-run the install.
+
+</canonical-block>
+
+Codex reads `.codex-plugin/plugin.json`, whose `skills` array lists the same promoted skills as the Claude manifest. The two manifests are separate files that must stay in step: the skills arrays match entry for entry, and `npm run check-plugin-version` asserts both versions track `package.json`.
+
+## Other agents: skills.sh
+
+Outside Claude Code and Codex, [skills.sh](https://skills.sh/sammykumar/sk-skills) copies editable skill files into the project. Use the whole-set form on `README.md`:
 
 <canonical-block name="skills-sh-whole-set">
 
