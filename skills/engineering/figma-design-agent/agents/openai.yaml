@@ -1,0 +1,5 @@
+interface:
+  display_name: "Figma Design Agent"
+  short_description: "Build editable Figma product designs from verified UI"
+policy:
+  allow_implicit_invocation: false

@@ -51,6 +51,7 @@
     "./skills/engineering/writing-specs",
     "./skills/engineering/splitting-tasks",
     "./skills/engineering/recording-designs",
+    "./skills/engineering/figma-design-agent",
     "./skills/engineering/figma-arch-diagram",
     "./skills/engineering/openscad-lsp"
   ]
