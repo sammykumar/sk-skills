@@ -1,8 +1,8 @@
 ## What it does
 
-`implement` builds work that has already been decided. You point it at a task, a spec, or the plan you just agreed in the conversation, and it writes the code, drives tdd at the seams, typechecks as it goes, runs code-review at the end, and commits to the current branch.
+`implement` builds work that has already been decided. You point it at a task, a spec, or the plan you just agreed in the conversation, and it turns the owner's acceptance criteria into 3 to 7 scenarios, writes the code, drives tdd at the seams, and carries those same scenarios through deterministic and installed acceptance before review.
 
-It never reopens the plan. There is no interview, no clarifying round, no proposal of a different approach. Whatever was settled upstream is the input, and the skill's whole job is to turn that into a commit. That is what separates it from typing "build this" at a fresh agent, which will happily redesign the work while it builds it.
+It never substitutes a passing test suite for proof in the application the owner will use. The candidate is frozen before installed acceptance, every evidence layer gets its own verdict, and any source change invalidates evidence tied to the previous candidate.
 
 ## When to reach for it
 
@@ -30,13 +30,15 @@ If the tasks came from to-tasks, the tracker they live on was configured by setu
 
 ## What one run does
 
-A run is five beats, in order:
+A run is seven beats, in order:
 
-1. Read the task or spec and work out the seams.
-2. Drive tdd at the pre-agreed seams, one red-green slice at a time.
-3. Typecheck often, run single test files as it goes.
-4. Run the full test suite once, at the end.
-5. Run code-review, then commit to the current branch.
+1. Read the task or spec, define 3 to 7 owner scenarios, and work out their public seams.
+2. Drive tdd at the pre-agreed seams, starting with at least one red that fails for the intended reason.
+3. Typecheck often and run focused deterministic tests at the public seam as the slices land.
+4. Run the full test suite, freeze the candidate identity, and record the exact commit and artifact fingerprint.
+5. Repeat the owner scenarios in the checkout-owned installed application, including native focus or geometry checks where they apply.
+6. Run a guarded, recoverable live-provider check only when the feature's contract depends on a provider.
+7. Report each evidence layer separately, run code-review against the fixed point, address findings, and repeat any invalidated acceptance before the final commit.
 
 One run covers one task. The tasks to-tasks produces are tracer-bullet vertical slices sized to fit a single fresh context window, so the intended rhythm is: clear context, implement one task, commit, clear again. Each task is self-contained, which is what makes the previous task's context disposable.
 
@@ -46,11 +48,34 @@ The idea the skill runs on is the **seam**: the public boundary you observe beha
 
 The word "pre-agreed" is doing real work, and it is also the skill's weakest joint. Nothing inside `implement` agrees the seams. `tdd` is the skill that asks, and it refuses to write a test at an unconfirmed seam. So in practice the agreement happens either upstream in the spec, or in the first exchange of the run. If it happens nowhere, the precondition never fires and the run quietly becomes "just write the code". Naming the seams in the spec is what stops that.
 
+## One scenario ledger, four verdicts
+
+The acceptance ledger keeps the evidence comparable. A deterministic check and an installed application run prove different things, but they execute the same owner scenarios against the same frozen candidate rather than drifting into separate test plans.
+
+The report keeps four verdicts distinct:
+
+| Verdict | What it proves |
+| --- | --- |
+| Deterministic | The behavior passes repeatable checks at its public seam. |
+| Installed application | The packaged candidate behaves correctly in the checkout-owned application and private state. |
+| Native focus or geometry | Operating-system focus, window, keyboard, dialog, and geometry behavior works where the scenarios depend on it. |
+| Live provider | A real provider satisfies the contract when the feature actually depends on one. |
+
+A layer that does not apply gets an explicit reason. Live-provider acceptance stays opt-in, uses the smallest action that proves the contract, and has a recovery path before the action runs. Invalid test assumptions, harness repairs, retries, and implementation rework stay in the record because they determine whether the result can be trusted. The change is ready to promote only when every owner scenario passes on the frozen candidate and the owner has found zero escapes.
+
 ## Common questions
 
 **It finished, but my task is still open and the acceptance criteria are still unchecked.**
 
 Correct, and expected. `implement` has no completion step. It ends at the commit and never touches the work item, confirmed on GitHub Issues and on the Repo PDD Markdown tracker, so it is not a tracker integration problem. It also does not act on the findings `code-review` produced, and does not tick the `- [ ]` boxes on the originating issue. Close the task and reconcile the criteria yourself. This bites hardest on a dependency chain, because `to-tasks` defines the frontier as tasks whose blockers are all closed. If nothing gets closed, nothing ever becomes visibly unblocked.
+
+**My deterministic tests pass, but the feature fails when I launch the app. Is the run done?**
+
+No. For an installed application, deterministic tests are one verdict in the acceptance proof. Freeze the candidate, repeat the same owner scenarios in the checkout-owned application, and report installed and native behavior separately. A source edit after that point creates a new candidate, so rerun every affected layer rather than carrying old evidence forward.
+
+**Do I need to spend provider credits on every implementation?**
+
+No. Run a live-provider check only when the contract depends on provider behavior that deterministic and installed checks cannot prove. Guard it behind explicit opt-in, define recovery first, and use one minimal prompt or action. Mark the verdict not applicable for features that do not cross that boundary.
 
 **Can I point it at all my tasks at once, or run several in parallel?**
 
@@ -77,8 +102,12 @@ Probably the task is too big rather than the skill being misused. A run does cod
 ## It's working if
 
 - The session opens by reading the task or spec and restating what it will build, rather than asking you what to build.
+- The acceptance record names 3 to 7 owner scenarios and shows the same scenarios at each applicable evidence layer.
 - You can see an actual `/tdd` invocation in the trace, not just tests appearing in the diff.
-- Typechecks and single test files run repeatedly during the run, and the full suite runs once near the end.
+- At least one red fails against the old behavior for the intended reason, and invalid test assumptions remain visible as invalidations rather than being counted as product failures.
+- Typechecks and focused public-seam tests run repeatedly during the run, and the full suite runs once near the end.
+- Installed, native-focus, and live-provider verdicts are separate, with not-applicable reasons where needed, and all passing evidence names the frozen candidate identity.
+- The record includes retries and rework, and the owner has found zero escapes before the approach is called proven.
 - The run reaches a commit on your current branch without you prompting it to carry on.
 - The diff is one task's worth of change: a vertical slice through every layer, not several tasks swept together.
 
