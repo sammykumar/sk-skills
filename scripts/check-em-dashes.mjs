@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // Fails if an em-dash appears in the repo's prose. See CLAUDE.md for the rule.
-// Runs as part of `npm run version`, right after `changeset version` regenerates
+// Runs as part of `pnpm run version`, right after `changeset version` regenerates
 // CHANGELOG.md from the changesets, which is where these get in.
 //
 // Code is exempt, because a name quoted from another system has to stay verbatim:
