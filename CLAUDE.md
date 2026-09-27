@@ -11,9 +11,9 @@ This is a fork of https://github.com/mattpocock/skills, kept for local customiza
 ## Commands
 
 - `claude plugin validate . --strict`: run after editing `.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json`, or `.lsp.json`.
-- `npm run check-plugin-version`: asserts both plugin manifests' versions match `package.json`; run after any of the three changes.
-- `npm test`: runs Node's built-in test runner over `skills/**/*.test.mjs` and `scripts/**/*.test.mjs`; run after editing any skill's `.mjs` glue or a repo script that has a test suite.
-- `npm run check-em-dashes`: fails if an em-dash reaches the repo's prose. Code is exempt, so a name quoted from another system stays verbatim inside a fence or a code span. `archive/` is exempt too: retired skills are kept as a frozen record of what they said when they were dropped, so restyling their prose would falsify the record. Chained onto `npm run version`, because regenerating `CHANGELOG.md` from the changesets is how these get in.
+- `pnpm run check-plugin-version`: asserts both plugin manifests' versions match `package.json`; run after any of the three changes.
+- `pnpm test`: runs Node's built-in test runner over `skills/**/*.test.mjs` and `scripts/**/*.test.mjs`; run after editing any skill's `.mjs` glue or a repo script that has a test suite.
+- `pnpm run check-em-dashes`: fails if an em-dash reaches the repo's prose. Code is exempt, so a name quoted from another system stays verbatim inside a fence or a code span. `archive/` is exempt too: retired skills are kept as a frozen record of what they said when they were dropped, so restyling their prose would falsify the record. Chained onto `pnpm run version`, because regenerating `CHANGELOG.md` from the changesets is how these get in.
 - `scripts/list-skills.sh`: list every `SKILL.md` path in the repo.
 - `scripts/link-skills.sh`: symlink the repo's skills into the local harness directories for dogfooding; re-run after adding, removing, or renaming a skill. Dev-only, not an installer. Run it only from the canonical checkout: run from inside `.claude/worktrees/<slug>/`, it repoints every global symlink at a temporary directory that later disappears, and the failure is invisible until skills stop resolving in unrelated repos. If you are in a worktree, `cd` to the repo root first and confirm with `pwd`.
 - `scripts/scaffold-ship.sh /path/to/repo [branch]`: cut a repo's `/ship` command from the canonical template into its `.claude/commands/ship.md`. See below.
@@ -24,8 +24,8 @@ This is a fork of https://github.com/mattpocock/skills, kept for local customiza
 
 ### Release flow (changesets)
 
-- `npm run changeset`: add a changeset describing any user-facing skill change.
-- `npm run version`: applies changesets and runs `sync-plugin-version.mjs` to copy `package.json`'s version into `plugin.json`. Do not hand-edit either version.
+- `pnpm run changeset`: add a changeset describing any user-facing skill change.
+- `pnpm run version`: applies changesets and runs `sync-plugin-version.mjs` to copy `package.json`'s version into `plugin.json`. Do not hand-edit either version.
 - Push before you version. The changelog generator looks up the commit that added each changeset, so `changeset version` fails with `Cannot read properties of null (reading 'author')` when those commits exist only locally. Get them onto GitHub first.
 - The changelog generator resolves PR and author links through the GitHub API, so `changeset version` needs a `GITHUB_TOKEN`. `scripts/changeset-version.mjs` wraps it and borrows the token from `gh auth token` when the variable is unset, so an authenticated `gh` CLI is enough. Set `GITHUB_TOKEN` yourself only where `gh` is not signed in, such as CI. Never commit a token.
 
