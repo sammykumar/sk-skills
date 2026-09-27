@@ -35,6 +35,8 @@ skills/productivity/setup-statusline/scripts/install-claude.sh
 
 Symlinks `vendor/statusline_command.py` and `vendor/statusline/themes.py` into the Claude config dir and points `settings.json` at the first. They are symlinks, not copies, so editing the skill changes the live status line with no reinstall.
 
+Run from the installed plugin, the links target the marketplace clone (`plugins/marketplaces/<marketplace>/…`) rather than the versioned plugin cache, because the cache directory for a version is removed when the plugin updates. `scripts/resolve-skill-dir.sh` does the mapping, and `install-copilot.sh` uses it too. If the marketplace clone is missing, the script warns and falls back to the cache path.
+
 If the user already ran the upstream project's own `make install`, those same two paths are symlinks into that clone. This script repoints them at the skill. Say so when it happens, because it means the skill becomes the one source of truth and edits to the old clone stop having any effect.
 
 ### 2. Copilot CLI

@@ -37,7 +37,7 @@ Codex's status line takes item names, not commands. There is no hook for externa
 
 ## The vendored renderer
 
-The renderer lives in the skill, under `vendor/`, and that copy is the source of truth. Both working installs point at it by reference rather than copying from it: Claude Code through symlinks into its config dir, Copilot because the adapter loads it by path. Edit `vendor/` and both harnesses pick the change up on their next session, with no reinstall step.
+The renderer lives in the skill, under `vendor/`, and that copy is the source of truth. Both working installs point at it by reference rather than copying from it: Claude Code through symlinks into its config dir, Copilot because the adapter loads it by path. Edit `vendor/` and both harnesses pick the change up on their next session, with no reinstall step. Installed from the plugin, both point at the marketplace clone rather than the versioned plugin cache, so a plugin update does not leave them pointing at a deleted directory.
 
 That reference-not-copy property is also the trap to know about. If a separate clone of the upstream project is still around and its own installer has run, the two compete for the same two paths in the Claude config dir. The installer resolves this by repointing those paths at the skill, which means edits to the old clone silently stop mattering.
 
