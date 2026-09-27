@@ -1,5 +1,15 @@
 # sk-skills
 
+## 2.5.0
+
+### Minor Changes
+
+- [`4d198bc`](https://github.com/sammykumar/sk-skills/commit/4d198bcd7f32e44f053e9943a0dfd837439b416e) Thanks [@sammykumar](https://github.com/sammykumar)! - Extend `/implement` with a layered acceptance loop that keeps 3 to 7 owner scenarios stable across deterministic, installed, native-focus, and guarded live-provider proof on a frozen candidate.
+
+### Patch Changes
+
+- [#25](https://github.com/sammykumar/sk-skills/pull/25) [`deb6700`](https://github.com/sammykumar/sk-skills/commit/deb6700d3f3cafd2aa11e8579ecb27ef1fc318e2) Thanks [@sammykumar](https://github.com/sammykumar)! - `/setup-statusline` now links the status line to the marketplace clone instead of the versioned plugin cache, so the Claude Code and Copilot status lines keep working after a plugin update removes the old version directory.
+
 ## 2.4.1
 
 ### Patch Changes
