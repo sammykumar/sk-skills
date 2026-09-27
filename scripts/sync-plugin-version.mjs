@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // Copies package.json's version into both plugin manifests: .claude-plugin/plugin.json
-// and .codex-plugin/plugin.json. Runs as part of `npm run version`, immediately after
+// and .codex-plugin/plugin.json. Runs as part of `pnpm run version`, immediately after
 // `changeset version`. With --check it changes nothing and exits 1 if any of them differ.
 
 import { readFileSync, writeFileSync } from "node:fs";

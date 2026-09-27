@@ -37,7 +37,7 @@ Same marketplace, same promoted set. To pull later updates, run `codex plugin ma
 
 </canonical-block>
 
-Codex reads `.codex-plugin/plugin.json`, whose `skills` array lists the same promoted skills as the Claude manifest. The two manifests are separate files that must stay in step: the skills arrays match entry for entry, and `npm run check-plugin-version` asserts both versions track `package.json`.
+Codex reads `.codex-plugin/plugin.json`, whose `skills` array lists the same promoted skills as the Claude manifest. The two manifests are separate files that must stay in step: the skills arrays match entry for entry, and `pnpm run check-plugin-version` asserts both versions track `package.json`.
 
 ## Other agents: skills.sh
 
