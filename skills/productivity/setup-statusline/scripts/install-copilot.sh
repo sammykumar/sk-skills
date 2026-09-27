@@ -6,7 +6,7 @@
 # the adapter, which translates and then calls the same renderer. Safe to re-run.
 set -euo pipefail
 
-SKILL_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+. "$(dirname "${BASH_SOURCE[0]}")/resolve-skill-dir.sh"
 COPILOT_DIR="${COPILOT_HOME:-$HOME/.copilot}"
 SETTINGS="$COPILOT_DIR/settings.json"
 ADAPTER="$SKILL_DIR/scripts/copilot-statusline.py"
