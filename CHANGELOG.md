@@ -1,5 +1,11 @@
 # sk-skills
 
+## 2.7.0
+
+### Minor Changes
+
+- [#30](https://github.com/sammykumar/sk-skills/pull/30) [`1f48440`](https://github.com/sammykumar/sk-skills/commit/1f4844088a58c101f685e55c8414e1d105da753c) Thanks [@sammykumar](https://github.com/sammykumar)! - `repo-status` now works on the mobile app. The band above the prompt draws only on the terminal and desktop, so when a phone attaches the same status opens as a pane, and closes again when the last phone leaves. `/repo-status` opens the pane on any surface.
+
 ## 2.6.0
 
 ### Minor Changes
