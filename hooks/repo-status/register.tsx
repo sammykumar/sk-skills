@@ -3,7 +3,9 @@ import type { EngineInterface, Register } from 'claude-code'
 
 import { describe, parseStatus } from './parse'
 
+const PANE = 'repo-status'
 const status = atom({ plugin: 'sk-skills', key: 'repoStatus' } as const, null)
+const isAutoOpened = atom({ plugin: 'sk-skills', key: 'repoStatusPaneAutoOpened' } as const, false)
 
 const refresh = async ($: EngineInterface) => {
   const dirs = await $.process.run(['git', 'rev-parse', '--absolute-git-dir', '--git-common-dir'])
@@ -20,11 +22,45 @@ const refresh = async ($: EngineInterface) => {
   await update($, status, () => next)
 }
 
+const hasPhone = async ($: EngineInterface) => (await $.session.surfaces()).includes('mobile')
+
+const openForPhone = async ($: EngineInterface) => {
+  await update($, isAutoOpened, () => true)
+  await $.ui.open({ id: PANE, title: 'Repo status' })
+}
+
 export const register: Register = on => {
+
   on('session.start', async ($, e, next) => {
     const result = await next(e)
+    await $.command.register({ name: 'repo-status', description: 'Show branch, worktree and uncommitted state in a pane' })
     await refresh($).catch(() => undefined)
+    if (await hasPhone($)) await openForPhone($)
     return result
+  })
+
+  on('session.attach', { surface: 'mobile' }, async ($, e, next) => {
+    const result = await next(e)
+    await refresh($).catch(() => undefined)
+    await openForPhone($)
+    return result
+  })
+
+  on('session.detach', { surface: 'mobile' }, async ($, e, next) => {
+    const result = await next(e)
+    if (e.reason === 'detach' && (await read($, isAutoOpened)) && !(await hasPhone($))) {
+      await update($, isAutoOpened, () => false)
+      await $.ui.close({ id: PANE }).catch(() => undefined)
+    }
+    return result
+  })
+
+  on('command.run', { command: 'repo-status' }, async $ => {
+    await update($, isAutoOpened, () => false)
+    await refresh($).catch(() => undefined)
+    await $.ui.open({ id: PANE, title: 'Repo status' })
+    const s = await read($, status)
+    return { text: s === null ? 'Not in a git repo.' : describe(s).join('  ·  ') }
   })
 
   on('turn.complete', async ($, e, next) => {
@@ -43,6 +79,21 @@ export const register: Register = on => {
     return (
       <Box>
         <Text dimColor>{parts.join('  ·  ')}</Text>
+      </Box>
+    )
+  })
+
+  on('ui.render', { component: 'Pane', requestId: PANE }, async ($, e) => {
+    const s = await read($, status)
+    const { Box, Text } = $.ui.resolve(e)
+
+    return (
+      <Box flexDirection="column">
+        {s === null ? (
+          <Text dimColor>Not in a git repo.</Text>
+        ) : (
+          describe(s).map(part => <Text key={part}>{part}</Text>)
+        )}
       </Box>
     )
   })
