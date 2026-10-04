@@ -4,3 +4,4 @@ node_modules
 !.claude/settings.json
 __pycache__/
 *.pyc
+!.claude/CLAUDE.md

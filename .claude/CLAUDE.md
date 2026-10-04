@@ -8,6 +8,8 @@ A collection of agent **skills** (each a folder with a `SKILL.md`) shipped two w
 
 This is a fork of https://github.com/mattpocock/skills, kept for local customization.
 
+This file lives at `.claude/CLAUDE.md`, not the repo root, because the repo root is also the plugin root: `claude plugin validate . --strict` rejects a `CLAUDE.md` there, since a plugin never loads one as context. Claude Code reads it from `.claude/` as project memory all the same, and the root `AGENTS.md` symlinks here for Codex.
+
 ## Commands
 
 - `claude plugin validate . --strict`: run after editing `.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json`, or `.lsp.json`.

@@ -167,7 +167,7 @@ These split on two axes. **Bucket**: engineering skills are for daily code work,
 
 ## Mods
 
-On Claude Code the plugin also installs a small set of mods, function hooks that draw into your session. Today that is `repo-status`: a line above the prompt showing the branch, worktree or main checkout, uncommitted files, ahead/behind, and the ClickUp task ID from a `cu-<id>` branch. See [CLAUDE.md](./CLAUDE.md#mods) for how they are laid out.
+On Claude Code the plugin also installs a small set of mods, function hooks that draw into your session. Today that is `repo-status`: a line above the prompt showing the branch, worktree or main checkout, uncommitted files, ahead/behind, and the ClickUp task ID from a `cu-<id>` branch. See [CLAUDE.md](./.claude/CLAUDE.md#mods) for how they are laid out.
 
 ## Why These Skills Exist
 
