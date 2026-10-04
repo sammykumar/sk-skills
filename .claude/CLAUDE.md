@@ -84,7 +84,7 @@ The plugin also ships Claude Code mods: function hooks that draw into the sessio
 
 | Mod | What it does |
 | --- | --- |
-| `repo-status` | A dim line above the prompt with the branch, whether the session is in a worktree or the main checkout, the uncommitted file count, ahead/behind against upstream, and the ClickUp task ID parsed from a `cu-<id>` branch. Refreshed at session start and after every turn; hidden outside a git repo. |
+| `repo-status` | A dim line above the prompt with the branch, whether the session is in a worktree or the main checkout, the uncommitted file count, ahead/behind against upstream, and the ClickUp task ID parsed from a `cu-<id>` branch. Refreshed at session start and after every turn; hidden outside a git repo. The band draws only on the terminal and desktop, so the same status also opens as a pane when a phone attaches (closed again when the last phone leaves), and `/repo-status` opens it on any surface. |
 
 ## Agent skills
 

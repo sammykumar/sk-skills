@@ -11,6 +11,6 @@ export type RepoStatus = {
 
 declare module 'claude-code' {
   interface PluginState {
-    'sk-skills': { repoStatus: RepoStatus | null }
+    'sk-skills': { repoStatus: RepoStatus | null; repoStatusPaneAutoOpened: boolean }
   }
 }
