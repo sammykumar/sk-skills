@@ -1,5 +1,11 @@
 # sk-skills
 
+## 2.6.0
+
+### Minor Changes
+
+- [#28](https://github.com/sammykumar/sk-skills/pull/28) [`3bf858c`](https://github.com/sammykumar/sk-skills/commit/3bf858cc18e841a6c3f382e549bb5fe302717de5) Thanks [@sammykumar](https://github.com/sammykumar)! - Add the first Claude Code mod, `repo-status`: a line above the prompt showing the branch, whether you are in a worktree or the main checkout, uncommitted files, ahead/behind against upstream, and the ClickUp task ID from a `cu-<id>` branch. Claude Code only.
+
 ## 2.5.0
 
 ### Minor Changes
