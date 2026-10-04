@@ -165,6 +165,10 @@ These split on two axes. **Bucket**: engineering skills are for daily code work,
 | **[grilling](./skills/productivity/grilling/SKILL.md)** | Productivity | Model-invoked | Interview the user relentlessly about a plan, decision, or idea until every branch of the design tree is resolved. The reusable interview primitive behind `grill-me`, `grill-with-docs`, `auto-implement`, `triage`, `wayfinder` and `improve-codebase-architecture`. |
 | **[writing-for-agents](./skills/productivity/writing-for-agents/SKILL.md)** | Productivity | Model-invoked | Writing documents for agents: skills, AGENTS.md/CLAUDE.md, and any doc an agent reaches by a pointer. |
 
+## Mods
+
+On Claude Code the plugin also installs a small set of mods, function hooks that draw into your session. Today that is `repo-status`: a line above the prompt showing the branch, worktree or main checkout, uncommitted files, ahead/behind, and the ClickUp task ID from a `cu-<id>` branch. See [CLAUDE.md](./.claude/CLAUDE.md#mods) for how they are laid out.
+
 ## Why These Skills Exist
 
 I built these skills as a way to fix common failure modes I see with Claude Code, Codex, and other coding agents.

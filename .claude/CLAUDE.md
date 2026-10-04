@@ -8,6 +8,8 @@ A collection of agent **skills** (each a folder with a `SKILL.md`) shipped two w
 
 This is a fork of https://github.com/mattpocock/skills, kept for local customization.
 
+This file lives at `.claude/CLAUDE.md`, not the repo root, because the repo root is also the plugin root: `claude plugin validate . --strict` rejects a `CLAUDE.md` there, since a plugin never loads one as context. Claude Code reads it from `.claude/` as project memory all the same, and the root `AGENTS.md` symlinks here for Codex.
+
 ## Commands
 
 - `claude plugin validate . --strict`: run after editing `.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json`, or `.lsp.json`.
@@ -72,6 +74,17 @@ No em-dashes anywhere in this repo's prose (`SKILL.md` files, docs, `README.md`,
 The plugin ships one thing that is not a skill: `.lsp.json` at the repo root, which declares the language servers Claude Code should launch. It is plugin configuration, not a stray file, and it is deliberately a separate file rather than an inline `lspServers` block in `plugin.json`, because LSP config declared in a manifest has a history of not surviving plugin installation. Language servers are Claude Code only, with no Codex equivalent, so a skill that documents one says so in its own body rather than promising navigation Codex cannot perform. The reasoning is in [.agents/adr/0008-ship-language-servers-not-a-bundled-lsp-client.md](./.agents/adr/0008-ship-language-servers-not-a-bundled-lsp-client.md).
 
 A plugin configures a language server, it never bundles one, so every entry has a binary the user installs themselves. Leave the optional fields unset unless there is a reason not to: before Claude Code v2.1.205, setting `restartOnCrash` or `shutdownTimeout` caused the server to be skipped entirely, with the reason visible only under `claude --debug`.
+
+## Mods
+
+The plugin also ships Claude Code mods: function hooks that draw into the session (a band above the prompt, a pane, a status line entry, a toast) or react to its events. They live under `hooks/`, one folder per mod (`hooks/<mod>/register.tsx` plus its helpers and `*.test.ts`), and each is listed in `hooks/hooks.json`'s `modules` array. Values a mod keeps in `$.state` are declared under the plugin's own name, `sk-skills`, in `types/index.d.ts`, which `plugin.json` names as `types`. Mods are Claude Code only, with no Codex equivalent.
+
+- `claude plugin test .`: runs every mod's tests.
+- `claude plugin validate .`: reports what each mod hooks and calls, and anything the engine would refuse.
+
+| Mod | What it does |
+| --- | --- |
+| `repo-status` | A dim line above the prompt with the branch, whether the session is in a worktree or the main checkout, the uncommitted file count, ahead/behind against upstream, and the ClickUp task ID parsed from a `cu-<id>` branch. Refreshed at session start and after every turn; hidden outside a git repo. |
 
 ## Agent skills
 
