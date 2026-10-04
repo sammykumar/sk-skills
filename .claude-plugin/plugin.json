@@ -9,6 +9,7 @@
   "homepage": "https://github.com/sammykumar/sk-skills",
   "repository": "https://github.com/sammykumar/sk-skills",
   "license": "MIT",
+  "types": "./types/index.d.ts",
   "keywords": [
     "engineering",
     "skills",
