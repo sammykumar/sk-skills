@@ -55,4 +55,4 @@ Report the tasks, which ones have no blockers and can be grabbed now, and tell t
 
 ## Preconditions
 
-Phase 3b publishes to the project issue tracker and applies triage labels, so the tracker and label vocabulary should have been provided to you. If not, tell the user to run `/setup-sk-skills`.
+Phase 3b publishes to the project issue tracker and applies triage labels, so the tracker and label vocabulary should have been provided to you. If not, tell the user to run `/setup-sk-skills` (`$setup-sk-skills` in Codex).

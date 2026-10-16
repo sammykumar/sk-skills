@@ -35,9 +35,11 @@ codex plugin add sk-skills@sammykumar
 
 Same marketplace, same promoted set. To pull later updates, run `codex plugin marketplace upgrade` and then re-run the install.
 
+Codex has no slash form for skills: type `$` to pick one (`$setup-sk-skills`), or browse them with `/skills`. Wherever these docs say `/name`, type `$name` in Codex.
+
 </canonical-block>
 
-Codex reads `.codex-plugin/plugin.json`, whose `skills` array lists the same promoted skills as the Claude manifest. The two manifests are separate files that must stay in step: the skills arrays match entry for entry, and `pnpm run check-plugin-version` asserts both versions track `package.json`.
+Codex reads `.codex-plugin/plugin.json`, whose `skills` array lists the same promoted skills as the Claude manifest. The two manifests are separate files that must stay in step: the skills arrays match entry for entry, and `pnpm run check-plugin-version` asserts both versions track `package.json`. It also declares an empty inline `hooks` object. Without one, Codex falls back to `hooks/hooks.json`, which is the Claude Code mods list, and warns on every start that it cannot parse `modules`.
 
 ## Other agents: skills.sh
 

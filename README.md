@@ -45,6 +45,8 @@ codex plugin add sk-skills@sammykumar
 
 Same marketplace, same promoted set. To pull later updates, run `codex plugin marketplace upgrade` and then re-run the install.
 
+Codex has no slash form for skills: type `$` to pick one (`$setup-sk-skills`), or browse them with `/skills`. Wherever these docs say `/name`, type `$name` in Codex.
+
 </details>
 
 <details>
