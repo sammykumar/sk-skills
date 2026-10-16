@@ -55,6 +55,9 @@
     "./skills/engineering/figma-arch-diagram",
     "./skills/engineering/openscad-lsp"
   ],
+  "hooks": {
+    "hooks": {}
+  },
   "interface": {
     "displayName": "SK Skills",
     "shortDescription": "Grilling, spec/task flows, TDD, code review and domain modelling for real engineering",

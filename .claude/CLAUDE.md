@@ -77,7 +77,7 @@ A plugin configures a language server, it never bundles one, so every entry has 
 
 ## Mods
 
-The plugin also ships Claude Code mods: function hooks that draw into the session (a band above the prompt, a pane, a status line entry, a toast) or react to its events. They live under `hooks/`, one folder per mod (`hooks/<mod>/register.tsx` plus its helpers and `*.test.ts`), and each is listed in `hooks/hooks.json`'s `modules` array. Values a mod keeps in `$.state` are declared under the plugin's own name, `sk-skills`, in `types/index.d.ts`, which `plugin.json` names as `types`. Mods are Claude Code only, with no Codex equivalent.
+The plugin also ships Claude Code mods: function hooks that draw into the session (a band above the prompt, a pane, a status line entry, a toast) or react to its events. They live under `hooks/`, one folder per mod (`hooks/<mod>/register.tsx` plus its helpers and `*.test.ts`), and each is listed in `hooks/hooks.json`'s `modules` array. Values a mod keeps in `$.state` are declared under the plugin's own name, `sk-skills`, in `types/index.d.ts`, which `plugin.json` names as `types`. Mods are Claude Code only, with no Codex equivalent. `.codex-plugin/plugin.json` declares an empty inline `hooks` object so Codex does not read `hooks/hooks.json` as its own hooks file; keep it there.
 
 - `claude plugin test .`: runs every mod's tests.
 - `claude plugin validate .`: reports what each mod hooks and calls, and anything the engine would refuse.

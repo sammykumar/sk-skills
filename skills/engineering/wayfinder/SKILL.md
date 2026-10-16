@@ -22,7 +22,7 @@ The map is a single issue on this repo's issue tracker, labelled `wayfinder:map`
 
 The map is an **index**, not a store. It lists the decisions made and points at the open questions that hold their detail; a decision lives in exactly one place, the open question that produced it, so the map never restates it, only gists it and links.
 
-**Where the map, its child open questions, blocking, and frontier queries physically live is tracker-specific.** The issue tracker should have been provided to you. If not, tell the user to run `/setup-sk-skills`. Consult the tracker doc's "Wayfinding operations" section for how _this_ repo expresses them. If no tracker has been provided, default to the Repo PDD Markdown tracker.
+**Where the map, its child open questions, blocking, and frontier queries physically live is tracker-specific.** The issue tracker should have been provided to you. If not, tell the user to run `/setup-sk-skills` (`$setup-sk-skills` in Codex). Consult the tracker doc's "Wayfinding operations" section for how _this_ repo expresses them. If no tracker has been provided, default to the Repo PDD Markdown tracker.
 
 ### The map body
 

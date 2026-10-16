@@ -7,7 +7,7 @@ description: "Break a plan, spec, or the current conversation into tracer-bullet
 
 Break a plan, spec, or conversation into a set of **tasks**: tracer-bullet vertical slices, each declaring the tasks that **block** it.
 
-The issue tracker and triage label vocabulary should have been provided to you. If not, tell the user to run `/setup-sk-skills`.
+The issue tracker and triage label vocabulary should have been provided to you. If not, tell the user to run `/setup-sk-skills` (`$setup-sk-skills` in Codex).
 
 ## Process
 

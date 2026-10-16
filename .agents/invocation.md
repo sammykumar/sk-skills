@@ -19,7 +19,9 @@ This is about **operative** instructions: a skill's own steps telling the agent 
 
 The Skill tool takes one skill per call. A step that needs two skills is two calls, not one call with two names: say so (`Call the Skill tool twice, for "grilling" and "domain-modeling"`), not "call it with X and Y," which reads as a single call taking both.
 
-This whole convention only holds when the named skill is **model-invoked**. A user-invoked skill can never be reached this way, full stop: per the invariant above, no other skill can call it, including by naming it to the Skill tool. When a step's precondition is a user-invoked skill (e.g. `setup-sk-skills`), phrase it as an instruction for the human to act on: "tell the user to run `/setup-sk-skills`", never as a Skill tool call.
+This whole convention only holds when the named skill is **model-invoked**. A user-invoked skill can never be reached this way, full stop: per the invariant above, no other skill can call it, including by naming it to the Skill tool. When a step's precondition is a user-invoked skill (e.g. `setup-sk-skills`), phrase it as an instruction for the human to act on: "tell the user to run `/setup-sk-skills` (`$setup-sk-skills` in Codex)", never as a Skill tool call.
+
+That instruction names both spellings because Codex has no slash form for skills. Its `/` menu holds only built-in commands, so a user reaches a skill there by typing `$name` or browsing `/skills`. An agent relaying a bare `/setup-sk-skills` to a Codex user hands them a command that does nothing.
 
 ## Wrapper and engine
 
