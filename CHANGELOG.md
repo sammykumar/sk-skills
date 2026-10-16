@@ -1,5 +1,11 @@
 # sk-skills
 
+## 2.7.1
+
+### Patch Changes
+
+- [#32](https://github.com/sammykumar/sk-skills/pull/32) [`7c65e41`](https://github.com/sammykumar/sk-skills/commit/7c65e4165d84fa616305c3317c15e75d5196a7a0) Thanks [@sammykumar](https://github.com/sammykumar)! - Codex: stop the startup warning `failed to parse plugin hooks config ... unknown field 'modules'` by declaring an empty inline `hooks` object in `.codex-plugin/plugin.json`, so Codex no longer reads the Claude Code mods list at `hooks/hooks.json`. Skills that send you to `/setup-sk-skills` now also name the Codex spelling, `$setup-sk-skills`, and the install docs say that Codex reaches skills with `$name` or `/skills`, not `/name`.
+
 ## 2.7.0
 
 ### Minor Changes
