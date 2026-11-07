@@ -1,5 +1,11 @@
 # sk-skills
 
+## 2.9.0
+
+### Minor Changes
+
+- [#36](https://github.com/sammykumar/sk-skills/pull/36) [`e2bd602`](https://github.com/sammykumar/sk-skills/commit/e2bd602c4449d6d431e667bbed751e5f8ef3b76f) Thanks [@sammykumar](https://github.com/sammykumar)! - `repo-status` now lives in one place: the Repo status pane beside the chat. The pane opens by itself when a session starts, so the status, the in-flight work and the next-prompt buttons are always in view. The line above the prompt is gone, and `/repo-status` no longer prints a copy of the status into the transcript; it just reopens the pane if you closed it.
+
 ## 2.8.0
 
 ### Minor Changes
