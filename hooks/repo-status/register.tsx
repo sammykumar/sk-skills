@@ -1,8 +1,9 @@
 import { atom, read, update } from 'claude-code'
 import type { EngineInterface, Register, ToolCallInput, ToolCallResult } from 'claude-code'
 
-import type { InFlightTask } from '../../types'
+import type { InFlightTask, NextAction } from '../../types'
 import { ACTIVE_AGENT, BAND_ROWS, describeTask, lastLine, ordered, parseBackgroundStart, parseNotifications, summary } from './inflight'
+import { parseNextActions, SUGGEST_PROMPT } from './next-actions'
 import { describe, parseStatus } from './parse'
 
 const PANE = 'repo-status'
@@ -11,6 +12,29 @@ const status = atom({ plugin: 'sk-skills', key: 'repoStatus' } as const, null)
 const isAutoOpened = atom({ plugin: 'sk-skills', key: 'repoStatusPaneAutoOpened' } as const, false)
 const inFlight = atom({ plugin: 'sk-skills', key: 'inFlight' } as const, [] as InFlightTask[])
 const inFlightNow = atom({ plugin: 'sk-skills', key: 'inFlightNow' } as const, 0)
+const nextActions = atom({ plugin: 'sk-skills', key: 'nextActions' } as const, [] as NextAction[])
+
+// Bumped on every prompt, so a suggestion that resolves after the person moved on is dropped.
+let suggestionRound = 0
+
+/** Asks a low-effort fork of the session for the likely next prompts and shows them as buttons. */
+const suggest = async ($: EngineInterface) => {
+  const round = suggestionRound
+  const reply = await $.model.fork({ prompt: SUGGEST_PROMPT, effort: 'low' })
+  if (round !== suggestionRound || !reply.isAnswered) return
+  const actions = parseNextActions(reply.text)
+  await update($, nextActions, () => actions)
+}
+
+const clearSuggestions = async ($: EngineInterface) => {
+  suggestionRound++
+  if ((await read($, nextActions)).length > 0) await update($, nextActions, () => [])
+}
+
+const runAction = async ($: EngineInterface, a: NextAction) => {
+  await clearSuggestions($)
+  await $.prompt.submit({ text: a.prompt })
+}
 
 const refresh = async ($: EngineInterface) => {
   const dirs = await $.process.run(['git', 'rev-parse', '--absolute-git-dir', '--git-common-dir'])
@@ -155,8 +179,10 @@ export const register: Register = on => {
   })
 
   // A background task ended: its notification reaches the session as a prompt, idle or mid-turn.
+  // Any other prompt means the person moved on: the old suggestions no longer apply.
   on('prompt.submit', async ($, e, next) => {
-    await endFromNotifications($, e.text).catch(() => undefined)
+    if (e.text.includes('<task-notification>')) await endFromNotifications($, e.text).catch(() => undefined)
+    else await clearSuggestions($).catch(() => undefined)
     return next(e)
   })
 
@@ -173,23 +199,30 @@ export const register: Register = on => {
     const s = await read($, status)
     const tasks = ordered(await read($, inFlight))
     const now = await read($, inFlightNow)
+    const actions = await read($, nextActions)
     const git = s === null ? 'Not in a git repo.' : describe(s).join('  ·  ')
-    return { text: [git, ...tasks.map(t => describeTask(t, now))].join('\n') }
+    const next = actions.map((a, i) => `${i + 1}. ${a.label}: ${a.prompt}`)
+    return { text: [git, ...tasks.map(t => describeTask(t, now)), ...(next.length ? ['Next:', ...next] : [])].join('\n') }
   })
 
   on('turn.complete', async ($, e, next) => {
     const result = await next(e)
     await refresh($).catch(() => undefined)
+    // Off the turn's own path: the fork runs on a timer so the prompt comes back at once.
+    if (e.agentId === undefined && e.reason === 'answer' && !e.isAborted) {
+      $.clock.after(0, () => suggest($).catch(() => undefined))
+    }
     return result
   })
 
   on('ui.render', { component: 'AbovePrompt' }, async ($, e, next) => {
     const s = await read($, status)
     const tasks = ordered(await read($, inFlight))
-    if (e.props.hasSurvey || (s === null && tasks.length === 0)) return next(e)
+    const actions = e.props.isWorking ? [] : await read($, nextActions)
+    if (e.props.hasSurvey || (s === null && tasks.length === 0 && actions.length === 0)) return next(e)
 
     const now = await read($, inFlightNow)
-    const { Box, Text } = $.ui.resolve(e)
+    const { Box, Button, Text } = $.ui.resolve(e)
     const shown = tasks.slice(0, BAND_ROWS)
     const hidden = tasks.length - shown.length
 
@@ -200,6 +233,14 @@ export const register: Register = on => {
           <Text key={t.id} dimColor wrap="truncate-end">{`● ${describeTask(t, now)}`}</Text>
         ))}
         {hidden > 0 && <Text dimColor>{`+${hidden} more  ·  /repo-status`}</Text>}
+        {actions.length > 0 && (
+          <Box flexDirection="row" gap={1}>
+            <Text dimColor>Next:</Text>
+            {actions.map((a, i) => (
+              <Button key={`next-${i}`} label={`${i + 1} ${a.label}`} hotkey={String(i + 1)} onPress={() => runAction($, a)} />
+            ))}
+          </Box>
+        )}
       </Box>
     )
   })
@@ -208,7 +249,8 @@ export const register: Register = on => {
     const s = await read($, status)
     const tasks = ordered(await read($, inFlight))
     const now = await read($, inFlightNow)
-    const { Box, Text } = $.ui.resolve(e)
+    const actions = await read($, nextActions)
+    const { Box, Button, Text } = $.ui.resolve(e)
 
     return (
       <Box flexDirection="column">
@@ -220,6 +262,10 @@ export const register: Register = on => {
         <Text bold>{`In flight: ${summary(tasks)}`}</Text>
         {tasks.map(t => (
           <Text key={t.id} wrap="truncate-end">{`● ${describeTask(t, now)}`}</Text>
+        ))}
+        {actions.length > 0 && <Text bold>Next</Text>}
+        {actions.map((a, i) => (
+          <Button key={`next-${i}`} label={`${i + 1} ${a.label}`} hotkey={String(i + 1)} onPress={() => runAction($, a)} />
         ))}
       </Box>
     )

@@ -24,6 +24,12 @@ export type InFlightTask = {
   status: string | null
 }
 
+/** A suggested next prompt: the button's text and what pressing it submits. */
+export type NextAction = {
+  label: string
+  prompt: string
+}
+
 declare module 'claude-code' {
   interface PluginState {
     'sk-skills': {
@@ -31,6 +37,7 @@ declare module 'claude-code' {
       repoStatusPaneAutoOpened: boolean
       inFlight: InFlightTask[]
       inFlightNow: number
+      nextActions: NextAction[]
     }
   }
 }
