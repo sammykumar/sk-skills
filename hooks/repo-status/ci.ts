@@ -49,6 +49,11 @@ export const parseCi = (runListJson: string, jobsJson: string | null): CiStatus 
 /** One short line from gh's stderr: why there is no CI to show. */
 export const ciReason = (stderr: string): string => {
   const text = stderr.toLowerCase()
+  if (text.includes('ip allow list')) return 'blocked by the org IP allow list'
+  if (text.includes('saml') || text.includes('oauth app access restrictions')) return 'org needs SSO or app approval for gh'
+  if (text.includes('rate limit')) return 'GitHub rate limit'
+  if (text.includes('http 403')) return 'GitHub denied access (403)'
+  if (text.includes('http 401') || text.includes('bad credentials')) return 'gh token rejected (401)'
   if (text.includes('auth login') || text.includes('not logged')) return 'gh not signed in'
   if (text.includes('no git remote') || text.includes('none of the git remotes')) return 'no GitHub remote'
   if (text.includes('could not resolve') || text.includes('not found')) return 'repo not on GitHub'

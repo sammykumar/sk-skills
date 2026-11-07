@@ -38,5 +38,9 @@ test('polls often while a run moves, rarely once settled, at once on a new branc
 test('a failed gh call becomes a short reason instead of a blank', async () => {
   expect(ciReason('To get started with GitHub CLI, please run:  gh auth login')).toBe('gh not signed in')
   expect(ciReason('no git remotes found')).toBe('no GitHub remote')
+  expect(ciReason('failed to get runs: HTTP 403: Although you appear to have the correct authorization credentials, the `x` organization has an IP allow list enabled')).toBe('blocked by the org IP allow list')
+  expect(ciReason('failed to get runs: HTTP 403: Resource protected by organization SAML enforcement')).toBe('org needs SSO or app approval for gh')
+  expect(ciReason('failed to get runs: HTTP 403: Forbidden')).toBe('GitHub denied access (403)')
+  expect(ciReason('HTTP 401: Bad credentials')).toBe('gh token rejected (401)')
   expect(ciDetail(unavailable('gh not found'))).toBe('gh not found')
 })
