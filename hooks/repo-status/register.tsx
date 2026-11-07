@@ -378,7 +378,7 @@ const openPane = ($: EngineInterface) => $.ui.open({ id: PANE, title: 'Repo stat
 
 // ---------------------------------------------------------------- export for an editor extension
 
-const exp = { dir: '', id: '', cwd: '', transcript: '', title: null as string | null, titleAt: 0, last: '', writtenAt: 0, extensionLive: false }
+const exp = { dir: '', id: '', cwd: '', transcript: '', title: null as string | null, titleAt: 0, last: '', writtenAt: 0, extensionLive: false, interactedAt: 0 }
 
 const setupExport = async ($: EngineInterface) => {
   if (exp.dir) return
@@ -392,7 +392,7 @@ const setupExport = async ($: EngineInterface) => {
 
 /** The tab title, re-read every 15s: it changes when Claude names the session or the person renames it. */
 const refreshTitle = async ($: EngineInterface, now: number) => {
-  if (!exp.transcript || now - exp.titleAt < 15_000) return
+  if (!exp.transcript || now - exp.titleAt < 5_000) return
   exp.titleAt = now
   const hits = await $.process.run(['grep', '-a', '-E', '"type":"(custom-title|ai-title)"', exp.transcript])
   exp.title = parseTitle(hits.stdout) ?? exp.title
@@ -409,17 +409,19 @@ const exportTick = async ($: EngineInterface) => {
   await refreshTitle($, now).catch(() => undefined)
   const [repo, run, file, tasks, done, actions] = await Promise.all([read($, status), read($, ci), read($, taskFile), read($, inFlight), read($, finished), read($, nextActions)])
   const state = { repo, ci: run, taskFile: file ? { path: file.path, mtimeMs: file.mtimeMs } : null, inFlight: tasks, finished: done, nextActions: actions }
-  const body = JSON.stringify({ title: exp.title, state })
+  const body = JSON.stringify({ title: exp.title, interactedAt: exp.interactedAt, state })
   if (body !== exp.last || now - exp.writtenAt > 5_000) {
     exp.last = body
     exp.writtenAt = now
-    await $.fs.write(sessionFile(exp.dir, exp.id), JSON.stringify({ sessionId: exp.id, cwd: exp.cwd, title: exp.title, updatedAt: now, state }))
+    await $.fs.write(sessionFile(exp.dir, exp.id), JSON.stringify({ sessionId: exp.id, cwd: exp.cwd, title: exp.title, interactedAt: exp.interactedAt, updatedAt: now, state }))
   }
   const inbox = inboxFile(exp.dir, exp.id)
   if (await $.fs.exists(inbox)) {
     const text = await $.fs.read(inbox)
     await $.process.run(['rm', '-f', inbox])
     for (const prompt of parseInbox(text)) {
+      // A press in the extension's pane is the person acting on this session too.
+      exp.interactedAt = now
       await clearSuggestions($)
       await $.prompt.submit({ text: prompt })
     }
@@ -479,11 +481,20 @@ export const register: Register = on => {
     return result
   })
 
+  // Typing in this session's prompt box: the clearest sign the person is looking at this session.
+  on('prompt.change', async ($, e, next) => {
+    exp.interactedAt = await $.clock.now().catch(() => exp.interactedAt)
+    return next(e)
+  })
+
   // A background task ended: its notification reaches the session as a prompt, idle or mid-turn.
   // Any other prompt means the person moved on: the old suggestions no longer apply.
   on('prompt.submit', async ($, e, next) => {
     if (e.text.includes('<task-notification>')) await endFromNotifications($, e.text).catch(() => undefined)
-    else await clearSuggestions($).catch(() => undefined)
+    else {
+      exp.interactedAt = await $.clock.now().catch(() => exp.interactedAt)
+      await clearSuggestions($).catch(() => undefined)
+    }
     return next(e)
   })
 
