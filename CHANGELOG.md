@@ -1,5 +1,11 @@
 # sk-skills
 
+## 2.11.0
+
+### Minor Changes
+
+- [#42](https://github.com/sammykumar/sk-skills/pull/42) [`e21c209`](https://github.com/sammykumar/sk-skills/commit/e21c20996c5f540efb4cba156281a34a28eb31ae) Thanks [@sammykumar](https://github.com/sammykumar)! - `repo-status` now publishes each session's state for editor extensions. Every second, a session writes its branch, CI, task file, running and finished work, next-prompt suggestions and tab title to `~/.claude/repo-status/<session id>.json`. An extension can queue prompts in `<session id>.inbox.json`, and the session sends them. While an extension reports itself live in `.extension.json`, the built-in pane stays closed, so only one pane shows.
+
 ## 2.10.1
 
 ### Patch Changes
