@@ -1,5 +1,11 @@
 # sk-skills
 
+## 2.11.1
+
+### Patch Changes
+
+- [#44](https://github.com/sammykumar/sk-skills/pull/44) [`9c3bcbb`](https://github.com/sammykumar/sk-skills/commit/9c3bcbb776991124825c10cd54217f41602e5aac) Thanks [@sammykumar](https://github.com/sammykumar)! - `repo-status` explains why CI is unavailable in plain words. Instead of a cut-off `gh` error such as "failed to get runs: HT…", it now names the cause: the org's IP allow list, an org that needs SSO or app approval for `gh`, a rate limit, a denied (403) or rejected (401) token, `gh` not signed in, or no GitHub remote.
+
 ## 2.11.0
 
 ### Minor Changes
