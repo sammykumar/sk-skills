@@ -31,8 +31,9 @@ test('/repo-status opens the pane without printing, and the pane draws the statu
   expect(opened).toEqual(['repo-status'])
   for (const surface of ['mobile', 'terminal', 'desktop', 'vscode'] as const) {
     const ui = await $.ui.mount({ plugin: 'sk-skills', surface, ...PANE })
-    expect(await ui.find({ type: 'Text', text: /worktree x/ })).toBeDefined()
-    expect(await ui.find({ type: 'Text', text: /1 uncommitted/ })).toBeDefined()
+    expect(await ui.find({ type: 'Text', text: /⎇ feat\/x-cu-86bc9ct1k/ })).toBeDefined()
+    expect(await ui.find({ type: 'Text', text: /^ x$/ })).toBeDefined()
+    expect(await ui.find({ type: 'Text', text: /● 1 changed/ })).toBeDefined()
     expect(await ui.find({ type: 'Text', text: /CU 86bc9ct1k/ })).toBeDefined()
     await ui.unmount()
   }
@@ -42,7 +43,7 @@ test('outside a git repo the pane says so', async ($, on) => {
   fakeGit(on, false)
   await $.command.run({ command: 'repo-status', args: '', origin: { kind: 'user' } } as never)
   const ui = await $.ui.mount({ plugin: 'sk-skills', surface: 'mobile', ...PANE })
-  expect(await ui.find({ type: 'Text', text: /Not in a git repo/ })).toBeDefined()
+  expect(await ui.find({ type: 'Text', text: /Not a git repository/ })).toBeDefined()
   await ui.unmount()
 })
 
