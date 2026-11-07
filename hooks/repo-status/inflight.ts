@@ -3,9 +3,6 @@ import type { InFlightTask } from '../../types'
 /** Background work states the agent list still counts as in flight. */
 export const ACTIVE_AGENT = new Set(['pending', 'running', 'waiting'])
 
-/** How many in-flight rows the band above the prompt shows before folding the rest. */
-export const BAND_ROWS = 3
-
 /** A background shell or monitor's start, read from the tool result the model sees. */
 export const parseBackgroundStart = (text: string): { id: string; outputFile: string | null } | null => {
   const outputFile = /Output is being written to: (\S+?\.output)\b/.exec(text)?.[1] ?? null

@@ -31,17 +31,18 @@ test('a background shell shows in the pane with its latest output, and its notif
   fakeHost(on)
   await $.tool.call({ tool: 'Bash', command: 'gh run watch 123', description: 'Wait for master CI', run_in_background: true })
 
-  const ran = await $.command.run({ command: 'repo-status', args: '', origin: { kind: 'user' } } as never)
-  expect(ran.text).toContain('shell  Wait for master CI  ·  lint: in_progress')
+  await $.command.run({ command: 'repo-status', args: '', origin: { kind: 'user' } } as never)
 
   for (const surface of ['terminal', 'mobile'] as const) {
     const ui = await $.ui.mount({ plugin: 'sk-skills', surface, ...PANE })
     expect(await ui.find({ type: 'Text', text: /In flight: 1 running/ })).toBeDefined()
-    expect(await ui.find({ type: 'Text', text: /Wait for master CI/ })).toBeDefined()
+    expect(await ui.find({ type: 'Text', text: /shell  Wait for master CI  ·  lint: in_progress/ })).toBeDefined()
     await ui.unmount()
   }
 
   await $.prompt.submit({ text: '<task-notification>\n<task-id>bci1</task-id>\n<status>completed</status>\n</task-notification>' } as never)
-  const after = await $.command.run({ command: 'repo-status', args: '', origin: { kind: 'user' } } as never)
-  expect(after.text).not.toContain('Wait for master CI')
+  const after = await $.ui.mount({ plugin: 'sk-skills', surface: 'terminal', ...PANE })
+  expect(await after.find({ type: 'Text', text: /Wait for master CI/ })).toBeUndefined()
+  expect(await after.find({ type: 'Text', text: /In flight: nothing running/ })).toBeDefined()
+  await after.unmount()
 })

@@ -1,4 +1,4 @@
-import { expect, test } from 'claude-code/testing'
+import { expect, mock, test } from 'claude-code/testing'
 import type { On } from 'claude-code'
 
 const PANE = {
@@ -7,8 +7,11 @@ const PANE = {
   props: { title: 'Repo status', isFocused: false, bodyColumns: 40, placement: 'inline', scroll: { offset: 0, bodyRows: 10 }, view: {} },
 } as const
 
-const fakeGit = (on: On, isRepo: boolean) => {
-  on('ui.open', () => ({ value: { isPlaced: true } }))
+const fakeGit = (on: On, isRepo: boolean, opened: string[] = []) => {
+  on('ui.open', (_$, e) => {
+    opened.push(e.id)
+    return { value: { isPlaced: true } }
+  })
   on('process.run', async (_$, e) => {
     if (!isRepo) return { value: { exitCode: 128, stdout: '', stderr: 'not a git repository', isStdoutTruncated: false, isStderrTruncated: false } }
     const out = e.argv.includes('status')
@@ -20,23 +23,36 @@ const fakeGit = (on: On, isRepo: boolean) => {
   })
 }
 
-test('/repo-status reports the status and the pane draws it on every surface, mobile included', async ($, on) => {
-  fakeGit(on, true)
+test('/repo-status opens the pane without printing, and the pane draws the status on every surface', async ($, on) => {
+  const opened: string[] = []
+  fakeGit(on, true, opened)
   const ran = await $.command.run({ command: 'repo-status', args: '', origin: { kind: 'user' } } as never)
-  expect(ran.text).toContain('CU 86bc9ct1k')
+  expect(ran.text).toBeUndefined()
+  expect(opened).toEqual(['repo-status'])
   for (const surface of ['mobile', 'terminal', 'desktop', 'vscode'] as const) {
     const ui = await $.ui.mount({ plugin: 'sk-skills', surface, ...PANE })
     expect(await ui.find({ type: 'Text', text: /worktree x/ })).toBeDefined()
     expect(await ui.find({ type: 'Text', text: /1 uncommitted/ })).toBeDefined()
+    expect(await ui.find({ type: 'Text', text: /CU 86bc9ct1k/ })).toBeDefined()
     await ui.unmount()
   }
 })
 
 test('outside a git repo the pane says so', async ($, on) => {
   fakeGit(on, false)
-  const ran = await $.command.run({ command: 'repo-status', args: '', origin: { kind: 'user' } } as never)
-  expect(ran.text).toBe('Not in a git repo.')
+  await $.command.run({ command: 'repo-status', args: '', origin: { kind: 'user' } } as never)
   const ui = await $.ui.mount({ plugin: 'sk-skills', surface: 'mobile', ...PANE })
   expect(await ui.find({ type: 'Text', text: /Not in a git repo/ })).toBeDefined()
   await ui.unmount()
+})
+
+test('the pane opens by itself when the session starts', async ($, on) => {
+  const opened: string[] = []
+  fakeGit(on, true, opened)
+  on('session.start', () => ({ cwd: '/r' }) as never)
+  on('command.register', () => ({ value: undefined }) as never)
+  on('agent.list', () => ({ value: [] }))
+  mock.clock(on, { now: 0 })
+  await $.session.start({ source: 'startup', cwd: '/r' } as never)
+  expect(opened).toEqual(['repo-status'])
 })

@@ -2,14 +2,13 @@ import { atom, read, update } from 'claude-code'
 import type { EngineInterface, Register, ToolCallInput, ToolCallResult } from 'claude-code'
 
 import type { InFlightTask, NextAction } from '../../types'
-import { ACTIVE_AGENT, BAND_ROWS, describeTask, lastLine, ordered, parseBackgroundStart, parseNotifications, summary } from './inflight'
+import { ACTIVE_AGENT, describeTask, lastLine, ordered, parseBackgroundStart, parseNotifications, summary } from './inflight'
 import { parseNextActions, SUGGEST_PROMPT } from './next-actions'
 import { describe, parseStatus } from './parse'
 
 const PANE = 'repo-status'
 const TICK_MS = 10_000
 const status = atom({ plugin: 'sk-skills', key: 'repoStatus' } as const, null)
-const isAutoOpened = atom({ plugin: 'sk-skills', key: 'repoStatusPaneAutoOpened' } as const, false)
 const inFlight = atom({ plugin: 'sk-skills', key: 'inFlight' } as const, [] as InFlightTask[])
 const inFlightNow = atom({ plugin: 'sk-skills', key: 'inFlightNow' } as const, 0)
 const nextActions = atom({ plugin: 'sk-skills', key: 'nextActions' } as const, [] as NextAction[])
@@ -102,12 +101,8 @@ const tick = async ($: EngineInterface) => {
   await update($, inFlightNow, () => now)
 }
 
-const hasPhone = async ($: EngineInterface) => (await $.session.surfaces()).includes('mobile')
-
-const openForPhone = async ($: EngineInterface) => {
-  await update($, isAutoOpened, () => true)
-  await $.ui.open({ id: PANE, title: 'Repo status' })
-}
+/** The pane is the mod's only view: opened at session start, reopened by `/repo-status`. */
+const openPane = ($: EngineInterface) => $.ui.open({ id: PANE, title: 'Repo status' })
 
 const endFromNotifications = async ($: EngineInterface, text: string) => {
   if (!text.includes('<task-notification>')) return
@@ -148,27 +143,19 @@ export const register: Register = on => {
 
   on('session.start', async ($, e, next) => {
     const result = await next(e)
-    await $.command.register({ name: 'repo-status', description: 'Show branch, worktree, uncommitted state and running background work in a pane' })
+    await $.command.register({ name: 'repo-status', description: 'Open the Repo status pane: branch, uncommitted state, running background work and suggested next prompts' })
     await refresh($).catch(() => undefined)
     await tick($).catch(() => undefined)
     $.clock.every(TICK_MS, () => tick($).catch(() => undefined))
-    if (await hasPhone($)) await openForPhone($)
+    await openPane($).catch(() => undefined)
     return result
   })
 
-  on('session.attach', { surface: 'mobile' }, async ($, e, next) => {
+  // A surface that attaches later (a phone) gets the pane too.
+  on('session.attach', async ($, e, next) => {
     const result = await next(e)
     await refresh($).catch(() => undefined)
-    await openForPhone($)
-    return result
-  })
-
-  on('session.detach', { surface: 'mobile' }, async ($, e, next) => {
-    const result = await next(e)
-    if (e.reason === 'detach' && (await read($, isAutoOpened)) && !(await hasPhone($))) {
-      await update($, isAutoOpened, () => false)
-      await $.ui.close({ id: PANE }).catch(() => undefined)
-    }
+    await openPane($).catch(() => undefined)
     return result
   })
 
@@ -191,18 +178,12 @@ export const register: Register = on => {
     return next(e)
   })
 
+  // Reopens the pane; it prints nothing, so the status lives in one place only.
   on('command.run', { command: 'repo-status' }, async $ => {
-    await update($, isAutoOpened, () => false)
     await refresh($).catch(() => undefined)
     await tick($).catch(() => undefined)
-    await $.ui.open({ id: PANE, title: 'Repo status' })
-    const s = await read($, status)
-    const tasks = ordered(await read($, inFlight))
-    const now = await read($, inFlightNow)
-    const actions = await read($, nextActions)
-    const git = s === null ? 'Not in a git repo.' : describe(s).join('  ·  ')
-    const next = actions.map((a, i) => `${i + 1}. ${a.label}: ${a.prompt}`)
-    return { text: [git, ...tasks.map(t => describeTask(t, now)), ...(next.length ? ['Next:', ...next] : [])].join('\n') }
+    await openPane($)
+    return {}
   })
 
   on('turn.complete', async ($, e, next) => {
@@ -213,36 +194,6 @@ export const register: Register = on => {
       $.clock.after(0, () => suggest($).catch(() => undefined))
     }
     return result
-  })
-
-  on('ui.render', { component: 'AbovePrompt' }, async ($, e, next) => {
-    const s = await read($, status)
-    const tasks = ordered(await read($, inFlight))
-    const actions = e.props.isWorking ? [] : await read($, nextActions)
-    if (e.props.hasSurvey || (s === null && tasks.length === 0 && actions.length === 0)) return next(e)
-
-    const now = await read($, inFlightNow)
-    const { Box, Button, Text } = $.ui.resolve(e)
-    const shown = tasks.slice(0, BAND_ROWS)
-    const hidden = tasks.length - shown.length
-
-    return (
-      <Box flexDirection="column">
-        {s !== null && <Text dimColor>{describe(s).join('  ·  ')}</Text>}
-        {shown.map(t => (
-          <Text key={t.id} dimColor wrap="truncate-end">{`● ${describeTask(t, now)}`}</Text>
-        ))}
-        {hidden > 0 && <Text dimColor>{`+${hidden} more  ·  /repo-status`}</Text>}
-        {actions.length > 0 && (
-          <Box flexDirection="row" gap={1}>
-            <Text dimColor>Next:</Text>
-            {actions.map((a, i) => (
-              <Button key={`next-${i}`} label={`${i + 1} ${a.label}`} hotkey={String(i + 1)} onPress={() => runAction($, a)} />
-            ))}
-          </Box>
-        )}
-      </Box>
-    )
   })
 
   on('ui.render', { component: 'Pane', requestId: PANE }, async ($, e) => {
