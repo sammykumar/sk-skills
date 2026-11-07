@@ -83,12 +83,14 @@ let ghPath: string | null = null
 
 /**
  * `REPO_STATUS_GH_PROXY`, when set, is the proxy the CI lookup uses in place
- * of the session's own: for a network where GitHub accepts some egress paths
- * and not others (an org IP allow list, say).
+ * of the session's own (`direct` or `none` for no proxy): for a network where
+ * GitHub accepts some egress paths and not others (an org IP allow list, say).
  */
 const ghEnv = async ($: EngineInterface): Promise<Record<string, string> | undefined> => {
-  const proxy = (await $.env.get('REPO_STATUS_GH_PROXY').catch(() => undefined))?.trim()
-  if (!proxy) return undefined
+  const raw = (await $.env.get('REPO_STATUS_GH_PROXY').catch(() => undefined))?.trim()
+  if (!raw) return undefined
+  // `direct` (or `none`) reaches GitHub with no proxy at all.
+  const proxy = /^(direct|none)$/i.test(raw) ? '' : raw
   return { HTTPS_PROXY: proxy, https_proxy: proxy, HTTP_PROXY: proxy, http_proxy: proxy }
 }
 
