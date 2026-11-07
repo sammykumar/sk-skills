@@ -1,5 +1,11 @@
 # sk-skills
 
+## 2.12.1
+
+### Patch Changes
+
+- [#48](https://github.com/sammykumar/sk-skills/pull/48) [`9a2689f`](https://github.com/sammykumar/sk-skills/commit/9a2689f5d82a4c8d7435798eb1bb4cae7a2cfbcc) Thanks [@sammykumar](https://github.com/sammykumar)! - `REPO_STATUS_GH_PROXY=direct` (or `none`) sends the CI lookup to GitHub with no proxy at all, for networks where the direct route is the one GitHub accepts.
+
 ## 2.12.0
 
 ### Minor Changes
