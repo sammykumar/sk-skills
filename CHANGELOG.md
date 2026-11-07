@@ -1,5 +1,11 @@
 # sk-skills
 
+## 2.12.0
+
+### Minor Changes
+
+- [#46](https://github.com/sammykumar/sk-skills/pull/46) [`5a41326`](https://github.com/sammykumar/sk-skills/commit/5a413264821e3159132e9432046b79e5293ca453) Thanks [@sammykumar](https://github.com/sammykumar)! - `repo-status` can send its CI lookup through a proxy of your choice. Set `REPO_STATUS_GH_PROXY` (for example in your Claude Code settings' `env`), and the `gh` calls behind the CI line use that proxy instead of the session's. This helps on networks where GitHub accepts only some routes, such as behind an org IP allow list.
+
 ## 2.11.1
 
 ### Patch Changes
