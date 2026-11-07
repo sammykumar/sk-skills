@@ -1,5 +1,13 @@
 # sk-skills
 
+## 2.8.0
+
+### Minor Changes
+
+- [#34](https://github.com/sammykumar/sk-skills/pull/34) [`d87c206`](https://github.com/sammykumar/sk-skills/commit/d87c206ac5e913541621e39b90772e64dd5d7bcb) Thanks [@sammykumar](https://github.com/sammykumar)! - `repo-status` now shows the background work that is still running, so you can see progress without asking for a status update. Under the git line, each background shell or monitor gets a row with how long it has been running and the last line of its output, refreshed every 10 seconds. Running subagents and the next scheduled check-in get rows too. A row clears when the task's completion notification arrives or the task is stopped. The pane and `/repo-status` list every row; the band above the prompt shows the first three.
+
+- [#34](https://github.com/sammykumar/sk-skills/pull/34) [`a453318`](https://github.com/sammykumar/sk-skills/commit/a453318b2c610cf985bea3dc0ad5a017f6a77cf5) Thanks [@sammykumar](https://github.com/sammykumar)! - `repo-status` now suggests what to do next. After each answered turn, up to three likely next prompts appear as buttons under the status, for example "1 Open the PR". Pressing one, or its number while the band has focus, sends that prompt for you. The buttons hide while Claude is working and clear as soon as you send anything else. Each suggestion costs one small, low-effort model call that reuses the session's cached context.
+
 ## 2.7.1
 
 ### Patch Changes
