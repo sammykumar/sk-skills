@@ -81,9 +81,21 @@ const refresh = async ($: EngineInterface) => {
 const GH_PATHS = ['gh', '/opt/homebrew/bin/gh', '/usr/local/bin/gh', '/usr/bin/gh']
 let ghPath: string | null = null
 
+/**
+ * `REPO_STATUS_GH_PROXY`, when set, is the proxy the CI lookup uses in place
+ * of the session's own: for a network where GitHub accepts some egress paths
+ * and not others (an org IP allow list, say).
+ */
+const ghEnv = async ($: EngineInterface): Promise<Record<string, string> | undefined> => {
+  const proxy = (await $.env.get('REPO_STATUS_GH_PROXY').catch(() => undefined))?.trim()
+  if (!proxy) return undefined
+  return { HTTPS_PROXY: proxy, https_proxy: proxy, HTTP_PROXY: proxy, http_proxy: proxy }
+}
+
 const gh = async ($: EngineInterface, args: readonly string[]): Promise<{ exitCode: number; stdout: string; reason: string }> => {
+  const env = await ghEnv($)
   for (const bin of ghPath ? [ghPath] : GH_PATHS) {
-    const ran = await $.process.run([bin, ...args], { timeoutMs: 20_000 }).catch(() => null)
+    const ran = await $.process.run([bin, ...args], { timeoutMs: 20_000, ...(env ? { env } : {}) }).catch(() => null)
     if (ran === null || ran.exitCode === 127) continue
     ghPath = bin
     return { exitCode: ran.exitCode, stdout: ran.stdout, reason: ciReason(ran.stderr) }
