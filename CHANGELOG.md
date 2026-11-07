@@ -1,5 +1,16 @@
 # sk-skills
 
+## 2.10.0
+
+### Minor Changes
+
+- [#38](https://github.com/sammykumar/sk-skills/pull/38) [`e5680c8`](https://github.com/sammykumar/sk-skills/commit/e5680c8d6ba33e6f21a806538fc6ac45c1406054) Thanks [@sammykumar](https://github.com/sammykumar)! - `repo-status` v2: the pane now shows four sections.
+
+  - **Repo** puts the branch and working-tree state beside the latest CI run for the branch, read with the GitHub CLI, including which jobs failed.
+  - **Tasks** shows the checklist this session wrote, picked automatically with nothing to configure. Tick a box, click a line to edit it in place, or add a task, and the change goes straight into the markdown file. If the line changed on disk since it was drawn, the pane asks before overwriting. `Open` opens the file in VS Code.
+  - **In flight** is restyled, and a new **Finished** list keeps tasks that just ended, with how they ended, for ten minutes.
+  - **Next** shows the top suggestion as a card with the prompt it will send.
+
 ## 2.9.0
 
 ### Minor Changes
