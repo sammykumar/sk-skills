@@ -34,7 +34,6 @@ declare module 'claude-code' {
   interface PluginState {
     'sk-skills': {
       repoStatus: RepoStatus | null
-      repoStatusPaneAutoOpened: boolean
       inFlight: InFlightTask[]
       inFlightNow: number
       nextActions: NextAction[]

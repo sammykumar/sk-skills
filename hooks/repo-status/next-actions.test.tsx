@@ -16,11 +16,6 @@ test('reads the actions out of a reply, skipping junk and duplicates, capped at 
   expect(parseNextActions('[{"label": broken')).toEqual([])
 })
 
-const BAND = {
-  component: 'AbovePrompt',
-  props: { hasSurvey: false, isWorking: false, maxRows: 6, bodyColumns: 100, scroll: { offset: 0, bodyRows: 6 }, view: {} },
-} as const
-
 const PANE = {
   component: 'Pane',
   requestId: 'repo-status',
@@ -54,18 +49,18 @@ test('after an answered turn the suggestion is a button, and pressing it submits
   await answerTurn($)
   await clock.advance(1)
 
-  for (const [surface, target] of [['terminal', BAND], ['mobile', PANE]] as const) {
-    const ui = await $.ui.mount({ plugin: 'sk-skills', surface, ...target })
+  for (const surface of ['terminal', 'vscode', 'desktop', 'mobile'] as const) {
+    const ui = await $.ui.mount({ plugin: 'sk-skills', surface, ...PANE })
     expect(await ui.find({ type: 'Button', key: 'next-0' })).toBeDefined()
     await ui.unmount()
   }
 
-  const ui = await $.ui.mount({ plugin: 'sk-skills', surface: 'terminal', ...BAND })
+  const ui = await $.ui.mount({ plugin: 'sk-skills', surface: 'terminal', ...PANE })
   await ui.press({ key: 'next-0' })
   expect(submitted).toEqual(['Push the branch and open a PR to master'])
   await ui.unmount()
 
-  const after = await $.ui.mount({ plugin: 'sk-skills', surface: 'terminal', ...BAND })
+  const after = await $.ui.mount({ plugin: 'sk-skills', surface: 'terminal', ...PANE })
   expect(await after.find({ type: 'Button', key: 'next-0' })).toBeUndefined()
   await after.unmount()
 })
@@ -86,7 +81,7 @@ test('a prompt typed before the suggestion lands drops it', async ($, on) => {
   release()
   await clock.advance(1)
 
-  const ui = await $.ui.mount({ plugin: 'sk-skills', surface: 'terminal', ...BAND })
+  const ui = await $.ui.mount({ plugin: 'sk-skills', surface: 'terminal', ...PANE })
   expect(await ui.find({ type: 'Button', key: 'next-0' })).toBeUndefined()
   await ui.unmount()
 })
