@@ -2,7 +2,7 @@ import { atom, read, update } from 'claude-code'
 import type { EngineInterface, Register, ToolCallInput, ToolCallResult } from 'claude-code'
 
 import type { CiStatus, FinishedTask, InFlightTask, NextAction, TaskFile, TaskFileCandidate, TasksUi } from '../../types'
-import { ciDetail, isDue, parseCi, STATE_WORD } from './ci'
+import { ciDetail, ciReason, isDue, parseCi, STATE_WORD, unavailable } from './ci'
 import { ACTIVE_AGENT, elapsed, lastLine, ordered, parseBackgroundStart, parseNotifications } from './inflight'
 import { parseNextActions, SUGGEST_PROMPT } from './next-actions'
 import { parseStatus } from './parse'
@@ -75,13 +75,28 @@ const refresh = async ($: EngineInterface) => {
   await update($, status, () => next)
 }
 
+// A pane started from an editor may not inherit the shell's PATH, so `gh` is
+// also looked for where the usual installers put it.
+const GH_PATHS = ['gh', '/opt/homebrew/bin/gh', '/usr/local/bin/gh', '/usr/bin/gh']
+let ghPath: string | null = null
+
+const gh = async ($: EngineInterface, args: readonly string[]): Promise<{ exitCode: number; stdout: string; reason: string }> => {
+  for (const bin of ghPath ? [ghPath] : GH_PATHS) {
+    const ran = await $.process.run([bin, ...args], { timeoutMs: 20_000 }).catch(() => null)
+    if (ran === null || ran.exitCode === 127) continue
+    ghPath = bin
+    return { exitCode: ran.exitCode, stdout: ran.stdout, reason: ciReason(ran.stderr) }
+  }
+  return { exitCode: 127, stdout: '', reason: 'gh not found' }
+}
+
 let ciFetchedAt = 0
 let ciBranch = ''
 
 /**
  * The latest run for the current branch from the GitHub CLI: often while a run
  * moves, every two minutes once settled. No `gh`, no auth, or no GitHub remote
- * leaves CI unknown (null) and the pane says so quietly.
+ * shows "CI unavailable" with the reason (gh missing, not signed in, no remote).
  */
 const refreshCi = async ($: EngineInterface, now: number) => {
   const s = await read($, status)
@@ -94,14 +109,14 @@ const refreshCi = async ($: EngineInterface, now: number) => {
   ciFetchedAt = now
   ciBranch = s.branch
   const fields = 'databaseId,status,conclusion,workflowName,createdAt,url'
-  const list = await $.process.run(['gh', 'run', 'list', '--branch', s.branch, '--limit', '1', '--json', fields], { timeoutMs: 20_000 })
+  const list = await gh($, ['run', 'list', '--branch', s.branch, '--limit', '1', '--json', fields])
   if (list.exitCode !== 0) {
-    await update($, ci, () => null)
+    await update($, ci, () => unavailable(list.reason))
     return
   }
   let next = parseCi(list.stdout, null)
   if (next.runId !== null && (next.state === 'running' || next.state === 'failed')) {
-    const jobs = await $.process.run(['gh', 'run', 'view', String(next.runId), '--json', 'jobs'], { timeoutMs: 20_000 })
+    const jobs = await gh($, ['run', 'view', String(next.runId), '--json', 'jobs'])
     if (jobs.exitCode === 0) next = parseCi(list.stdout, jobs.stdout)
   }
   await update($, ci, () => next)
@@ -355,6 +370,7 @@ const CI_LOOK: Record<CiStatus['state'], { glyph: string; color: string }> = {
   running: { glyph: '◐', color: 'claude' },
   queued: { glyph: '◌', color: 'warning' },
   none: { glyph: '–', color: 'inactive' },
+  unavailable: { glyph: '–', color: 'inactive' },
   other: { glyph: '•', color: 'inactive' },
 }
 const isGood = (s: string) => s === 'completed' || s === 'success'
@@ -428,14 +444,11 @@ export const register: Register = on => {
       read($, status), read($, inFlight), read($, inFlightNow), read($, finished), read($, nextActions), read($, ci), read($, taskFile), read($, tasksUi),
     ])
     const { Box, Text, Button, Input, Link, Code } = $.ui.resolve(e)
-    const columns = Math.max(24, Math.floor(e.props.bodyColumns) - 1)
-
+    // Every row is sibling Texts in one Box: a Text nested in a Text loses its
+    // color on some surfaces, and a run of rule glyphs wraps instead of shrinking.
     const rule = (key: string, title: string, right = '') => (
-      <Box key={key} flexDirection="row" marginTop={1}>
+      <Box key={key} flexDirection="row" justifyContent="space-between" marginTop={1}>
         <Text bold color="suggestion">{title}</Text>
-        <Box flexGrow={1} overflow="hidden" marginX={1}>
-          <Text dimColor wrap="truncate-end">{'─'.repeat(columns)}</Text>
-        </Box>
         <Text dimColor>{right}</Text>
       </Box>
     )
@@ -444,29 +457,29 @@ export const register: Register = on => {
     const repoRow = s === null ? (
       <Text key="no-repo" dimColor>{'  Not a git repository'}</Text>
     ) : (
-      <Box key="repo-row" flexDirection="row" columnGap={2}>
-        <Box flexDirection="column" width="50%">
+      <Box key="repo-row" flexDirection="row">
+        <Box flexDirection="column" width="50%" paddingRight={1}>
           <Box flexDirection="row">
             <Text bold wrap="truncate-end">{`⎇ ${s.branch}`}</Text>
             {s.isWorktree && <Text dimColor>{` ${s.worktreeName ?? 'worktree'}`}</Text>}
           </Box>
-          <Text wrap="truncate-end">
+          <Box flexDirection="row" columnGap={1}>
             {s.dirty === 0 ? <Text color="success">✓ clean</Text> : <Text color="warning">{`● ${s.dirty} changed`}</Text>}
-            <Text dimColor>{s.hasUpstream ? `  ↑${s.ahead} ↓${s.behind}` : '  no upstream'}</Text>
-            {s.taskId && <Text dimColor>{`  CU ${s.taskId}`}</Text>}
-          </Text>
+            <Text dimColor>{s.hasUpstream ? `↑${s.ahead} ↓${s.behind}` : 'no upstream'}</Text>
+            {s.taskId && <Text dimColor>{`CU ${s.taskId}`}</Text>}
+          </Box>
         </Box>
         <Box flexDirection="column" width="50%">
           {run === null ? (
-            <Text dimColor>CI unknown</Text>
+            <Text dimColor>CI …</Text>
           ) : (
             <Box flexDirection="column">
               <Box flexDirection="row" justifyContent="space-between">
-                <Text wrap="truncate-end">
-                  <Text color={CI_LOOK[run.state].color}>{`${CI_LOOK[run.state].glyph} `}</Text>
-                  <Text>CI </Text>
+                <Box flexDirection="row" columnGap={1}>
+                  <Text color={CI_LOOK[run.state].color}>{CI_LOOK[run.state].glyph}</Text>
+                  <Text>CI</Text>
                   <Text bold color={CI_LOOK[run.state].color}>{STATE_WORD[run.state]}</Text>
-                </Text>
+                </Box>
                 {run.startedAt !== null && <Text dimColor>{elapsed(now - run.startedAt)}</Text>}
               </Box>
               <Box flexDirection="row" justifyContent="space-between" columnGap={1}>
@@ -485,7 +498,7 @@ export const register: Register = on => {
     const nextItem = nextOpen(groups)
     const collapsed = defaultCollapsed(groups)
     for (const k of ui.toggled) collapsed.has(k) ? collapsed.delete(k) : collapsed.add(k)
-    const barLen = Math.max(8, columns - 16)
+    const barLen = 12
     const filled = tally.total === 0 ? 0 : Math.round((tally.done / tally.total) * barLen)
 
     const taskRow = (item: TaskItem) => {
@@ -528,15 +541,15 @@ export const register: Register = on => {
       rule('rule-tasks', 'Tasks', '–'),
       <Text key="tasks-none" dimColor wrap="wrap">{'  None yet: appears when this session writes a checklist'}</Text>,
     ] : [
-      <Box key="rule-tasks" flexDirection="row" marginTop={1}>
+      <Box key="rule-tasks" flexDirection="row" justifyContent="space-between" marginTop={1}>
         <Text bold color="suggestion">Tasks</Text>
-        <Box flexGrow={1} overflow="hidden" marginX={1}>
-          <Text wrap="truncate-end">
+        <Box flexDirection="row" columnGap={1}>
+          <Box flexDirection="row">
             <Text color="success">{'━'.repeat(filled)}</Text>
-            <Text dimColor>{'─'.repeat(Math.max(0, barLen - filled))}</Text>
-          </Text>
+            <Text dimColor>{'─'.repeat(barLen - filled)}</Text>
+          </Box>
+          <Text dimColor>{`${tally.done}/${tally.total}`}</Text>
         </Box>
-        <Text dimColor>{`${tally.done}/${tally.total}`}</Text>
       </Box>,
       <Box key="task-file" flexDirection="row" justifyContent="space-between" columnGap={1}>
         <Text dimColor wrap="truncate-middle">{tidyPath(file.path)}</Text>
@@ -576,7 +589,10 @@ export const register: Register = on => {
         return (
           <Box key={`run-${t.id}`} flexDirection="column">
             <Box flexDirection="row" justifyContent="space-between" columnGap={1}>
-              <Text wrap="truncate-end"><Text color={color}>{`${waiting ? '◑' : RUN_GLYPH[t.kind]} `}</Text><Text>{t.label}</Text></Text>
+              <Box flexDirection="row" columnGap={1} flexShrink={1}>
+                <Text color={color}>{waiting ? '◑' : RUN_GLYPH[t.kind]}</Text>
+                <Text wrap="truncate-end">{t.label}</Text>
+              </Box>
               <Text dimColor>{when}</Text>
             </Box>
             <Text dimColor wrap="truncate-end">{`  ${t.kind === 'wakeup' ? 'check-in' : t.kind}${waiting ? '  ·  waiting' : ''}${t.lastLine ? `  ·  ${t.lastLine}` : ''}`}</Text>
@@ -590,7 +606,10 @@ export const register: Register = on => {
           return (
             <Box key={`done-${f.id}`} flexDirection="column">
               <Box flexDirection="row" justifyContent="space-between" columnGap={1}>
-                <Text wrap="truncate-end"><Text color={ok ? 'success' : 'error'}>{ok ? '✓ ' : '✗ '}</Text><Text dimColor={ok}>{f.label}</Text></Text>
+                <Box flexDirection="row" columnGap={1} flexShrink={1}>
+                  <Text color={ok ? 'success' : 'error'}>{ok ? '✓' : '✗'}</Text>
+                  <Text dimColor={ok} wrap="truncate-end">{f.label}</Text>
+                </Box>
                 <Text dimColor>{`${elapsed(now - f.endedAt)} ago`}</Text>
               </Box>
               <Text dimColor={ok} color={ok ? undefined : 'error'} wrap="truncate-end">{`  ${f.kind}  ·  ${f.status}  ·  took ${elapsed(f.endedAt - f.startedAt)}`}</Text>

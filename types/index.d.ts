@@ -43,7 +43,7 @@ export type NextAction = {
 
 /** The latest CI run for the current branch, as `gh run list` reports it. */
 export type CiStatus = {
-  state: 'passed' | 'failed' | 'running' | 'queued' | 'none' | 'other'
+  state: 'passed' | 'failed' | 'running' | 'queued' | 'none' | 'other' | 'unavailable'
   workflow: string
   startedAt: number | null
   url: string | null

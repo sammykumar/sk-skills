@@ -46,6 +46,20 @@ export const parseCi = (runListJson: string, jobsJson: string | null): CiStatus 
   }
 }
 
+/** One short line from gh's stderr: why there is no CI to show. */
+export const ciReason = (stderr: string): string => {
+  const text = stderr.toLowerCase()
+  if (text.includes('auth login') || text.includes('not logged')) return 'gh not signed in'
+  if (text.includes('no git remote') || text.includes('none of the git remotes')) return 'no GitHub remote'
+  if (text.includes('could not resolve') || text.includes('not found')) return 'repo not on GitHub'
+  const first = stderr.split('\n').map(l => l.trim()).find(Boolean) ?? 'gh failed'
+  return first.length > 40 ? `${first.slice(0, 39)}…` : first
+}
+
+export const unavailable = (reason: string): CiStatus => ({
+  state: 'unavailable', workflow: reason, startedAt: null, url: null, runId: null, jobsDone: 0, jobsTotal: 0, failedJobs: [], conclusion: null,
+})
+
 export const STATE_WORD: Record<CiStatus['state'], string> = {
   passed: 'passed',
   failed: 'failed',
@@ -53,6 +67,7 @@ export const STATE_WORD: Record<CiStatus['state'], string> = {
   queued: 'queued',
   none: 'no runs',
   other: 'done',
+  unavailable: 'unavailable',
 }
 
 /** The quiet second line: failing jobs, else jobs done/total while running, else the workflow. */
@@ -61,6 +76,7 @@ export const ciDetail = (ci: CiStatus): string => {
   if (ci.state === 'running' && ci.jobsTotal > 0) return `${ci.workflow} · ${ci.jobsDone}/${ci.jobsTotal}`
   if (ci.state === 'other' && ci.conclusion) return `${ci.workflow} · ${ci.conclusion}`
   if (ci.state === 'none') return 'this branch'
+  if (ci.state === 'unavailable') return ci.workflow
   return ci.workflow
 }
 
