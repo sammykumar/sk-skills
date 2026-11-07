@@ -5,6 +5,7 @@ import type { CiStatus, FinishedTask, InFlightTask, NextAction, TaskFile, TaskFi
 import { ciDetail, ciReason, isDue, parseCi, STATE_WORD, unavailable } from './ci'
 import { ACTIVE_AGENT, elapsed, lastLine, ordered, parseBackgroundStart, parseNotifications } from './inflight'
 import { parseNextActions, SUGGEST_PROMPT } from './next-actions'
+import { EXPORT_DIR, extensionFile, inboxFile, isExtensionLive, parseInbox, parseTitle, sessionFile } from './export'
 import { parseStatus } from './parse'
 import {
   counts,
@@ -358,8 +359,62 @@ const noteToolCall = async ($: EngineInterface, e: ToolCallInput, result: ToolCa
   }
 }
 
-/** The pane is the mod's only view: opened at session start, reopened by `/repo-status`. */
+/** The pane: opened at session start unless an editor extension draws it, reopened by `/repo-status`. */
 const openPane = ($: EngineInterface) => $.ui.open({ id: PANE, title: 'Repo status' })
+
+// ---------------------------------------------------------------- export for an editor extension
+
+const exp = { dir: '', id: '', cwd: '', transcript: '', title: null as string | null, titleAt: 0, last: '', writtenAt: 0, extensionLive: false }
+
+const setupExport = async ($: EngineInterface) => {
+  if (exp.dir) return
+  exp.dir = EXPORT_DIR((await $.env.get('HOME')) ?? '')
+  exp.id = await $.session.id()
+  exp.cwd = await $.session.cwd()
+  await $.process.run(['mkdir', '-p', exp.dir])
+  const found = await $.process.run(['find', `${exp.dir.replace(/\/repo-status$/, '')}/projects`, '-maxdepth', '2', '-name', `${exp.id}.jsonl`])
+  exp.transcript = found.stdout.split('\n')[0]?.trim() ?? ''
+}
+
+/** The tab title, re-read every 15s: it changes when Claude names the session or the person renames it. */
+const refreshTitle = async ($: EngineInterface, now: number) => {
+  if (!exp.transcript || now - exp.titleAt < 15_000) return
+  exp.titleAt = now
+  const hits = await $.process.run(['grep', '-a', '-E', '"type":"(custom-title|ai-title)"', exp.transcript])
+  exp.title = parseTitle(hits.stdout) ?? exp.title
+}
+
+/**
+ * Once a second: writes the session's state when it changed (and every 5s as a
+ * heartbeat), submits any prompt the extension queued, and keeps the built-in
+ * pane closed while an extension is drawing.
+ */
+const exportTick = async ($: EngineInterface) => {
+  await setupExport($)
+  const now = await $.clock.now()
+  await refreshTitle($, now).catch(() => undefined)
+  const [repo, run, file, tasks, done, actions] = await Promise.all([read($, status), read($, ci), read($, taskFile), read($, inFlight), read($, finished), read($, nextActions)])
+  const state = { repo, ci: run, taskFile: file ? { path: file.path, mtimeMs: file.mtimeMs } : null, inFlight: tasks, finished: done, nextActions: actions }
+  const body = JSON.stringify({ title: exp.title, state })
+  if (body !== exp.last || now - exp.writtenAt > 5_000) {
+    exp.last = body
+    exp.writtenAt = now
+    await $.fs.write(sessionFile(exp.dir, exp.id), JSON.stringify({ sessionId: exp.id, cwd: exp.cwd, title: exp.title, updatedAt: now, state }))
+  }
+  const inbox = inboxFile(exp.dir, exp.id)
+  if (await $.fs.exists(inbox)) {
+    const text = await $.fs.read(inbox)
+    await $.process.run(['rm', '-f', inbox])
+    for (const prompt of parseInbox(text)) {
+      await clearSuggestions($)
+      await $.prompt.submit({ text: prompt })
+    }
+  }
+  const heartbeat = await $.fs.read(extensionFile(exp.dir)).catch(() => null)
+  const live = isExtensionLive(heartbeat, now)
+  if (live && !exp.extensionLive) await $.ui.close({ id: PANE }).catch(() => undefined)
+  exp.extensionLive = live
+}
 
 // ---------------------------------------------------------------- view helpers
 
@@ -388,7 +443,9 @@ export const register: Register = on => {
     await refresh($).catch(() => undefined)
     await tick($).catch(() => undefined)
     $.clock.every(TICK_MS, () => tick($).catch(() => undefined))
-    await openPane($).catch(() => undefined)
+    await exportTick($).catch(() => undefined)
+    $.clock.every(1_000, () => exportTick($).catch(() => undefined))
+    if (!exp.extensionLive) await openPane($).catch(() => undefined)
     return result
   })
 
@@ -396,7 +453,7 @@ export const register: Register = on => {
   on('session.attach', async ($, e, next) => {
     const result = await next(e)
     await refresh($).catch(() => undefined)
-    await openPane($).catch(() => undefined)
+    if (!exp.extensionLive) await openPane($).catch(() => undefined)
     return result
   })
 
@@ -419,6 +476,12 @@ export const register: Register = on => {
   on('session.receive', async ($, e, next) => {
     if (e.agentId === undefined) await endFromNotifications($, e.text).catch(() => undefined)
     return next(e)
+  })
+
+  on('session.end', async ($, e, next) => {
+    const result = await next(e)
+    if (exp.dir && exp.id) await $.process.run(['rm', '-f', sessionFile(exp.dir, exp.id)]).catch(() => undefined)
+    return result
   })
 
   // Reopens the pane; it prints nothing, so the status lives in one place only.
