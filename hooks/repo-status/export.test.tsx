@@ -73,13 +73,15 @@ test('each session publishes its state with its tab title, and takes prompts fro
 
   await $.session.start({ source: 'startup', cwd: '/r' } as never)
   const doc = JSON.parse(files.get(`${DIR}/sess-1.json`) ?? '{}')
-  expect(doc).toMatchObject({ sessionId: 'sess-1', cwd: '/r', title: 'Ship the pane' })
+  expect(doc).toMatchObject({ sessionId: 'sess-1', cwd: '/r', title: 'Ship the pane', interactedAt: 0 })
   expect(doc.state.repo.branch).toBe('main')
   expect(opened).toEqual(['repo-status'])
 
   files.set(`${DIR}/sess-1.inbox.json`, '[{"type":"prompt","text":"Check CI"}]')
   await clock.advance(1_000)
   expect(submitted).toEqual(['Check CI'])
+  await clock.advance(1_000)
+  expect(JSON.parse(files.get(`${DIR}/sess-1.json`) ?? '{}').interactedAt).toBeGreaterThan(100_000)
   expect(files.has(`${DIR}/sess-1.inbox.json`)).toBe(false)
 })
 
