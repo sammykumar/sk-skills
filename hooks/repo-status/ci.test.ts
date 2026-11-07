@@ -1,6 +1,6 @@
 import { expect, test } from 'claude-code/testing'
 
-import { ciDetail, isDue, parseCi } from './ci'
+import { ciDetail, ciReason, isDue, parseCi, unavailable } from './ci'
 
 const run = (o: Record<string, unknown>) => JSON.stringify([{ databaseId: 7, workflowName: 'Build & test', createdAt: '2026-11-07T12:00:00Z', url: 'https://example.test/runs/7', ...o }])
 const jobs = JSON.stringify({ jobs: [
@@ -33,4 +33,10 @@ test('polls often while a run moves, rarely once settled, at once on a new branc
   expect(isDue(passed, 0, 16_000, false)).toBe(false)
   expect(isDue(passed, 0, 121_000, false)).toBe(true)
   expect(isDue(passed, 0, 1, true)).toBe(true)
+})
+
+test('a failed gh call becomes a short reason instead of a blank', async () => {
+  expect(ciReason('To get started with GitHub CLI, please run:  gh auth login')).toBe('gh not signed in')
+  expect(ciReason('no git remotes found')).toBe('no GitHub remote')
+  expect(ciDetail(unavailable('gh not found'))).toBe('gh not found')
 })
