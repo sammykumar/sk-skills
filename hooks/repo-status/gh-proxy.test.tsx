@@ -33,6 +33,14 @@ test('REPO_STATUS_GH_PROXY routes only the CI lookup through its proxy', async (
   expect(seen[0]).toMatchObject({ HTTPS_PROXY: 'http://127.0.0.1:9999', http_proxy: 'http://127.0.0.1:9999' })
 })
 
+test('direct clears the proxy for the CI lookup', async ($, on) => {
+  const seen: Array<Record<string, string> | undefined> = []
+  mock.clock(on, { now: 1_000_000 })
+  host(on, 'direct', seen)
+  await $.session.start({ source: 'startup', cwd: '/r' } as never)
+  expect(seen[0]).toMatchObject({ HTTPS_PROXY: '', https_proxy: '', HTTP_PROXY: '', http_proxy: '' })
+})
+
 test('without it, gh runs with the session environment untouched', async ($, on) => {
   const seen: Array<Record<string, string> | undefined> = []
   mock.clock(on, { now: 1_000_000 })
